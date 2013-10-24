@@ -35,9 +35,6 @@ License
 Download
 --------
 * I didn't implement a late binding of COM object, so you may choose the followings according to your office version.
-
 * [office 12 (2007)](https://github.com/relue2718/onenote-duplicates-remover/blob/master/publish/12.zip)
-
 * [office 14 (2010)](https://github.com/relue2718/onenote-duplicates-remover/blob/master/publish/14.zip)
-
 * [office 15 (2012)](https://github.com/relue2718/onenote-duplicates-remover/blob/master/publish/15.zip)
