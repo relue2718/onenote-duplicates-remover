@@ -106,7 +106,7 @@ namespace OneNoteDuplicatesRemover
         {
             // InnerText는 동일하지만 ObjectId와 LastModified 항목만 다른 경우가 많다.
             string pageContents = "";
-            application.GetPageContent( pageId, out pageContents, Microsoft.Office.Interop.OneNote.PageInfo.piAll, Microsoft.Office.Interop.OneNote.XMLSchema.xs2010 );
+            application.GetPageContent( pageId, out pageContents, Microsoft.Office.Interop.OneNote.PageInfo.piAll );
 
             System.Xml.XmlDocument pageXmlContents = new System.Xml.XmlDocument();
             pageXmlContents.LoadXml( pageContents );
@@ -119,7 +119,12 @@ namespace OneNoteDuplicatesRemover
 
         public void Navigate( string lastSelectedPageId )
         {
-            application.NavigateTo( lastSelectedPageId );
+            /*
+                http://msdn.microsoft.com/en-us/library/gg649853(v=office.14).aspx
+                bstrPageID—The OneNote ID of the page that contains the object to delete.
+                bstrObjectID—The OneNote ID of the object that you want to delete. 
+             */
+            application.NavigateTo( lastSelectedPageId, "", false );
         }
 
         public bool RemovePage( string pageId )

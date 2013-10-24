@@ -20,6 +20,8 @@ namespace OneNoteDuplicatesRemover
             InitializeComponent();
             onenoteAccessor.OnLogEvent += onenoteAccessor_OnLogEvent;
             onenoteAccessor.OnProgressEvent += onenoteAccessor_OnProgressEvent;
+
+            this.label5.Text = typeof(Microsoft.Office.Interop.OneNote.Application).Assembly.FullName;
         }
 
         void onenoteAccessor_OnProgressEvent( int current, int max )
@@ -255,8 +257,9 @@ namespace OneNoteDuplicatesRemover
             this.progressBar1.Maximum = max;
             this.progressBar1.Value = current;
             labelProgress.Text = string.Format( "{0} of {1}", current, max );
+            Application.DoEvents(); // While scanning, try to update the label.
         }
-
+        
         private void ResetProgressBar()
         {
             this.progressBar1.Value = 0;
