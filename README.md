@@ -9,7 +9,7 @@ Requirements
 
 Description
 -----------
-* Duplicated OneNote pages are not easily detected by file-level duplication detectors because there are varying attributes such as 'GUID' or 'Last Modified' in the internal file format. This tool ignores those attributes, calculates hash of each OneNote page based on its content and group them.
+* Duplicated OneNote pages are not easily detected by file-level duplication detectors because there are varying attributes such as 'GUID' or 'Last Modified' in the internal file format. This tool ignores those attributes, calculates a hash of each OneNote page based on its content and group them.
 
 Usage
 -----
