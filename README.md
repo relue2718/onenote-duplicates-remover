@@ -20,8 +20,8 @@ Usage
 Disclaimer
 ----------
 * **PLEASE BACKUP YOUR ONENOTE FILES BEFORE PROCEEDING ANY REMOVAL OPERATION **
-* What this program does is to **remove** the duplicated OneNote pages by calculating a hash value based on its content.
-* However, you should be aware of possible software bugs that will cause unexpected data loss.
+* What this program does is to **remove** the duplicated OneNote pages by calculating a hash value based on its content. Any hash algorithm can generate the same value for the 'different' inputs; the probability is extremely low but not zero.
+* However, you should be aware of possible software bugs and the limitation of this approach that will cause unexpected data loss.
 
 Download
 --------
