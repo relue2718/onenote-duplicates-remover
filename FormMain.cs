@@ -11,8 +11,8 @@ namespace OneNoteDuplicatesRemover
 {
   public partial class FormMain : Form
   {
-    private OnenoteAccessor onenoteAccessor = null;
-    private Dictionary<string, OnenotePageInfo> fullHierarchy = new Dictionary<string, OnenotePageInfo>();
+    private OneNoteAccessor onenoteAccessor = null;
+    private Dictionary<string, OneNotePageInfo> fullHierarchy = new Dictionary<string, OneNotePageInfo>();
     private string lastSelectedPageId = "";
 
     public FormMain()
@@ -22,7 +22,7 @@ namespace OneNoteDuplicatesRemover
       InitializeComponent();
       InitializeUIComponent();
 
-      onenoteAccessor = new OnenoteAccessor();
+      onenoteAccessor = new OneNoteAccessor();
       onenoteAccessor.OnProgressEvent += onenoteAccessor_OnProgressEvent;
     }
 
@@ -139,9 +139,9 @@ namespace OneNoteDuplicatesRemover
         }
         if (treeNode.Nodes.Count == checkedCount)
         {
-          MessageBox.Show("Please review your selection: \r\n"+
-            "You selected every page in the duplicated group; it means that you will lose the data.\r\n\r\n"+
-            "group: " + treeNode.Text, "De-duplication job is aborted.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+          MessageBox.Show( 
+            "De-duplication is aborted. \r\n\r\nYou've selected every page in the same group. (name:" + treeNode.Text + ")\r\n\r\n" +
+            "You should keep at least one copy of pages in order to keep your data.", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
           treeViewHierarchy.SelectedNode = treeNode;
           treeViewHierarchy.Focus();
           return;
@@ -160,7 +160,7 @@ namespace OneNoteDuplicatesRemover
         }
       }
 
-      if (MessageBox.Show("Are you sure to remove the selected pages (count: " + removingCount.ToString() + ")?\r\n\r\nPlease 'BACKUP' before proceeding.", "Remove", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+      if (MessageBox.Show("Are you sure to remove the selected pages? (page count: " + removingCount.ToString() + ")\r\n\r\nPlease *BACKUP* before proceeding de-duplication.", "Confirm", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
       {
         ResetProgressBar();
         int currentCount = 0;
@@ -187,7 +187,8 @@ namespace OneNoteDuplicatesRemover
           }
         }
         ResetProgressBar();
-        MessageBox.Show(string.Format("Deleted : {0}\r\nFailed : {1}", successCount, failureCount), "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        ResetTreeViewControl();
+        MessageBox.Show(string.Format("Deleted : {0}\r\nFailed : {1}", successCount, failureCount), "Summary", MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
     }
 
@@ -196,10 +197,10 @@ namespace OneNoteDuplicatesRemover
       ResetProgressBar();
       fullHierarchy = onenoteAccessor.GetFullHierarchy();
       ResetProgressBar();
-      this.treeViewHierarchy.Nodes.Clear();
+      ResetTreeViewControl();
 
       Dictionary<string /* innerTextHash */, List<string> /* Page Id List */ > duplicatedGroups = new Dictionary<string, List<string>>();
-      foreach (KeyValuePair<string, OnenotePageInfo> pageInfo in fullHierarchy)
+      foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in fullHierarchy)
       {
         string pageId = pageInfo.Key;
         string pageInnerTextHash = pageInfo.Value.HashOfInnerText;
@@ -260,6 +261,11 @@ namespace OneNoteDuplicatesRemover
       
       ResetProgressBar();
       toolStripStatusLabelScan.Text = "Scan Finished";
+    }
+
+    private void ResetTreeViewControl()
+    {
+      this.treeViewHierarchy.Nodes.Clear();
     }
 
     #region Progress Bar

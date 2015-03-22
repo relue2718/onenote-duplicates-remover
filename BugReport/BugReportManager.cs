@@ -7,13 +7,15 @@ namespace OneNoteDuplicatesRemover.BugReport
 {
   public class BugReportManager
   {
-    private List<CaughtExceptionInfo> caughtExceptions = new List<CaughtExceptionInfo>();
+    //private List<CaughtExceptionInfo> caughtExceptions = new List<CaughtExceptionInfo>();
     public void ReportCaughtException(Exception e)
     {
-      CaughtExceptionInfo caughtExceptionInfo = new CaughtExceptionInfo();
-      caughtExceptionInfo.Time = new DateTime().ToUniversalTime().ToString();
-      caughtExceptionInfo.Exception = e.ToString();
-      caughtExceptions.Add(caughtExceptionInfo);
+      //CaughtExceptionInfo caughtExceptionInfo = new CaughtExceptionInfo();
+      //caughtExceptionInfo.Time = new DateTime().ToUniversalTime().ToString();
+      //caughtExceptionInfo.Exception = e.ToString();
+      //caughtExceptions.Add(caughtExceptionInfo);
+
+      etc.FileLogger.Instance.Print("Exception", "Caught: {0}", e.ToString());
     }
 
     public string CollectSystemInformation()

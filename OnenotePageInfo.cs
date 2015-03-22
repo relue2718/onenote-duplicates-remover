@@ -5,12 +5,12 @@ using System.Text;
 
 namespace OneNoteDuplicatesRemover
 {
-    public class OnenotePageInfo
+    public class OneNotePageInfo
     {
         public string ParentSectionId; 
         public string ParentSectionName; 
         public string ParentSectionFilePath; 
         public string PageName;
-        public string HashOfInnerText; // A hash value of inner text in a page
+        public string HashOfInnerText; // A hash value of 'innerText' in a page
     }
 }

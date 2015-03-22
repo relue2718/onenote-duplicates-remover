@@ -7,12 +7,12 @@ using System.Text;
 
 namespace OneNoteDuplicatesRemover
 {
-  class OnenoteApplicationWrapper
+  class OneNoteApplicationWrapper
   {
     private Microsoft.Office.Interop.OneNote.Application application = null;
     private BugReport.BugReportManager bugReportManager = null;
 
-    public OnenoteApplicationWrapper(BugReport.BugReportManager bugReportManager)
+    public OneNoteApplicationWrapper(BugReport.BugReportManager bugReportManager)
     {
       this.bugReportManager = bugReportManager;
 
@@ -24,7 +24,6 @@ namespace OneNoteDuplicatesRemover
       {
         bugReportManager.ReportCaughtException(e);
       }
-
     }
 
     public bool GetFullHierarchyAsXML(out string strXml)

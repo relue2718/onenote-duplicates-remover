@@ -5,16 +5,15 @@ using System.Text;
 
 namespace OneNoteDuplicatesRemover
 {
-  public class OnenoteAccessor
+  public class OneNoteAccessor
   {
     private BugReport.BugReportManager bugReportManager = null;
-    private etc.FileLogger fileLogger = null;
-    private OnenoteApplicationWrapper instance = null;
+    private OneNoteApplicationWrapper instance = null;
 
-    public OnenoteAccessor()
+    public OneNoteAccessor()
     {
       bugReportManager = new BugReport.BugReportManager();
-      instance = new OnenoteApplicationWrapper(bugReportManager);
+      instance = new OneNoteApplicationWrapper(bugReportManager);
     }
 
     public delegate void ProgressEventHandler(int current, int max);
@@ -28,7 +27,7 @@ namespace OneNoteDuplicatesRemover
       }
     }
 
-    public Dictionary<string, OnenotePageInfo> GetFullHierarchy()
+    public Dictionary<string, OneNotePageInfo> GetFullHierarchy()
     {
       string strXml = "";
       bool success = instance.GetFullHierarchyAsXML(out strXml);
@@ -38,18 +37,18 @@ namespace OneNoteDuplicatesRemover
         System.Xml.XmlDocument fullHierarchy = new System.Xml.XmlDocument();
         fullHierarchy.LoadXml(strXml);
 
-        Dictionary<string, OnenotePageInfo> onenotePageInfos = GetOnenotePageInfos(fullHierarchy);
-        int totalCount = onenotePageInfos.Count;
+        Dictionary<string, OneNotePageInfo> pageInfos = GetOneNotePageInfos(fullHierarchy);
+        int totalCount = pageInfos.Count;
         int i = 0;
-        foreach (KeyValuePair<string, OnenotePageInfo> pageInfo in onenotePageInfos)
+        foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in pageInfos)
         {
           i++;
           string pageId = pageInfo.Key;
-          string pageInnerTextHash = GetOnenoteInnerTextHash(pageId);
+          string pageInnerTextHash = GetHashOfOneNotePage(pageId);
           pageInfo.Value.HashOfInnerText = pageInnerTextHash;
           FireProgressEvent(i, totalCount);
         }
-        return onenotePageInfos;
+        return pageInfos;
       }
       else
       {
@@ -57,9 +56,9 @@ namespace OneNoteDuplicatesRemover
       }
     }
 
-    private Dictionary<string, OnenotePageInfo> GetOnenotePageInfos(System.Xml.XmlDocument xmlDocument)
+    private Dictionary<string, OneNotePageInfo> GetOneNotePageInfos(System.Xml.XmlDocument xmlDocument)
     {
-      Dictionary<string, OnenotePageInfo> pageInfos = new Dictionary<string, OnenotePageInfo>();
+      Dictionary<string, OneNotePageInfo> pageInfos = new Dictionary<string, OneNotePageInfo>();
       if (xmlDocument != null)
       {
         System.Xml.XmlNodeList pageNodeList = xmlDocument.GetElementsByTagName("one:Page");
@@ -70,30 +69,30 @@ namespace OneNoteDuplicatesRemover
 
           if (parentNodeName == "one:Section")
           {
-            // Optional한 Attribute임. 없으면 지워지지 않은 것이므로 false로 생각하고 넘어감.
-            System.Xml.XmlAttribute IsDeletedPagesAttribute = pageNode.ParentNode.Attributes["isDeletedPages"];
-            bool isDeletedPages = false;
-            if (IsDeletedPagesAttribute != null)
-            {
-              isDeletedPages = bool.Parse(IsDeletedPagesAttribute.Value);
-            }
-
-            // 지워지지 않은 Page를 대상으로만 처리한다. (휴지통에 있는 걸 남기고 원본을 지워버리는 불상사 방지)
+            bool isDeletedPages = CheckIfDeleted(pageNode);
+            // To avoid the situation that it is going to delete the pages that shouldn't be deleted and to keep the pages in the 'trash' folder.
             if (isDeletedPages == false)
             {
               if (pageInfos.ContainsKey(pageUniqueId) == false)
               {
-                // 항상 있는 Attribute임
-                string sectionId = pageNode.ParentNode.Attributes["ID"].Value;
-                string sectionPath = pageNode.ParentNode.Attributes["path"].Value;
-                string sectionName = pageNode.ParentNode.Attributes["name"].Value;
+                try
+                {
+                  // 'ID', 'path' and 'name' attributes are always existing.
+                  string sectionId = pageNode.ParentNode.Attributes["ID"].Value;
+                  string sectionPath = pageNode.ParentNode.Attributes["path"].Value;
+                  string sectionName = pageNode.ParentNode.Attributes["name"].Value;
 
-                OnenotePageInfo pageInfo = new OnenotePageInfo();
-                pageInfo.ParentSectionId = sectionId;
-                pageInfo.ParentSectionFilePath = sectionPath;
-                pageInfo.ParentSectionName = sectionName;
-                pageInfo.PageName = pageNode.Attributes["name"].Value;
-                pageInfos.Add(pageUniqueId, pageInfo);
+                  OneNotePageInfo pageInfo = new OneNotePageInfo();
+                  pageInfo.ParentSectionId = sectionId;
+                  pageInfo.ParentSectionFilePath = sectionPath;
+                  pageInfo.ParentSectionName = sectionName;
+                  pageInfo.PageName = pageNode.Attributes["name"].Value;
+                  pageInfos.Add(pageUniqueId, pageInfo);
+                }
+                catch (System.Exception e)
+                {
+                  bugReportManager.ReportCaughtException(e);
+                }
               }
             }
           }
@@ -103,9 +102,26 @@ namespace OneNoteDuplicatesRemover
       return pageInfos;
     }
 
-    private string GetOnenoteInnerTextHash(string pageId)
+    private static bool CheckIfDeleted(System.Xml.XmlNode pageNode)
     {
-      // InnerText는 동일하지만 ObjectId와 LastModified 항목만 다른 경우가 많다.
+      // The 'isDeletedPages' attribute is optional. If the attribute doesn't exist, we assume that the page isn't deleted.
+      bool isDeletedPages = false;
+
+      System.Xml.XmlAttribute IsDeletedPagesAttribute = pageNode.ParentNode.Attributes["isDeletedPages"];
+      if (IsDeletedPagesAttribute != null)
+      {
+        isDeletedPages = bool.Parse(IsDeletedPagesAttribute.Value);
+      }
+      return isDeletedPages;
+    }
+
+    private string GetHashOfOneNotePage(string pageId)
+    {
+      // The OneNote page consists of XML-like markups. 
+      // Though the innerText is identical, it is common to have different 'objectID' and  'lastModifiedTime' attributes. 
+      // These differences would cause a complete different hash value even if the contents are the same.
+      // Therefore, I will ignore those attributes by extracting 'innerText' and calculate a hash value without those attributes.
+
       string pageContents = "";
       instance.GetPageContent(pageId, out pageContents);
 
@@ -135,8 +151,9 @@ namespace OneNoteDuplicatesRemover
         instance.DeleteHierarchy(pageId);
         return true;
       }
-      catch (System.Exception)
+      catch (System.Exception e)
       {
+        bugReportManager.ReportCaughtException(e);
         return false;
       }
     }
