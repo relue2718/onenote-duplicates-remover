@@ -14,7 +14,7 @@ Why do I need this tool?
 Usage
 -----
 * Click '*Scan Duplicates*' and click '*Select all except one*' button once the scanning process is done.
-* You may change the selection preference by changing the order of found paths. (See the '*path preference*' area)
+* You may change the selection preference by changing the order of paths. (See the '*path preference*' area)
 * If you check '*Navigate the highlighted page*', OneNote will open the selected page automatically. It will help you review the selected page.
 
 Disclaimer
@@ -31,4 +31,4 @@ Download
 --------
 * [OneNoteDuplicatesRemover.exe (Executable File; 27kb; 32bit; OneNote 2010, 2013 compatible)](https://github.com/relue2718/onenote-duplicates-remover/raw/master/publish/OneNoteDuplicatesRemover.exe)
 * If you can't run the executable file, you may build the program by yourself. Please understand me that I can't provide every version that works for various environments.
-* Please let me know if there is a way to do lazy-binding for a COM type library, especially for the OneNote type library. I've tried several methods but those methods won't work for the OneNote type library.
+* Please let me know if there is a way to do lazy binding for a COM type library, especially for the OneNote type library. I've tried several methods, but those methods won't work for the OneNote type library.
