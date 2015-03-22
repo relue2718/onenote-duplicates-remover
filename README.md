@@ -1,32 +1,34 @@
-Onenote-duplicates-remover
+OneNote Duplicates Remover
 ==========================
-A tool to de-duplicate OneNote pages.
+A simple tool to remove the duplicated Microsoft OneNote pages.
 
 Requirements
 ------------
-* Microsoft Office OneNote (should be installed)
+* Microsoft Office OneNote
 * .NET framework 4
 
-Description
+Why do I need this tool?
 -----------
-* Duplicated OneNote pages are not easily detected by file-level duplication detectors because there are varying attributes such as 'GUID' or 'Last Modified' in the internal file format. This tool ignores those attributes, calculates a hash of each OneNote page based on its content and group them.
+* Duplicated OneNote pages are not easily detected by file-level duplication detectors because there are varying attributes such as 'objectId' or 'lastModifiedTime' in the OneNote file format. This tool ignores those attributes and calculates a hash value of each OneNote page based on its contents.
 
 Usage
 -----
-* I have tested many cases such as password protected pages, pages located in a cloud service like SkyDrive (now, OneDrive) and pages shared via networks. For my personal usage, I removed 4,000 duplicated pages out of 16,000 pages. However, I can't guarantee that this tool works for every corner case. I strongly recommend to backup data before you proceed any removal operation.
-* Selection preference means that this tool will choose the 'survivor' page based on the priority you set.
-* If you check 'Navigate the highlighted page automatically', OneNote will open the highlighted(or selected) page.
+* Click '*Scan Duplicates*' and click '*Select all except one*' button once the scanning process is done.
+* You may change the selection preference by changing the order of found paths. (See the '*path preference*' area)
+* If you check '*Navigate the highlighted page*', OneNote will open the selected page automatically. It will help you review the selected page.
 
 Disclaimer
 ----------
-* PLEASE BACKUP YOUR ONENOTE FILES BEFORE PROCEEDING ANY REMOVAL OPERATION
-* What this program does is to **remove** the duplicated OneNote pages by calculating a hash value based on its content. Any hash algorithm can generate the same value for the 'different' inputs; the probability is extremely low but not zero.
-* You should be aware of possible software bugs and the limitation of this approach that will cause unexpected data loss.
+* **PLEASE BACKUP YOUR ONENOTE FILES BEFORE YOU PROCEED ANY REMOVAL OPERATION**
+* I've tested many cases such as password protected pages, pages located in OneDrive or shared via networks. For my personal usage, I could remove 4,000 duplicated pages out of 16,000 pages. However, I can't guarantee that this tool works for every corner case. I strongly recommend to backup data before you proceed any removal operation.
+* The algorithm to detect duplicates is based on the property of uniqueness of hashing algorithm (MD5). However, there is a chance to have the same hash value for different contents. The probability is extremely low, but not zero. You should be aware of the limitation of this approach that can cause unexpected data loss.
+
+Screenshot
+----------
+![screenshot](https://raw.githubusercontent.com/relue2718/onenote-duplicates-remover/master/screenshot/1.png)
 
 Download
 --------
-* I can't provide every updated version for various OneNote versions (32bit, 64bit; 2007, 2010, 2012, 2013).
-* Here are the pre-compiled binary versions, but these are out-dated. The most stable way is to build this program by yourself.
-* [office 12 (2007)](https://github.com/relue2718/onenote-duplicates-remover/blob/master/publish/12.zip)
-* [office 14 (2010)](https://github.com/relue2718/onenote-duplicates-remover/blob/master/publish/14.zip)
-* [office 15 (2012)](https://github.com/relue2718/onenote-duplicates-remover/blob/master/publish/15.zip)
+* [OneNoteDuplicatesRemover.exe (Executable File; 27kb; 32bit; OneNote 2010, 2013 compatible)](https://github.com/relue2718/onenote-duplicates-remover/raw/master/publish/OneNoteDuplicatesRemover.exe)
+* If you can't run the executable file, you may build the program by yourself. Please understand me that I can't provide every version that works for various environments.
+* Please let me know if there is a way to do lazy-binding for a COM type library, especially for the OneNote type library. I've tried several methods but those methods won't work for the OneNote type library.
