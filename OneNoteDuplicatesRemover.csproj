@@ -94,9 +94,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BugReport\BugReportManager.cs" />
-    <Compile Include="BugReport\CaughtExceptionInfo.cs" />
     <Compile Include="etc\FileLogger.cs" />
+    <Compile Include="etc\LoggerHelper.cs" />
+    <Compile Include="etc\MyTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

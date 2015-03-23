@@ -10,80 +10,79 @@ namespace OneNoteDuplicatesRemover
   class OneNoteApplicationWrapper
   {
     private Microsoft.Office.Interop.OneNote.Application application = null;
-    private BugReport.BugReportManager bugReportManager = null;
 
-    public OneNoteApplicationWrapper(BugReport.BugReportManager bugReportManager)
+    public bool InitializeOneNoteTypeLibrary()
     {
-      this.bugReportManager = bugReportManager;
-
       try
       {
         application = new Microsoft.Office.Interop.OneNote.Application();
+        return true;
       }
-      catch (Exception e)
+      catch (Exception exception)
       {
-        bugReportManager.ReportCaughtException(e);
+        etc.LoggerHelper.LogException(exception);
+        return false;
       }
     }
 
-    public bool GetFullHierarchyAsXML(out string strXml)
+    public bool TryGetHierarchyAsXML(out string fullHierarchyXmlStr)
     {
-      strXml = "";
+      fullHierarchyXmlStr = "";
 
       try
       {
-        application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsPages, out strXml);
+        application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsPages, out fullHierarchyXmlStr);
+        return true;
       }
-      catch (Exception e)
+      catch (Exception exception)
       {
-        bugReportManager.ReportCaughtException(e);
+        etc.LoggerHelper.LogException(exception);
         return false;
       }
-      return true;
     }
 
-    public bool GetPageContent(string pageId, out string pageContents)
+    public bool TryGetPageContent(string pageId, out string pageContent)
     {
-      pageContents = "";
+      pageContent = "";
 
       try
       {
-        application.GetPageContent(pageId, out pageContents, Microsoft.Office.Interop.OneNote.PageInfo.piAll);
+        application.GetPageContent(pageId, out pageContent, Microsoft.Office.Interop.OneNote.PageInfo.piAll);
+        return true;
       }
-      catch (Exception e)
+      catch (Exception exception)
       {
-        bugReportManager.ReportCaughtException(e);
+        etc.LoggerHelper.LogException(exception);
         return false;
       }
-      return true;
     }
 
-    public bool NavigateTo(string lastSelectedPageId)
+    public bool TryNavigateTo(string lastSelectedPageId)
     {
       try
       {
         application.NavigateTo(lastSelectedPageId /* bstrHierarchyObjectID */, "", false);
+        return true;
       }
-      catch (Exception e)
+      catch (Exception exception)
       {
-        bugReportManager.ReportCaughtException(e);
+        etc.LoggerHelper.LogException(exception);
         return false;
       }
-      return true;
     }
 
-    public bool DeleteHierarchy(string pageId)
+    public bool TryDeleteHierarchy(string pageId)
     {
       try
       {
         application.DeleteHierarchy(pageId);
+        return true;
       }
-      catch (Exception e)
+      catch (Exception exception)
       {
-        bugReportManager.ReportCaughtException(e);
+        etc.LoggerHelper.LogException(exception);
         return false;
       }
-      return true;
     }
   }
 }

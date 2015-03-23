@@ -7,17 +7,29 @@ namespace OneNoteDuplicatesRemover
 {
   public class OneNoteAccessor
   {
-    private BugReport.BugReportManager bugReportManager = null;
+    private Dictionary<string, OneNotePageInfo> hierarchy = new Dictionary<string, OneNotePageInfo>();
+    private string lastSelectedPageId = "";
+
     private OneNoteApplicationWrapper instance = null;
 
-    public OneNoteAccessor()
+    public void InitializeOneNoteWrapper()
     {
-      bugReportManager = new BugReport.BugReportManager();
-      instance = new OneNoteApplicationWrapper(bugReportManager);
+      this.instance = new OneNoteApplicationWrapper();
+      bool success = this.instance.InitializeOneNoteTypeLibrary();
+      if (!success)
+      {
+        if (OnAbortedEvent != null)
+        {
+          OnAbortedEvent("Unable to initialize OneNote Type Library");
+        }
+      }
     }
 
     public delegate void ProgressEventHandler(int current, int max);
     public event ProgressEventHandler OnProgressEvent = null;
+
+    public delegate void AbortedEventHandler(string msg); // If the program is not able to be continued.
+    public event AbortedEventHandler OnAbortedEvent = null;
 
     private void FireProgressEvent(int current, int max)
     {
@@ -27,55 +39,85 @@ namespace OneNoteDuplicatesRemover
       }
     }
 
-    public Dictionary<string, OneNotePageInfo> GetFullHierarchy()
+    public bool UpdateHierarchy()
     {
-      string strXml = "";
-      bool success = instance.GetFullHierarchyAsXML(out strXml);
+      hierarchy = new Dictionary<string, OneNotePageInfo>();
+
+      string hierarchyXmlString = "";
+      bool success = instance.TryGetHierarchyAsXML(out hierarchyXmlString);
 
       if (success)
       {
-        System.Xml.XmlDocument fullHierarchy = new System.Xml.XmlDocument();
-        fullHierarchy.LoadXml(strXml);
+        System.Xml.XmlDocument hierarchyXml = new System.Xml.XmlDocument();
 
-        Dictionary<string, OneNotePageInfo> pageInfos = GetOneNotePageInfos(fullHierarchy);
-        int totalCount = pageInfos.Count;
-        int i = 0;
-        foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in pageInfos)
+        try
         {
-          i++;
-          string pageId = pageInfo.Key;
-          string pageInnerTextHash = GetHashOfOneNotePage(pageId);
-          pageInfo.Value.HashOfInnerText = pageInnerTextHash;
-          FireProgressEvent(i, totalCount);
+          hierarchyXml.LoadXml(hierarchyXmlString);
         }
-        return pageInfos;
+        catch (System.Exception exception)
+        {
+          etc.LoggerHelper.LogException(exception);
+          return false;
+        }
+
+        bool successPageInfos = TryGetOneNotePageInfos(hierarchyXml, out hierarchy);
+        if (successPageInfos)
+        {
+          int totalCount = hierarchy.Count;
+          int i = 0;
+          foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in hierarchy)
+          {
+            i++;
+            string pageId = pageInfo.Key;
+            string pageInnerTextHash = "";
+            bool successHash = TryGetHashOfOneNotePage(pageId, out pageInnerTextHash);
+            if (successHash)
+            {
+              pageInfo.Value.HashOfInnerText = pageInnerTextHash;
+              pageInfo.Value.IsOkay = true;
+              FireProgressEvent(i, totalCount);
+            }
+            else
+            {
+              etc.LoggerHelper.LogWarn("Unable to get a hash, pageId:{0}", pageId);
+            }
+          }
+          return true;
+        }
+        else
+        {
+          etc.LoggerHelper.LogWarn("Unable to parse the hierarchy");
+          return false;
+        }
       }
       else
       {
-        return null;
+        etc.LoggerHelper.LogWarn("Unable to get a hierarchy");
+        return false;
       }
     }
 
-    private Dictionary<string, OneNotePageInfo> GetOneNotePageInfos(System.Xml.XmlDocument xmlDocument)
+    private bool TryGetOneNotePageInfos(System.Xml.XmlDocument xmlDocument, out Dictionary<string /*PageId*/, OneNotePageInfo> pageInfos)
     {
-      Dictionary<string, OneNotePageInfo> pageInfos = new Dictionary<string, OneNotePageInfo>();
+      pageInfos = new Dictionary<string, OneNotePageInfo>();
+
       if (xmlDocument != null)
       {
         System.Xml.XmlNodeList pageNodeList = xmlDocument.GetElementsByTagName("one:Page");
         foreach (System.Xml.XmlNode pageNode in pageNodeList)
         {
-          string pageUniqueId = pageNode.Attributes["ID"].Value;
-          string parentNodeName = pageNode.ParentNode.Name;
-
-          if (parentNodeName == "one:Section")
+          try
           {
-            bool isDeletedPages = CheckIfDeleted(pageNode);
-            // To avoid the situation that it is going to delete the pages that shouldn't be deleted and to keep the pages in the 'trash' folder.
-            if (isDeletedPages == false)
+            string pageUniqueId = pageNode.Attributes["ID"].Value;
+            string parentNodeName = pageNode.ParentNode.Name;
+
+            if (parentNodeName == "one:Section")
             {
-              if (pageInfos.ContainsKey(pageUniqueId) == false)
+              bool isDeletedPages = CheckIfDeleted(pageNode);
+              // To avoid the situation that it is going to delete the pages that shouldn't be deleted and to keep the pages in the 'trash' folder.
+              if (isDeletedPages == false)
               {
-                try
+                if (pageInfos.ContainsKey(pageUniqueId) == false)
                 {
                   // 'ID', 'path' and 'name' attributes are always existing.
                   string sectionId = pageNode.ParentNode.Attributes["ID"].Value;
@@ -89,17 +131,21 @@ namespace OneNoteDuplicatesRemover
                   pageInfo.PageName = pageNode.Attributes["name"].Value;
                   pageInfos.Add(pageUniqueId, pageInfo);
                 }
-                catch (System.Exception e)
-                {
-                  bugReportManager.ReportCaughtException(e);
-                }
               }
             }
           }
+          catch (System.Exception exception)
+          {
+            etc.LoggerHelper.LogWarn("Ignore the exception: {0}", exception.ToString());
+          }
         }
+        return true;
       }
-
-      return pageInfos;
+      else
+      {
+        etc.LoggerHelper.LogWarn("xmlDocument is null");
+        return false;
+      }
     }
 
     private static bool CheckIfDeleted(System.Xml.XmlNode pageNode)
@@ -115,46 +161,152 @@ namespace OneNoteDuplicatesRemover
       return isDeletedPages;
     }
 
-    private string GetHashOfOneNotePage(string pageId)
+    private bool TryGetHashOfOneNotePage(string pageId, out string hash)
     {
+      hash = "";
+
       // The OneNote page consists of XML-like markups. 
       // Though the innerText is identical, it is common to have different 'objectID' and  'lastModifiedTime' attributes. 
       // These differences would cause a complete different hash value even if the contents are the same.
       // Therefore, I will ignore those attributes by extracting 'innerText' and calculate a hash value without those attributes.
 
       string pageContents = "";
-      instance.GetPageContent(pageId, out pageContents);
+      bool success = instance.TryGetPageContent(pageId, out pageContents);
+      if (success)
+      {
+        System.Xml.XmlDocument pageXmlContents = new System.Xml.XmlDocument();
+        try
+        {
+          pageXmlContents.LoadXml(pageContents);
+        }
+        catch (System.Exception exception)
+        {
+          etc.LoggerHelper.LogException(exception);
+          return false;
+        }
 
-      System.Xml.XmlDocument pageXmlContents = new System.Xml.XmlDocument();
-      pageXmlContents.LoadXml(pageContents);
-
-      byte[] rawInnerText = Encoding.UTF8.GetBytes(pageXmlContents.InnerText);
-      byte[] computedHash = System.Security.Cryptography.MD5.Create().ComputeHash(rawInnerText);
-
-      return Utils.MakeHashString(computedHash);
+        bool successCalculateHash = TryCalculateHashOf(pageXmlContents.InnerText, out hash);
+        if (successCalculateHash)
+        {
+          return true;
+        }
+        else
+        {
+          etc.LoggerHelper.LogWarn("Unable to calculate a hash, pageId:{0}", pageId);
+          return false;
+        }
+      }
+      else
+      {
+        etc.LoggerHelper.LogWarn("Unable to get a page content, pageId:{0}", pageId);
+        return false;
+      }
     }
 
-    public void Navigate(string lastSelectedPageId)
+    private static bool TryCalculateHashOf(string plainText, out string hash)
+    {
+      hash = "";
+      try
+      {
+        byte[] rawInnerText = Encoding.UTF8.GetBytes(plainText);
+        byte[] computedHash = System.Security.Cryptography.MD5.Create().ComputeHash(rawInnerText);
+        hash = Utils.MakeHashString(computedHash);
+        return true;
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
+        return false;
+      }
+    }
+
+    public void Navigate(string pageId)
     {
       /*
           http://msdn.microsoft.com/en-us/library/gg649853(v=office.14).aspx
-          bstrPageID—The OneNote ID of the page that contains the object to delete.
-          bstrObjectID—The OneNote ID of the object that you want to delete. 
+          bstrPageID: The OneNote ID of the page that contains the object to delete.
+          bstrObjectID: The OneNote ID of the object that you want to delete. 
        */
-      instance.NavigateTo(lastSelectedPageId);
+      bool success = instance.TryNavigateTo(pageId);
+      if (!success)
+      {
+        etc.LoggerHelper.LogWarn("Navigate failed. pageId:{0}", pageId);
+      }
     }
 
     public bool RemovePage(string pageId)
     {
-      try
+      bool success = instance.TryDeleteHierarchy(pageId);
+      if (!success)
       {
-        instance.DeleteHierarchy(pageId);
-        return true;
+        etc.LoggerHelper.LogWarn("Remove failed. pageId:{0}", pageId);
       }
-      catch (System.Exception e)
+      return success;
+    }
+
+    public string GetLastSelectedPageId()
+    {
+      return this.lastSelectedPageId;
+    }
+
+    public void SetLastSelectedPageId(string pageId)
+    {
+      this.lastSelectedPageId = pageId;
+    }
+
+    public bool HasPageId(string pageId)
+    {
+      if (hierarchy != null)
       {
-        bugReportManager.ReportCaughtException(e);
+        return hierarchy.ContainsKey(pageId);
+      }
+      else
+      {
+        etc.LoggerHelper.LogWarn("Unable to get the full hierarchy. pageId:{0}", pageId);
         return false;
+      }
+    }
+
+    public Dictionary<string, List<string>> GetDuplicatedGroups()
+    {
+      Dictionary<string /* innerTextHash */, List<string> /* Page Id List */ > duplicatedGroups = new Dictionary<string, List<string>>();
+      foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in hierarchy)
+      {
+        if (pageInfo.Value.IsOkay)
+        {
+          string pageId = pageInfo.Key;
+          string pageInnerTextHash = pageInfo.Value.HashOfInnerText;
+
+          if (duplicatedGroups.ContainsKey(pageInnerTextHash) == false)
+          {
+            duplicatedGroups.Add(pageInnerTextHash, new List<string>());
+          }
+
+          duplicatedGroups[pageInnerTextHash].Add(pageId);
+        }
+      }
+      return duplicatedGroups;
+    }
+
+    public bool TryGetSectionPath(string pageId, out string sectionPath)
+    {
+      sectionPath = "";
+
+      if (hierarchy == null)
+      {
+        return false;
+      }
+      else
+      {
+        if (hierarchy.ContainsKey(pageId))
+        {
+          sectionPath = hierarchy[pageId].ParentSectionFilePath;
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
     }
   }

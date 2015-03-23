@@ -12,21 +12,13 @@ namespace OneNoteDuplicatesRemover
   public partial class FormMain : Form
   {
     private OneNoteAccessor onenoteAccessor = null;
-    private Dictionary<string, OneNotePageInfo> fullHierarchy = new Dictionary<string, OneNotePageInfo>();
-    private string lastSelectedPageId = "";
 
     public FormMain()
     {
-      InitializeFileLogger();
-
       InitializeComponent();
-      InitializeUIComponent();
-
-      onenoteAccessor = new OneNoteAccessor();
-      onenoteAccessor.OnProgressEvent += onenoteAccessor_OnProgressEvent;
     }
 
-    private static void InitializeFileLogger()
+    private void InitializeFileLogger()
     {
       string today = DateTime.Now.ToString("yyyyMMdd-HHmmssFFF");
       etc.FileLogger.Instance.Init("onenote-duplicates-remover-" + today + ".log");
@@ -34,7 +26,30 @@ namespace OneNoteDuplicatesRemover
 
     private void InitializeUIComponent()
     {
-      toolStripStatusLabelScan.Text = "Ready";
+      UpdateStatus("Ready");
+    }
+
+    private void InitializeOneNoteAccessor()
+    {
+      try
+      {
+        onenoteAccessor = new OneNoteAccessor();
+        onenoteAccessor.OnProgressEvent += onenoteAccessor_OnProgressEvent;
+        onenoteAccessor.OnAbortedEvent += onenoteAccessor_OnAbortedEvent;
+        onenoteAccessor.InitializeOneNoteWrapper();
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
+      }
+    }
+
+    private void onenoteAccessor_OnAbortedEvent(string msg)
+    {
+      MessageBox.Show(string.Format("Sorry for the inconvenience.\r\n\r\n" +
+        "The program has encountered with an unrecoverable error.\r\n\r\n" +
+        "Message: {0}", msg), "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      this.Close();
     }
 
     void onenoteAccessor_OnProgressEvent(int current, int max)
@@ -44,89 +59,202 @@ namespace OneNoteDuplicatesRemover
 
     private void buttonUp_Click(object sender, EventArgs e)
     {
-      int selectedIndex = listBoxPreferences.SelectedIndex;
-      if (selectedIndex > 0 && selectedIndex != -1)
+      try
       {
-        listBoxPreferences.Items.Insert(selectedIndex - 1, listBoxPreferences.Items[selectedIndex]);
-        listBoxPreferences.Items.RemoveAt(selectedIndex + 1);
-        listBoxPreferences.SelectedIndex = selectedIndex - 1;
+        int selectedIndex = listBoxPreferences.SelectedIndex;
+        if (selectedIndex > 0 && selectedIndex != -1)
+        {
+          listBoxPreferences.Items.Insert(selectedIndex - 1, listBoxPreferences.Items[selectedIndex]);
+          listBoxPreferences.Items.RemoveAt(selectedIndex + 1);
+          listBoxPreferences.SelectedIndex = selectedIndex - 1;
+        }
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
       }
     }
 
     private void buttonDown_Click(object sender, EventArgs e)
     {
-      int selectedIndex = listBoxPreferences.SelectedIndex;
-      if (selectedIndex < listBoxPreferences.Items.Count - 1 && selectedIndex != -1)
+      try
       {
-        listBoxPreferences.Items.Insert(selectedIndex + 2, listBoxPreferences.Items[selectedIndex]);
-        listBoxPreferences.Items.RemoveAt(selectedIndex);
-        listBoxPreferences.SelectedIndex = selectedIndex + 1;
+        int selectedIndex = listBoxPreferences.SelectedIndex;
+        if (selectedIndex < listBoxPreferences.Items.Count - 1 && selectedIndex != -1)
+        {
+          listBoxPreferences.Items.Insert(selectedIndex + 2, listBoxPreferences.Items[selectedIndex]);
+          listBoxPreferences.Items.RemoveAt(selectedIndex);
+          listBoxPreferences.SelectedIndex = selectedIndex + 1;
+        }
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
       }
     }
 
     private void treeViewHierarchy_BeforeSelect(object sender, TreeViewCancelEventArgs e)
     {
-      if (lastSelectedPageId != e.Node.Name)
+      try
       {
-        lastSelectedPageId = e.Node.Name;
-        if (fullHierarchy.ContainsKey(lastSelectedPageId))
+        if (checkBoxNavigateAutomatically.Checked == true)
         {
-          if (checkBoxNavigateAutomatically.Checked == true)
+          string lastSelectedPageId = onenoteAccessor.GetLastSelectedPageId();
+          if (lastSelectedPageId != e.Node.Name)
           {
-            onenoteAccessor.Navigate(lastSelectedPageId);
+            onenoteAccessor.SetLastSelectedPageId(e.Node.Name);
+            if (onenoteAccessor.HasPageId(e.Node.Name))
+            {
+              onenoteAccessor.Navigate(e.Node.Name);
+            }
           }
         }
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
       }
     }
 
     private void buttonScanDuplicatedPages_Click(object sender, EventArgs e)
     {
-      ScanDuplicated();
+      ScanDuplicatedPages();
     }
 
     private void buttonSelectAllExceptOne_Click(object sender, EventArgs e)
     {
-      // Select all except one
-      List<string> preferences = new List<string>(listBoxPreferences.Items.Cast<string>());
-
-      foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
+      try
       {
-        int childCount = treeNode.Nodes.Count;
-        int[] priorities = new int[childCount];
-        int whereMin = int.MaxValue;
-        int wherePos = -1;
-        for (int i = 0; i < childCount; ++i)
+        List<string> preferences = new List<string>(listBoxPreferences.Items.Cast<string>()); // Select all except one
+
+        foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
         {
-          string sectionPath = treeNode.Nodes[i].Text;
-          string sectionDir = System.IO.Path.GetDirectoryName(sectionPath);
-          int where = preferences.IndexOf(sectionDir);
-          if (whereMin > where)
+          int childCount = treeNode.Nodes.Count;
+          int[] priorities = new int[childCount];
+          int whereMin = int.MaxValue;
+          int wherePos = -1;
+          for (int i = 0; i < childCount; ++i)
           {
-            whereMin = where;
-            wherePos = i;
+            string sectionPath = treeNode.Nodes[i].Text;
+            string sectionDir = System.IO.Path.GetDirectoryName(sectionPath);
+            int where = preferences.IndexOf(sectionDir);
+            if (whereMin > where)
+            {
+              whereMin = where;
+              wherePos = i;
+            }
+          }
+          for (int i = 0; i < childCount; ++i)
+          {
+            treeNode.Nodes[i].Checked = (i != wherePos);
           }
         }
-        for (int i = 0; i < childCount; ++i)
-        {
-          treeNode.Nodes[i].Checked = (i != wherePos);
-        }
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
       }
     }
 
+
     private void buttonDeselectAll_Click(object sender, EventArgs e)
     {
-      foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
+      try
       {
-        foreach (TreeNode childNode in treeNode.Nodes)
+        foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
         {
-          childNode.Checked = false;
+          foreach (TreeNode childNode in treeNode.Nodes)
+          {
+            childNode.Checked = false;
+          }
         }
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
       }
     }
 
     private void buttonRemoveSelectedPages_Click(object sender, EventArgs e)
     {
       // ** for the safety ** Not to allow user to select every page in a duplicated group.
+      TreeNode selectedTreeNode = null;
+      bool isEveryPageSelected = CheckIfEveryPageIsSelected(out selectedTreeNode);
+      if (isEveryPageSelected)
+      {
+        MessageBox.Show(
+          "De-duplication is aborted. \r\n\r\n" +
+          "You've selected every page in the same group. (name:" + selectedTreeNode.Text + ")\r\n\r\n" +
+          "You should keep at least one copy of pages in order to keep your data.",
+          "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+        treeViewHierarchy.SelectedNode = selectedTreeNode;
+        treeViewHierarchy.Focus();
+      }
+      else
+      {
+        int removingCount = GetCountOfPageBeingRemoved();
+        if (MessageBox.Show("Are you sure to remove the selected pages? (page count: " + removingCount.ToString() + ")\r\n\r\nPlease *BACKUP* before proceeding de-duplication.", "Confirm", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+        {
+          ResetProgressBar();
+          int successCount;
+          int failureCount;
+          RemoveSelectedOneNotePages(removingCount, out successCount, out failureCount);
+          ResetProgressBar();
+          ResetTreeViewControl();
+          MessageBox.Show(string.Format("Deleted : {0}\r\nFailed : {1}", successCount, failureCount), "Summary", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+      }
+    }
+
+    private void RemoveSelectedOneNotePages(int removingCount, out int successCount, out int failureCount)
+    {
+      successCount = 0;
+      failureCount = 0;
+
+      int currentCount = 0;
+
+      foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
+      {
+        foreach (TreeNode childNode in treeNode.Nodes)
+        {
+          if (childNode.Checked == true)
+          {
+            currentCount++;
+            bool result = onenoteAccessor.RemovePage(childNode.Name);
+            if (result)
+            {
+              successCount++;
+            }
+            else
+            {
+              failureCount++;
+            }
+            SetProgressBar(currentCount, removingCount);
+          }
+        }
+      }
+    }
+
+    private int GetCountOfPageBeingRemoved()
+    {
+      int removingCount = 0;
+      foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
+      {
+        foreach (TreeNode childNode in treeNode.Nodes)
+        {
+          if (childNode.Checked == true)
+          {
+            removingCount++;
+          }
+        }
+      }
+      return removingCount;
+    }
+
+    private bool CheckIfEveryPageIsSelected(out TreeNode selectedTreeNode)
+    {
+      selectedTreeNode = null;
       foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
       {
         int checkedCount = 0;
@@ -139,99 +267,55 @@ namespace OneNoteDuplicatesRemover
         }
         if (treeNode.Nodes.Count == checkedCount)
         {
-          MessageBox.Show( 
-            "De-duplication is aborted. \r\n\r\nYou've selected every page in the same group. (name:" + treeNode.Text + ")\r\n\r\n" +
-            "You should keep at least one copy of pages in order to keep your data.", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-          treeViewHierarchy.SelectedNode = treeNode;
-          treeViewHierarchy.Focus();
-          return;
+          selectedTreeNode = treeNode;
+          return true;
         }
       }
+      return false;
+    }
 
-      int removingCount = 0;
-      foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
+    private void ScanDuplicatedPages()
+    {
+      ResetProgressBar();
+      bool success = onenoteAccessor.UpdateHierarchy();
+      if (success)
       {
-        foreach (TreeNode childNode in treeNode.Nodes)
-        {
-          if (childNode.Checked == true)
-          {
-            removingCount++;
-          }
-        }
-      }
-
-      if (MessageBox.Show("Are you sure to remove the selected pages? (page count: " + removingCount.ToString() + ")\r\n\r\nPlease *BACKUP* before proceeding de-duplication.", "Confirm", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-      {
-        ResetProgressBar();
-        int currentCount = 0;
-        int successCount = 0;
-        int failureCount = 0;
-        foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
-        {
-          foreach (TreeNode childNode in treeNode.Nodes)
-          {
-            if (childNode.Checked == true)
-            {
-              currentCount++;
-              bool result = onenoteAccessor.RemovePage(childNode.Name);
-              if (result)
-              {
-                successCount++;
-              }
-              else
-              {
-                failureCount++;
-              }
-              SetProgressBar(currentCount, removingCount);
-            }
-          }
-        }
         ResetProgressBar();
         ResetTreeViewControl();
-        MessageBox.Show(string.Format("Deleted : {0}\r\nFailed : {1}", successCount, failureCount), "Summary", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        Dictionary<string /* innerTextHash */, List<string> /* Page Id List */ > duplicatedGroups = null;
+        duplicatedGroups = onenoteAccessor.GetDuplicatedGroups();
+
+        List<string> preferredPathList = new List<string>();
+        UpdateDuplicatedGroupsToUI(duplicatedGroups, preferredPathList);
+        preferredPathList = MakePreferredPathListTidy(preferredPathList);
+        UpdatePathPreferenceUI(preferredPathList);
+
+        ResetProgressBar();
+        UpdateStatus("Scan Finished");
+      }
+      else
+      {
+        etc.LoggerHelper.LogWarn("Unable to get a hierarchy.");
       }
     }
 
-    private void ScanDuplicated()
+    private void UpdateStatus(string msg)
     {
-      ResetProgressBar();
-      fullHierarchy = onenoteAccessor.GetFullHierarchy();
-      ResetProgressBar();
-      ResetTreeViewControl();
+      toolStripStatusLabelScan.Text = msg;
+    }
 
-      Dictionary<string /* innerTextHash */, List<string> /* Page Id List */ > duplicatedGroups = new Dictionary<string, List<string>>();
-      foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in fullHierarchy)
+    private void UpdatePathPreferenceUI(List<string> sectionPathList)
+    {
+      listBoxPreferences.Items.Clear();
+      foreach (string sectionPath in sectionPathList)
       {
-        string pageId = pageInfo.Key;
-        string pageInnerTextHash = pageInfo.Value.HashOfInnerText;
-
-        if (duplicatedGroups.ContainsKey(pageInnerTextHash) == false)
-        {
-          duplicatedGroups.Add(pageInnerTextHash, new List<string>());
-        }
-
-        duplicatedGroups[pageInnerTextHash].Add(pageId);
+        listBoxPreferences.Items.Add(sectionPath);
       }
+    }
 
-      List<string> sectionPathList = new List<string>();
-
-      int duplicatedGroupIndex = 0;
-      foreach (KeyValuePair<string, List<string>> groupInfo in duplicatedGroups)
-      {
-        if (groupInfo.Value.Count > 1)
-        {
-          duplicatedGroupIndex++;
-          TreeNode groupNode = this.treeViewHierarchy.Nodes.Add(groupInfo.Key, string.Format("Duplicated Page Group {0} - {1}", duplicatedGroupIndex, groupInfo.Key == "D41D8CD98F00B204E9800998ECF8427E" ? "Empty Page" : groupInfo.Key));
-          TreeViewHelper.HideCheckBox(treeViewHierarchy, groupNode);
-          for (int i = 0; i < groupInfo.Value.Count; ++i)
-          {
-            string sectionPath = fullHierarchy[groupInfo.Value[i]].ParentSectionFilePath;
-            groupNode.Nodes.Add(groupInfo.Value[i], sectionPath);
-            sectionPathList.Add(System.IO.Path.GetDirectoryName(sectionPath));
-          }
-        }
-      }
-
+    private static List<string> MakePreferredPathListTidy(List<string> sectionPathList)
+    {
       sectionPathList.Sort((string left, string right) =>
       {
         bool isLeftCloud = (left.IndexOf("https:") == 0);
@@ -250,17 +334,33 @@ namespace OneNoteDuplicatesRemover
         }
       });
       sectionPathList = sectionPathList.Distinct().ToList();
+      return sectionPathList;
+    }
 
-      listBoxPreferences.Items.Clear();
-      foreach (string sectionPath in sectionPathList)
+    private void UpdateDuplicatedGroupsToUI(Dictionary<string /* innerTextHash */, List<string> /* Page Id List */ > duplicatedGroups, List<string> sectionPathList)
+    {
+      int duplicatedGroupIndex = 0;
+      foreach (KeyValuePair<string, List<string>> groupInfo in duplicatedGroups)
       {
-        listBoxPreferences.Items.Add(sectionPath);
+        if (groupInfo.Value.Count > 1)
+        {
+          duplicatedGroupIndex++;
+          TreeNode groupNode = this.treeViewHierarchy.Nodes.Add(groupInfo.Key, string.Format("Duplicated Page Group {0} - {1}", duplicatedGroupIndex, groupInfo.Key == "D41D8CD98F00B204E9800998ECF8427E" ? "Empty Page" : groupInfo.Key));
+          TreeViewHelper.HideCheckBox(treeViewHierarchy, groupNode);
+          for (int i = 0; i < groupInfo.Value.Count; ++i)
+          {
+            string pageId = groupInfo.Value[i];
+            string sectionPath = null;
+            bool success = onenoteAccessor.TryGetSectionPath(pageId, out sectionPath);
+            if (success)
+            {
+              groupNode.Nodes.Add(pageId, sectionPath);
+              sectionPathList.Add(System.IO.Path.GetDirectoryName(sectionPath));
+            }
+          }
+        }
       }
-
       treeViewHierarchy.ExpandAll();
-      
-      ResetProgressBar();
-      toolStripStatusLabelScan.Text = "Scan Finished";
     }
 
     private void ResetTreeViewControl()
@@ -268,21 +368,38 @@ namespace OneNoteDuplicatesRemover
       this.treeViewHierarchy.Nodes.Clear();
     }
 
-    #region Progress Bar
     private void SetProgressBar(int current, int max)
     {
-      toolStripProgressBarScan.Maximum = max;
-      toolStripProgressBarScan.Value = current;
-      
-      toolStripStatusLabelScan.Text = string.Format("{0} of {1}", current, max);
-      
-      Application.DoEvents(); // While scanning, try to update the label.
+      try
+      {
+        toolStripProgressBarScan.Maximum = max;
+        toolStripProgressBarScan.Value = current;
+        UpdateStatus(string.Format("{0} of {1}", current, max));
+        Application.DoEvents(); // While scanning, try to update the label.
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
+      }
     }
 
     private void ResetProgressBar()
     {
       this.toolStripProgressBarScan.Value = 0;
     }
-    #endregion
+
+    private void FormMain_Load(object sender, EventArgs e)
+    {
+      try
+      {
+        InitializeFileLogger();
+        InitializeUIComponent();
+        InitializeOneNoteAccessor();
+      }
+      catch (System.Exception exception)
+      {
+        etc.LoggerHelper.LogException(exception);
+      }
+    }
   }
 }

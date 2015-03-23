@@ -31,7 +31,7 @@ namespace OneNoteDuplicatesRemover.etc
       }
     }
 
-    string path = "";
+    private string path = "";
 
     public void Init(string path)
     {
@@ -42,9 +42,12 @@ namespace OneNoteDuplicatesRemover.etc
     {
       try
       {
-        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, true, Encoding.UTF8))
+        if (path != "")
         {
-          sw.WriteLine(category + " * " + DateTime.Now.ToUniversalTime().ToString() + " * " + format, args);
+          using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, true, Encoding.UTF8))
+          {
+            sw.WriteLine(category + " * " + DateTime.Now.ToUniversalTime().ToString() + " * " + format, args);
+          }
         }
       }
       catch (Exception e)
