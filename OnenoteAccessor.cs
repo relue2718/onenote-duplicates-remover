@@ -25,17 +25,17 @@ namespace OneNoteDuplicatesRemover
       }
     }
 
-    public delegate void ProgressEventHandler(int current, int max);
+    public delegate void ProgressEventHandler(int current, int max, string pageName);
     public event ProgressEventHandler OnProgressEvent = null;
 
     public delegate void AbortedEventHandler(string msg); // If the program is not able to be continued.
     public event AbortedEventHandler OnAbortedEvent = null;
 
-    private void FireProgressEvent(int current, int max)
+    private void FireProgressEvent(int current, int max, string pageName)
     {
       if (OnProgressEvent != null)
       {
-        OnProgressEvent(current, max);
+        OnProgressEvent(current, max, pageName);
       }
     }
 
@@ -75,7 +75,9 @@ namespace OneNoteDuplicatesRemover
             {
               pageInfo.Value.HashOfInnerText = pageInnerTextHash;
               pageInfo.Value.IsOkay = true;
-              FireProgressEvent(i, totalCount);
+
+
+              FireProgressEvent(i, totalCount, pageInfo.Value.PageName);
             }
             else
             {
@@ -267,9 +269,9 @@ namespace OneNoteDuplicatesRemover
       }
     }
 
-    public Dictionary<string, List<string>> GetDuplicatedGroups()
+    public Dictionary<string, List<Tuple<string /* pageId */, string /* pageName */ >>> GetDuplicatedGroups()
     {
-      Dictionary<string /* innerTextHash */, List<string> /* Page Id List */ > duplicatedGroups = new Dictionary<string, List<string>>();
+      Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* Page Id List */ > duplicatedGroups = new Dictionary<string, List<Tuple<string, string>>>();
       foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in hierarchy)
       {
         if (pageInfo.Value.IsOkay)
@@ -279,10 +281,10 @@ namespace OneNoteDuplicatesRemover
 
           if (duplicatedGroups.ContainsKey(pageInnerTextHash) == false)
           {
-            duplicatedGroups.Add(pageInnerTextHash, new List<string>());
+            duplicatedGroups.Add(pageInnerTextHash, new List<Tuple<string, string>>());
           }
 
-          duplicatedGroups[pageInnerTextHash].Add(pageId);
+          duplicatedGroups[pageInnerTextHash].Add(new Tuple<string, string>(pageId, pageInfo.Value.PageName));
         }
       }
       return duplicatedGroups;
