@@ -36,7 +36,7 @@ Issues
 
 Download
 --------
-* [OneNoteDuplicatesRemover.exe (Executable File; 27kb; 32bit; OneNote 2010, 2013 compatible)](https://github.com/relue2718/onenote-duplicates-remover/raw/master/publish/OneNoteDuplicatesRemover.exe)
+* [OneNoteDuplicatesRemover.exe (Executable File; 32bit; Onenote 2013)](https://github.com/relue2718/onenote-duplicates-remover/raw/master/executable/OneNoteDuplicatesRemover.exe)
 * If you can't run the executable file, you may build the program by yourself. Please understand me that I can't provide every version that works for various environments.
 
 Need help!
