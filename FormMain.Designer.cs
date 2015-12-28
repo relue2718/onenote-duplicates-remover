@@ -35,7 +35,7 @@
       this.buttonDeselectAll = new System.Windows.Forms.Button();
       this.buttonRemoveSelectedPages = new System.Windows.Forms.Button();
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-      this.treeViewHierarchy = new etc.MyTreeView();
+      this.treeViewHierarchy = new System.Windows.Forms.TreeView();
       this.splitContainer3 = new System.Windows.Forms.SplitContainer();
       this.label2 = new System.Windows.Forms.Label();
       this.buttonUp = new System.Windows.Forms.Button();
