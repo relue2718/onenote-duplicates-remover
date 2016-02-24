@@ -46,7 +46,6 @@ namespace OneNoteDuplicatesRemover
                     UpdateProgressBar(0, 100);
                     break;
                 case CurrentStatus.Removing:
-                    toolStripStatusLabelScan.Text = "Removing duplicates" + appendedStatus;
                     UpdateStatusLabel("Removing", appendedStatus);
                     UpdateProgressBar(progressBarCurrent, progressBarMax);
                     break;
