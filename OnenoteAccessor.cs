@@ -7,7 +7,7 @@ namespace OneNoteDuplicatesRemover
 {
     public class OneNoteAccessor
     {
-        private OneNoteApplicationWrapper instance = null;
+        private OneNoteApplicationWrapper onenoteApplication = null;
         private Dictionary<string, OneNotePageInfo> hierarchy = new Dictionary<string, OneNotePageInfo>();
         private string lastSelectedPageId = "";
 
@@ -16,8 +16,8 @@ namespace OneNoteDuplicatesRemover
 
         public void InitializeOneNoteWrapper()
         {
-            instance = new OneNoteApplicationWrapper();
-            instance.InitializeOneNoteTypeLibrary();
+            onenoteApplication = new OneNoteApplicationWrapper();
+            onenoteApplication.InitializeOneNoteTypeLibrary();
         }
 
         public bool UpdateHierarchy()
@@ -25,7 +25,7 @@ namespace OneNoteDuplicatesRemover
             hierarchy = new Dictionary<string, OneNotePageInfo>();
 
             string hierarchyXmlString = "";
-            bool success = instance.TryGetHierarchyAsXML(out hierarchyXmlString);
+            bool success = onenoteApplication.TryGetHierarchyAsXML(out hierarchyXmlString);
 
             if (success)
             {
@@ -55,7 +55,7 @@ namespace OneNoteDuplicatesRemover
                         if (successHash)
                         {
                             pageInfo.Value.HashOfInnerText = pageInnerTextHash;
-                            pageInfo.Value.IsOkay = true;
+                            pageInfo.Value.IsContentRetrieved = true;
 
                             FireEventUpdatedScanProgress(i, totalCount, pageInfo.Value.PageName);
                         }
@@ -161,7 +161,7 @@ namespace OneNoteDuplicatesRemover
             // Therefore, I will ignore those attributes by extracting 'innerText' and calculate a hash value without those attributes.
 
             string pageContents = "";
-            bool success = instance.TryGetPageContent(pageId, out pageContents);
+            bool success = onenoteApplication.TryGetPageContent(pageId, out pageContents);
             if (success)
             {
                 System.Xml.XmlDocument pageXmlContents = new System.Xml.XmlDocument();
@@ -217,7 +217,7 @@ namespace OneNoteDuplicatesRemover
                 bstrPageID: The OneNote ID of the page that contains the object to delete.
                 bstrObjectID: The OneNote ID of the object that you want to delete. 
              */
-            bool success = instance.TryNavigateTo(pageId);
+            bool success = onenoteApplication.TryNavigateTo(pageId);
             if (!success)
             {
                 etc.LoggerHelper.LogWarn("Navigate failed. pageId:{0}", pageId);
@@ -226,7 +226,7 @@ namespace OneNoteDuplicatesRemover
 
         public bool RemovePage(string pageId)
         {
-            bool success = instance.TryDeleteHierarchy(pageId);
+            bool success = onenoteApplication.TryDeleteHierarchy(pageId);
             if (!success)
             {
                 etc.LoggerHelper.LogWarn("Remove failed. pageId:{0}", pageId);
@@ -262,7 +262,7 @@ namespace OneNoteDuplicatesRemover
             Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* Page Id List */ > duplicatedGroups = new Dictionary<string, List<Tuple<string, string>>>();
             foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in hierarchy)
             {
-                if (pageInfo.Value.IsOkay)
+                if (pageInfo.Value.IsContentRetrieved)
                 {
                     string pageId = pageInfo.Key;
                     string pageInnerTextHash = pageInfo.Value.HashOfInnerText;

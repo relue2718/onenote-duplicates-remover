@@ -15,8 +15,8 @@ namespace OneNoteDuplicatesRemover
         static void Main()
         {
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new FormMain() );
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new FormMain());
         }
     }
 }

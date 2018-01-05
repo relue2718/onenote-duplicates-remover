@@ -26,7 +26,7 @@ namespace OneNoteDuplicatesRemover
         private void UpdateCurrentStatus(CurrentStatus newStatus, string additionalInformation = "", int progressBarCurrent = 0, int progressBarMax = 0)
         {
             _currentStatus = newStatus;
-            
+
             // Do the following stuff
             // 1. Update the status label
             // 2. Update the progress bar
