@@ -45,6 +45,8 @@
             this.toolStripProgressBarScan = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelScan = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.buttonTop = new System.Windows.Forms.Button();
+            this.buttonButtom = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -185,6 +187,8 @@
             // 
             // splitContainer3.Panel1
             // 
+            this.splitContainer3.Panel1.Controls.Add(this.buttonButtom);
+            this.splitContainer3.Panel1.Controls.Add(this.buttonTop);
             this.splitContainer3.Panel1.Controls.Add(this.label2);
             this.splitContainer3.Panel1.Controls.Add(this.buttonUp);
             this.splitContainer3.Panel1.Controls.Add(this.buttonDown);
@@ -201,14 +205,14 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(9, 7);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 13);
+            this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 10;
-            this.label2.Text = "Path Preferences";
+            this.label2.Text = "Path Preference";
             // 
             // buttonUp
             // 
             this.buttonUp.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonUp.Location = new System.Drawing.Point(7, 24);
+            this.buttonUp.Location = new System.Drawing.Point(8, 59);
             this.buttonUp.Name = "buttonUp";
             this.buttonUp.Size = new System.Drawing.Size(105, 24);
             this.buttonUp.TabIndex = 8;
@@ -219,7 +223,7 @@
             // buttonDown
             // 
             this.buttonDown.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonDown.Location = new System.Drawing.Point(7, 54);
+            this.buttonDown.Location = new System.Drawing.Point(8, 89);
             this.buttonDown.Name = "buttonDown";
             this.buttonDown.Size = new System.Drawing.Size(105, 24);
             this.buttonDown.TabIndex = 9;
@@ -278,6 +282,28 @@
             this.toolStripContainer1.TabIndex = 20;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
+            // buttonTop
+            // 
+            this.buttonTop.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonTop.Location = new System.Drawing.Point(8, 29);
+            this.buttonTop.Name = "buttonTop";
+            this.buttonTop.Size = new System.Drawing.Size(105, 24);
+            this.buttonTop.TabIndex = 11;
+            this.buttonTop.Text = "Top";
+            this.buttonTop.UseVisualStyleBackColor = true;
+            this.buttonTop.Click += new System.EventHandler(this.buttonTop_Click);
+            // 
+            // buttonButtom
+            // 
+            this.buttonButtom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonButtom.Location = new System.Drawing.Point(8, 119);
+            this.buttonButtom.Name = "buttonButtom";
+            this.buttonButtom.Size = new System.Drawing.Size(105, 24);
+            this.buttonButtom.TabIndex = 12;
+            this.buttonButtom.Text = "Bottom";
+            this.buttonButtom.UseVisualStyleBackColor = true;
+            this.buttonButtom.Click += new System.EventHandler(this.buttonButtom_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -333,5 +359,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listBoxPreferences;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.Button buttonButtom;
+        private System.Windows.Forms.Button buttonTop;
     }
 }

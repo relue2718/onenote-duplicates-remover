@@ -143,6 +143,42 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
+        private void buttonTop_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int selectedIndex = listBoxPreferences.SelectedIndex;
+                if (selectedIndex <= listBoxPreferences.Items.Count - 1 && selectedIndex != -1)
+                {
+                    listBoxPreferences.Items.Insert(0, listBoxPreferences.Items[selectedIndex]);
+                    listBoxPreferences.Items.RemoveAt(selectedIndex + 1);
+                    listBoxPreferences.SelectedIndex = 0;
+                }
+            }
+            catch (System.Exception exception)
+            {
+                etc.LoggerHelper.LogException(exception);
+            }
+        }
+
+        private void buttonButtom_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int selectedIndex = listBoxPreferences.SelectedIndex;
+                if (selectedIndex <= listBoxPreferences.Items.Count - 1 && selectedIndex != -1)
+                {
+                    listBoxPreferences.Items.Insert(listBoxPreferences.Items.Count-1, listBoxPreferences.Items[selectedIndex]);
+                    listBoxPreferences.Items.RemoveAt(selectedIndex);
+                    listBoxPreferences.SelectedIndex = listBoxPreferences.Items.Count-1;
+                }
+            }
+            catch (System.Exception exception)
+            {
+                etc.LoggerHelper.LogException(exception);
+            }
+        }
+
         private void treeViewHierarchy_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
             try
@@ -431,7 +467,21 @@ namespace OneNoteDuplicatesRemover
                 }
                 else
                 {
-                    return left.CompareTo(right);
+                    // NOTE: Might be unsafe if the section name contains "OneNote_RecycleBin" (very unlikely)
+                    bool isLeftRecycleBin = left.Contains("OneNote_RecycleBin");
+                    bool isRightRecycleBin = right.Contains("OneNote_RecycleBin");
+                    if (isLeftRecycleBin && !isRightRecycleBin)
+                    {
+                        return 1;
+                    }
+                    else if (!isLeftRecycleBin && isRightRecycleBin)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return left.CompareTo(right);
+                    }
                 }
             });
             sectionPathList = sectionPathList.Distinct().ToList();
@@ -483,5 +533,7 @@ namespace OneNoteDuplicatesRemover
                 etc.LoggerHelper.LogException(exception);
             }
         }
+
+
     }
 }

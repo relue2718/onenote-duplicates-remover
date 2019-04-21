@@ -199,7 +199,7 @@ namespace OneNoteDuplicatesRemover
             try
             {
                 byte[] rawInnerText = Encoding.UTF8.GetBytes(plainText);
-                byte[] computedHash = System.Security.Cryptography.MD5.Create().ComputeHash(rawInnerText);
+                byte[] computedHash = System.Security.Cryptography.SHA256.Create().ComputeHash(rawInnerText);
                 hash = Utils.MakeHashString(computedHash);
                 return true;
             }
