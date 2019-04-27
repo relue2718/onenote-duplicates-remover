@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.labelMessageCounts = new System.Windows.Forms.Label();
             this.buttonScanDuplicatedPages = new System.Windows.Forms.Button();
             this.checkBoxNavigateAutomatically = new System.Windows.Forms.CheckBox();
             this.buttonSelectAllExceptOne = new System.Windows.Forms.Button();
@@ -47,7 +48,11 @@
             this.toolStripProgressBarScan = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelScan = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.labelMessageCounts = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dumpJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -64,6 +69,7 @@
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer2
@@ -87,9 +93,17 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer2.Size = new System.Drawing.Size(978, 588);
+            this.splitContainer2.Size = new System.Drawing.Size(978, 564);
             this.splitContainer2.SplitterDistance = 66;
             this.splitContainer2.TabIndex = 18;
+            // 
+            // labelMessageCounts
+            // 
+            this.labelMessageCounts.AutoSize = true;
+            this.labelMessageCounts.Location = new System.Drawing.Point(483, 44);
+            this.labelMessageCounts.Name = "labelMessageCounts";
+            this.labelMessageCounts.Size = new System.Drawing.Size(0, 13);
+            this.labelMessageCounts.TabIndex = 6;
             // 
             // buttonScanDuplicatedPages
             // 
@@ -161,8 +175,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer1.Size = new System.Drawing.Size(978, 518);
-            this.splitContainer1.SplitterDistance = 346;
+            this.splitContainer1.Size = new System.Drawing.Size(978, 494);
+            this.splitContainer1.SplitterDistance = 329;
             this.splitContainer1.TabIndex = 18;
             // 
             // treeViewHierarchy
@@ -172,7 +186,7 @@
             this.treeViewHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewHierarchy.Location = new System.Drawing.Point(0, 0);
             this.treeViewHierarchy.Name = "treeViewHierarchy";
-            this.treeViewHierarchy.Size = new System.Drawing.Size(974, 342);
+            this.treeViewHierarchy.Size = new System.Drawing.Size(974, 325);
             this.treeViewHierarchy.TabIndex = 6;
             this.treeViewHierarchy.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewHierarchy_BeforeSelect);
             // 
@@ -194,7 +208,7 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.listBoxPreferences);
-            this.splitContainer3.Size = new System.Drawing.Size(974, 164);
+            this.splitContainer3.Size = new System.Drawing.Size(974, 157);
             this.splitContainer3.SplitterDistance = 118;
             this.splitContainer3.TabIndex = 12;
             // 
@@ -258,7 +272,7 @@
             this.listBoxPreferences.FormattingEnabled = true;
             this.listBoxPreferences.Location = new System.Drawing.Point(0, 0);
             this.listBoxPreferences.Name = "listBoxPreferences";
-            this.listBoxPreferences.Size = new System.Drawing.Size(852, 164);
+            this.listBoxPreferences.Size = new System.Drawing.Size(852, 157);
             this.listBoxPreferences.TabIndex = 11;
             // 
             // statusStrip1
@@ -294,21 +308,52 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer2);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(978, 588);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(978, 564);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(978, 635);
+            this.toolStripContainer1.Size = new System.Drawing.Size(978, 611);
             this.toolStripContainer1.TabIndex = 20;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
-            // labelMessageCounts
+            // menuStrip1
             // 
-            this.labelMessageCounts.AutoSize = true;
-            this.labelMessageCounts.Location = new System.Drawing.Point(483, 44);
-            this.labelMessageCounts.Name = "labelMessageCounts";
-            this.labelMessageCounts.Size = new System.Drawing.Size(0, 13);
-            this.labelMessageCounts.TabIndex = 6;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(978, 24);
+            this.menuStrip1.TabIndex = 21;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dumpJsonToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // dumpJsonToolStripMenuItem
+            // 
+            this.dumpJsonToolStripMenuItem.Name = "dumpJsonToolStripMenuItem";
+            this.dumpJsonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dumpJsonToolStripMenuItem.Text = "&Dump JSON...";
+            this.dumpJsonToolStripMenuItem.Click += new System.EventHandler(this.dumpJsonToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -316,7 +361,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(978, 635);
             this.Controls.Add(this.toolStripContainer1);
+            this.Controls.Add(this.menuStrip1);
             this.ForeColor = System.Drawing.Color.Black;
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OneNoteDuplicatesRemover";
@@ -342,7 +389,10 @@
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -368,5 +418,10 @@
         private System.Windows.Forms.Button buttonBottom;
         private System.Windows.Forms.Button buttonTop;
         private System.Windows.Forms.Label labelMessageCounts;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem dumpJsonToolStripMenuItem;
     }
 }

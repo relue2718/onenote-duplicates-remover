@@ -62,10 +62,43 @@ namespace OneNoteDuplicatesRemover
                 UpdateCurrentStatus(CurrentStatus.ScanCompleted);
 
                 Dictionary<string, List<Tuple<string, string>>> duplicatesGroups = accessor.GetDuplicatesGroups();
-                List<string> sortedSectionPathList = SortSectionPathList(GetSectionPathList(duplicatesGroups));
-                UpdateUIFromDuplicatesGroups(duplicatesGroups);
-                UpdatePathPreferenceUI(sortedSectionPathList);
+                if (SanityCheck(duplicatesGroups))
+                {
+                    List<string> sortedSectionPathList = SortSectionPathList(GetSectionPathList(duplicatesGroups));
+                    UpdateUIFromDuplicatesGroups(duplicatesGroups);
+                    UpdatePathPreferenceUI(sortedSectionPathList);
+                }
             }));
+        }
+
+        private bool SanityCheck(Dictionary<string, List<Tuple<string, string>>> duplicatesGroups)
+        {
+            HashSet<string> knownPagesEntire = new HashSet<string>();
+            foreach (KeyValuePair<string, List<Tuple<string, string>>> groupInfo in duplicatesGroups)
+            {
+                if (groupInfo.Value.Count > 1)
+                {
+                    HashSet<string> knownPagesGroup = new HashSet<string>();
+                    foreach (Tuple<string /* page ID */, string> pageInfo in groupInfo.Value)
+                    {
+                        knownPagesGroup.Add(pageInfo.Item1);
+                        if (!knownPagesEntire.Contains(pageInfo.Item1))
+                        {
+                            knownPagesEntire.Add(pageInfo.Item1);
+                        }
+                        else
+                        {
+                            etc.LoggerHelper.LogError("Page ID must be unique in all groups.");
+                            return false;
+                        }
+                    }
+                    if (knownPagesGroup.Count != groupInfo.Value.Count)
+                    {
+                        etc.LoggerHelper.LogError("Page ID must be unique in each group.");
+                    }
+                }
+            }
+            return true;
         }
 
         private void Accessor_EventProgress(int countReadPages_Success, int countReadPages_Failed, int countHashedPages_Success, int countHashedPages_Failed, int countTotalPages, string lastPageTitle)
@@ -595,6 +628,34 @@ namespace OneNoteDuplicatesRemover
             buttonBottom.Enabled = enabled;
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: Graceful exit.
+            Application.Exit();
+        }
 
+        private void dumpJsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, List<Tuple<string, string>>> duplicatesGroups = accessor.GetDuplicatesGroups();
+            if (duplicatesGroups != null)
+            {
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(duplicatesGroups);
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.FileName = "dump-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json";
+                sfd.Filter = "JSON files (*.json)|*.json";
+                sfd.Title = "Save JSON";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(sfd.FileName, false, Encoding.UTF8))
+                    {
+                        sw.Write(json);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Scanning is not completed.");
+            }
+        }
     }
 }
