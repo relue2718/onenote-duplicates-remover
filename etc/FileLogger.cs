@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace OneNoteDuplicatesRemover.etc
@@ -32,16 +30,18 @@ namespace OneNoteDuplicatesRemover.etc
         }
 
         private string path = "";
-        private readonly object print_lock = new object();
 
         public void Init(string path)
         {
-            this.path = path;
+            lock (this)
+            {
+                this.path = path;
+            }
         }
 
         public void Print(string message)
         {
-            lock (print_lock)
+            lock (this)
             {
                 try
                 {
@@ -55,7 +55,7 @@ namespace OneNoteDuplicatesRemover.etc
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Debug.Print(e.ToString());
+                    DebugLogger.Instance.Print(e.ToString());
                 }
             }
         }

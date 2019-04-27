@@ -94,6 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="etc\DebugLogger.cs" />
     <Compile Include="etc\FileLogger.cs" />
     <Compile Include="etc\LoggerHelper.cs" />
     <Compile Include="etc\MyTreeView.cs">

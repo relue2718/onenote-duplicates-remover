@@ -47,6 +47,7 @@
             this.toolStripProgressBarScan = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelScan = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.labelMessageCounts = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -76,6 +77,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.labelMessageCounts);
             this.splitContainer2.Panel1.Controls.Add(this.buttonScanDuplicatedPages);
             this.splitContainer2.Panel1.Controls.Add(this.checkBoxNavigateAutomatically);
             this.splitContainer2.Panel1.Controls.Add(this.buttonSelectAllExceptOne);
@@ -93,12 +95,11 @@
             // 
             this.buttonScanDuplicatedPages.BackColor = System.Drawing.Color.LightSkyBlue;
             this.buttonScanDuplicatedPages.Cursor = System.Windows.Forms.Cursors.Default;
-            this.buttonScanDuplicatedPages.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonScanDuplicatedPages.Location = new System.Drawing.Point(12, 12);
             this.buttonScanDuplicatedPages.Name = "buttonScanDuplicatedPages";
             this.buttonScanDuplicatedPages.Size = new System.Drawing.Size(148, 26);
-            this.buttonScanDuplicatedPages.TabIndex = 18;
-            this.buttonScanDuplicatedPages.Text = "Scan Duplicates";
+            this.buttonScanDuplicatedPages.TabIndex = 0;
+            this.buttonScanDuplicatedPages.Text = "Scan duplicates";
             this.buttonScanDuplicatedPages.UseVisualStyleBackColor = false;
             this.buttonScanDuplicatedPages.Click += new System.EventHandler(this.buttonScanDuplicatedPages_Click);
             // 
@@ -109,29 +110,27 @@
             this.checkBoxNavigateAutomatically.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxNavigateAutomatically.Location = new System.Drawing.Point(12, 44);
             this.checkBoxNavigateAutomatically.Name = "checkBoxNavigateAutomatically";
-            this.checkBoxNavigateAutomatically.Size = new System.Drawing.Size(168, 17);
-            this.checkBoxNavigateAutomatically.TabIndex = 25;
-            this.checkBoxNavigateAutomatically.Text = "Navigate the highlighted page";
+            this.checkBoxNavigateAutomatically.Size = new System.Drawing.Size(180, 17);
+            this.checkBoxNavigateAutomatically.TabIndex = 5;
+            this.checkBoxNavigateAutomatically.Text = "Navigate to the highlighted page";
             this.checkBoxNavigateAutomatically.UseVisualStyleBackColor = true;
             // 
             // buttonSelectAllExceptOne
             // 
-            this.buttonSelectAllExceptOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSelectAllExceptOne.Location = new System.Drawing.Point(173, 12);
             this.buttonSelectAllExceptOne.Name = "buttonSelectAllExceptOne";
             this.buttonSelectAllExceptOne.Size = new System.Drawing.Size(148, 26);
-            this.buttonSelectAllExceptOne.TabIndex = 21;
+            this.buttonSelectAllExceptOne.TabIndex = 1;
             this.buttonSelectAllExceptOne.Text = "Select all except one";
             this.buttonSelectAllExceptOne.UseVisualStyleBackColor = true;
             this.buttonSelectAllExceptOne.Click += new System.EventHandler(this.buttonSelectAllExceptOne_Click);
             // 
             // buttonDeselectAll
             // 
-            this.buttonDeselectAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDeselectAll.Location = new System.Drawing.Point(325, 12);
             this.buttonDeselectAll.Name = "buttonDeselectAll";
             this.buttonDeselectAll.Size = new System.Drawing.Size(148, 26);
-            this.buttonDeselectAll.TabIndex = 22;
+            this.buttonDeselectAll.TabIndex = 3;
             this.buttonDeselectAll.Text = "Deselect all";
             this.buttonDeselectAll.UseVisualStyleBackColor = true;
             this.buttonDeselectAll.Click += new System.EventHandler(this.buttonDeselectAll_Click);
@@ -139,11 +138,10 @@
             // buttonRemoveSelectedPages
             // 
             this.buttonRemoveSelectedPages.BackColor = System.Drawing.Color.LightSalmon;
-            this.buttonRemoveSelectedPages.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonRemoveSelectedPages.Location = new System.Drawing.Point(486, 12);
             this.buttonRemoveSelectedPages.Name = "buttonRemoveSelectedPages";
             this.buttonRemoveSelectedPages.Size = new System.Drawing.Size(244, 26);
-            this.buttonRemoveSelectedPages.TabIndex = 23;
+            this.buttonRemoveSelectedPages.TabIndex = 4;
             this.buttonRemoveSelectedPages.Text = "Remove the selected pages";
             this.buttonRemoveSelectedPages.UseVisualStyleBackColor = false;
             this.buttonRemoveSelectedPages.Click += new System.EventHandler(this.buttonRemoveSelectedPages_Click);
@@ -175,7 +173,7 @@
             this.treeViewHierarchy.Location = new System.Drawing.Point(0, 0);
             this.treeViewHierarchy.Name = "treeViewHierarchy";
             this.treeViewHierarchy.Size = new System.Drawing.Size(974, 342);
-            this.treeViewHierarchy.TabIndex = 1;
+            this.treeViewHierarchy.TabIndex = 6;
             this.treeViewHierarchy.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewHierarchy_BeforeSelect);
             // 
             // splitContainer3
@@ -206,7 +204,7 @@
             this.buttonBottom.Location = new System.Drawing.Point(8, 119);
             this.buttonBottom.Name = "buttonBottom";
             this.buttonBottom.Size = new System.Drawing.Size(105, 24);
-            this.buttonBottom.TabIndex = 12;
+            this.buttonBottom.TabIndex = 10;
             this.buttonBottom.Text = "Bottom";
             this.buttonBottom.UseVisualStyleBackColor = true;
             this.buttonBottom.Click += new System.EventHandler(this.buttonBottom_Click);
@@ -217,7 +215,7 @@
             this.buttonTop.Location = new System.Drawing.Point(8, 29);
             this.buttonTop.Name = "buttonTop";
             this.buttonTop.Size = new System.Drawing.Size(105, 24);
-            this.buttonTop.TabIndex = 11;
+            this.buttonTop.TabIndex = 7;
             this.buttonTop.Text = "Top";
             this.buttonTop.UseVisualStyleBackColor = true;
             this.buttonTop.Click += new System.EventHandler(this.buttonTop_Click);
@@ -227,9 +225,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(9, 7);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 10;
-            this.label2.Text = "Path Preference";
+            this.label2.Text = "Section Preference";
             // 
             // buttonUp
             // 
@@ -261,7 +259,7 @@
             this.listBoxPreferences.Location = new System.Drawing.Point(0, 0);
             this.listBoxPreferences.Name = "listBoxPreferences";
             this.listBoxPreferences.Size = new System.Drawing.Size(852, 164);
-            this.listBoxPreferences.TabIndex = 7;
+            this.listBoxPreferences.TabIndex = 11;
             // 
             // statusStrip1
             // 
@@ -303,6 +301,14 @@
             this.toolStripContainer1.Size = new System.Drawing.Size(978, 635);
             this.toolStripContainer1.TabIndex = 20;
             this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // labelMessageCounts
+            // 
+            this.labelMessageCounts.AutoSize = true;
+            this.labelMessageCounts.Location = new System.Drawing.Point(483, 44);
+            this.labelMessageCounts.Name = "labelMessageCounts";
+            this.labelMessageCounts.Size = new System.Drawing.Size(0, 13);
+            this.labelMessageCounts.TabIndex = 6;
             // 
             // FormMain
             // 
@@ -361,5 +367,6 @@
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.Button buttonBottom;
         private System.Windows.Forms.Button buttonTop;
+        private System.Windows.Forms.Label labelMessageCounts;
     }
 }

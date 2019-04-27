@@ -9,16 +9,18 @@ namespace OneNoteDuplicatesRemover
 {
     public partial class FormMain : Form
     {
+
+
         private enum CurrentStatus
         {
             Ready,
             Scanning,
-            Completed_Scanning,
-            Completed_Removing,
+            ScanCompleted,
+            RemoveCompleted,
             Removing
         };
 
-        private CurrentStatus current_status = CurrentStatus.Ready;
+        private CurrentStatus currentStatus = CurrentStatus.Ready;
         private OneNoteAccessor accessor = null;
 
         public FormMain()
@@ -28,8 +30,8 @@ namespace OneNoteDuplicatesRemover
 
         private void InitializeFileLogger()
         {
-            string today = DateTime.Now.ToString("yyyyMMdd-HHmmssFFF");
-            etc.FileLogger.Instance.Init("log-" + today + ".log");
+            string currentTimestamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-FFF");
+            etc.FileLogger.Instance.Init("log-" + currentTimestamp + ".log");
         }
 
         private void InitializeUIComponent()
@@ -42,8 +44,8 @@ namespace OneNoteDuplicatesRemover
             try
             {
                 accessor = new OneNoteAccessor();
-                accessor.UpdateProgress += Accessor_UpdateProgress;
-                //accessor.OnUpdatedScanProgress += _accessor_OnUpdatedScanProgress;
+                accessor.EventProgressEvent += Accessor_EventProgress;
+                accessor.EventScanCompleted += Accessor_EventScanCompleted;
                 accessor.InitializeOneNoteWrapper();
             }
             catch (System.Exception exception)
@@ -52,19 +54,28 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        private void Accessor_UpdateProgress(int count_read_pages_success, int count_read_pages_failed, int count_hashed_pages_success, int count_hashed_pages_failed, int total_pages, string page_title)
+        private void Accessor_EventScanCompleted()
         {
-            int __count_read_ahead = count_read_pages_success - count_hashed_pages_success;
-            string __additional_info = string.Format("Read ahead:{0}, Hashed:({1}/{2}), Errs:({3}, {4}) -- {5}", __count_read_ahead, count_hashed_pages_success, total_pages, count_read_pages_failed, count_hashed_pages_failed, page_title);
-            etc.LoggerHelper.LogInfo(__additional_info);
-
             // Main UI thread will do this task.
-            Invoke((MethodInvoker)(
-                () =>
+            Invoke((MethodInvoker)(() =>
             {
-                int count_read_ahead = count_read_pages_success - count_hashed_pages_success;
-                string additional_info = string.Format("Read ahead:{0}, Hashed:({1}/{2}), Errs:({3}, {4}) -- {5}", count_read_ahead, count_hashed_pages_success, total_pages, count_read_pages_failed, count_hashed_pages_failed, page_title);
-                UpdateCurrentStatus(CurrentStatus.Scanning, additional_info);
+                UpdateCurrentStatus(CurrentStatus.ScanCompleted);
+
+                Dictionary<string, List<Tuple<string, string>>> duplicatesGroups = accessor.GetDuplicatesGroups();
+                List<string> sortedSectionPathList = SortSectionPathList(GetSectionPathList(duplicatesGroups));
+                UpdateUIFromDuplicatesGroups(duplicatesGroups);
+                UpdatePathPreferenceUI(sortedSectionPathList);
+            }));
+        }
+
+        private void Accessor_EventProgress(int countReadPages_Success, int countReadPages_Failed, int countHashedPages_Success, int countHashedPages_Failed, int countTotalPages, string lastPageTitle)
+        {
+            // Main UI thread will do this task.
+            Invoke((MethodInvoker)(() =>
+            {
+                int countReadAhead = countReadPages_Success - countHashedPages_Success;
+                string additionalInfo = string.Format("Hashed:({1}/{2}), Read Ahead:{0}, Errs:({3}, {4}) -- {5}", countReadAhead, countHashedPages_Success, countTotalPages, countReadPages_Failed, countHashedPages_Failed, lastPageTitle);
+                UpdateCurrentStatus(CurrentStatus.Scanning, additionalInfo);
             }));
         }
 
@@ -72,6 +83,7 @@ namespace OneNoteDuplicatesRemover
         {
             try
             {
+                etc.LoggerHelper.EventCategoryCountChanged += LoggerHelper_EventCategoryCountChanged;
                 InitializeFileLogger();
                 InitializeUIComponent();
                 InitializeOneNoteAccessor();
@@ -82,50 +94,62 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        private void UpdateCurrentStatus(CurrentStatus new_status, string additional_info = "", int progress_bar_current = 0, int progress_bar_max = 0)
+        private void LoggerHelper_EventCategoryCountChanged(int countInfo, int countWarning, int countError, int countException)
         {
-            current_status = new_status;
-            string additional_status = additional_info.Length == 0 ? "" : " (" + additional_info + ")";
-            switch (current_status)
+            Invoke((MethodInvoker)(() =>
+            {
+                labelMessageCounts.Text = string.Format("[Log] Info: {0}, Warning: {1}, Error: {2}, Exception: {3}", countInfo, countWarning, countError, countException);
+            }));
+        }
+
+        private void UpdateCurrentStatus(CurrentStatus newStatus, string additionalInfo = "", int progressBarCurrent = 0, int progressBarMaximum = 0)
+        {
+            currentStatus = newStatus;
+            string additionalStatus = additionalInfo.Length == 0 ? "" : " (" + additionalInfo + ")";
+            switch (currentStatus)
             {
                 case CurrentStatus.Ready:
-                    UpdateStatusLabel("Ready", additional_status);
+                    UpdateStatusLabel("Ready", additionalStatus);
                     UpdateProgressBar(0, 100);
                     break;
                 case CurrentStatus.Scanning:
-                    UpdateStatusLabel("Scanning", additional_status);
-                    UpdateProgressBar(progress_bar_current, progress_bar_max);
+                    UpdateStatusLabel("Scanning", additionalStatus);
+                    UpdateProgressBar(progressBarCurrent, progressBarMaximum);
                     break;
-                case CurrentStatus.Completed_Scanning:
+                case CurrentStatus.ScanCompleted:
                     SetUIControlEnabled(true);
-                    UpdateStatusLabel("Scan Completed", additional_status);
+                    etc.LoggerHelper.LogInfo("Scan completed.");
+                    UpdateStatusLabel("Scan Completed", additionalStatus);
                     UpdateProgressBar(0, 100);
                     break;
                 case CurrentStatus.Removing:
-                    UpdateStatusLabel("Removing", additional_status);
-                    UpdateProgressBar(progress_bar_current, progress_bar_max);
+                    UpdateStatusLabel("Removing", additionalStatus);
+                    UpdateProgressBar(progressBarCurrent, progressBarMaximum);
                     break;
-                case CurrentStatus.Completed_Removing:
+                case CurrentStatus.RemoveCompleted:
                     SetUIControlEnabled(true);
-                    UpdateStatusLabel("Removed", additional_status);
+                    etc.LoggerHelper.LogInfo("Remove completed.");
+                    UpdateStatusLabel("Removed", additionalStatus);
                     UpdateProgressBar(0, 100);
                     break;
                 default:
-                    UpdateStatusLabel("Undefined", additional_status);
+                    SetUIControlEnabled(false);
+                    etc.LoggerHelper.LogError("Invalid status! {0}", currentStatus);
+                    UpdateStatusLabel("Undefined", additionalStatus);
                     UpdateProgressBar(0, 100);
                     break;
             }
         }
 
-        private void UpdateStatusLabel(string status, string additional_status)
+        private void UpdateStatusLabel(string status, string additionalStatus)
         {
-            toolStripStatusLabelScan.Text = status + additional_status;
+            toolStripStatusLabelScan.Text = status + additionalStatus;
         }
 
-        private void UpdateProgressBar(int progress_bar_current, int progress_bar_max)
+        private void UpdateProgressBar(int progressBarCurrent, int progressBarMaximum)
         {
-            toolStripProgressBarScan.Value = progress_bar_current;
-            toolStripProgressBarScan.Maximum = progress_bar_max;
+            toolStripProgressBarScan.Value = progressBarCurrent;
+            toolStripProgressBarScan.Maximum = progressBarMaximum;
         }
 
         private void buttonUp_Click(object sender, EventArgs e)
@@ -207,13 +231,25 @@ namespace OneNoteDuplicatesRemover
                 if (checkBoxNavigateAutomatically.Checked == true)
                 {
                     string lastSelectedPageId = accessor.GetLastSelectedPageId();
-                    if (lastSelectedPageId != e.Node.Name)
+                    string highlightedPageId = e.Node.Name;
+                    if (e.Node.Tag != null)
                     {
-                        accessor.SetLastSelectedPageId(e.Node.Name);
-                        //if (_accessor.HasPageId(e.Node.Name))
-                        //{
-                        //    _accessor.Navigate(e.Node.Name);
-                        //}
+                        if (lastSelectedPageId != highlightedPageId)
+                        {
+                            accessor.SetLastSelectedPageId(highlightedPageId);
+                            if (accessor.CheckIfPageExists(highlightedPageId))
+                            {
+                                accessor.Navigate(highlightedPageId);
+                            }
+                            else
+                            {
+                                etc.LoggerHelper.LogError("Unable to find the page ID: {0}", highlightedPageId);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Ignore this case: the selected item is not a page.
                     }
                 }
             }
@@ -230,23 +266,15 @@ namespace OneNoteDuplicatesRemover
             if (accessor.InvokeScanPages())
             {
                 // Successfully invoked
+                etc.LoggerHelper.LogInfo("Successfully loaded the page hierarchy.");
             }
             else
             {
-                // Outright failure.
-                UpdateCurrentStatus(CurrentStatus.Ready);
+                // Outright failure
+                ResetUIControl();
                 SetUIControlEnabled(true);
+                etc.LoggerHelper.LogError("Failed to parse raw_xml_string or retrieve page hierarchy.");
             }
-
-            //UpdateCurrentStatus(CurrentStatus.Completed_Scanning);
-            //Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* < Page Id, Page Name > List */ > duplicatedGroups = null;
-            //duplicatedGroups = _accessor.GetDuplicatedGroups();
-
-            //List<string> preferredPathList = new List<string>();
-            //UpdateDuplicatedGroupsToUI(duplicatedGroups, preferredPathList);
-            //preferredPathList = MakePreferredPathListTsidy(preferredPathList);
-            //UpdatePathPreferenceUI(preferredPathList);
-            //UpdateCurrentStatus(CurrentStatus.Completed_Scanning);
         }
 
         private void buttonSelectAllExceptOne_Click(object sender, EventArgs e)
@@ -304,81 +332,75 @@ namespace OneNoteDuplicatesRemover
 
         private void buttonRemoveSelectedPages_Click(object sender, EventArgs e)
         {
+            SetUIControlEnabled(false);
+
             // ** for the safety ** Not to allow user to select every page in a duplicated group.
             TreeNode selectedTreeNode = null;
             bool isEveryPageSelected = CheckIfEveryPageIsSelected(out selectedTreeNode);
             if (isEveryPageSelected)
             {
-                MessageBox.Show(
-                  "De-duplication is aborted. \r\n\r\n" +
-                  "You've selected every page in the same group. (name:" + selectedTreeNode.Text + ")\r\n\r\n" +
-                  "You should keep at least one copy of pages in order to keep your data.",
-                  "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+                MessageBox.Show("WARNING: Data might be lost!\r\n\r\n" + "You have selected every page in the same group.\r\n" + string.Format("Name: {0}.\r\n", selectedTreeNode.Text) + "\r\n\r\nThe removal operation has been canceled.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                SetUIControlEnabled(true);
                 treeViewHierarchy.SelectedNode = selectedTreeNode;
                 treeViewHierarchy.Focus();
             }
             else
             {
-                int removingCount = GetCountOfPageBeingRemoved();
-                if (MessageBox.Show("Are you sure to remove the selected pages? (page count: " + removingCount.ToString() + ")\r\n\r\nPlease *BACKUP* before proceeding de-duplication.", "Confirm", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                int countPagesBeingRemoved = GetCountPagesBeingRemoved();
+                if (countPagesBeingRemoved > 0)
                 {
-                    int successCount;
-                    int failureCount;
+                    if (MessageBox.Show("Are you sure to remove the selected pages?\r\n" + string.Format("The number of the selected pages: {0}", countPagesBeingRemoved) + "\r\n\r\nPlease **BACKUP** OneNote notebooks!", "Confirm", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        int countRemoval_Success;
+                        int countRemoval_Failed;
+                        List<Tuple<string, string, bool>> resultRemoval = null;
+                        RemoveSelectedPages(countPagesBeingRemoved, out countRemoval_Success, out countRemoval_Failed, out resultRemoval);
+                        string generatedHtmlFile = GenerateHtmlReportRemovedFiles(resultRemoval, countRemoval_Success, countRemoval_Failed);
 
-                    List<Tuple<string, bool>> removeResults = null;
-                    RemoveSelectedOneNotePages(removingCount, out successCount, out failureCount, out removeResults);
+                        MessageBox.Show(string.Format("Removed: {0} pages", countRemoval_Success) + "\r\n" +
+                            string.Format("Failed to remove: {0} pages", countRemoval_Failed), "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        System.Diagnostics.Process.Start(generatedHtmlFile);
+                    }
                     ResetUIControl();
-
-                    string generatedHtmlFile = GenerateHtmlReportRemovedFiles(removeResults, successCount, failureCount);
-
-                    if (failureCount != 0)
-                    {
-                        MessageBox.Show(string.Format("Removed: {0}", successCount), "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        if (MessageBox.Show(string.Format("Removed : {0}\r\nFailed : {1}\r\n\r\n"
-                          + "Some pages couldn't be removed. \r\n"
-                          + "The HTML report file has been generated. \r\n"
-                          + "Click 'yes' if you want to open the HTML report file.", successCount, failureCount), "Result", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == System.Windows.Forms.DialogResult.Yes)
-                        {
-                            System.Diagnostics.Process.Start(generatedHtmlFile);
-                        }
-                    }
                 }
+                SetUIControlEnabled(true);
             }
         }
 
-        private string GenerateHtmlReportRemovedFiles(List<Tuple<string, bool>> removeResults, int successCount, int failureCount)
+        private string GenerateHtmlReportRemovedFiles(List<Tuple<string, string, bool>> resultRemoval, int countSuccess, int countFailure)
         {
-            string yyyyMMddHHmmss = DateTime.Now.ToString("yyyyMMddHHmmss");
-            string filename = string.Format("report-removed-pages-{0}.html", yyyyMMddHHmmss);
+            DateTime currentTimestamp = DateTime.Now;
+            string yyyyMMddHHmmss = currentTimestamp.ToString("yyyy-MM-dd-HH-mm-ss");
+            string filename = string.Format("report-{0}.html", yyyyMMddHHmmss);
             using (System.IO.StreamWriter sw = new System.IO.StreamWriter(filename))
             {
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine(string.Format("<html><head><title>Removed Pages @ {0}</title></head>", yyyyMMddHHmmss));
+                string title = string.Format("Report @ {0}", currentTimestamp.ToString());
+                sb.AppendLine(string.Format("<html><head><title>{0}</title></head>", title));
                 sb.AppendLine(string.Format("<body>"));
-
+                sb.AppendLine(string.Format("<h1>{0}</h1>", title));
                 ////////////////////////////////////////////////////////////////////
-                sb.AppendLine(string.Format("<h3>Pages that are removed successfully (count:{0})</h3>", successCount));
+                sb.AppendLine(string.Format("<h3>Removed Pages (Count: {0})</h3>", countSuccess));
                 sb.AppendLine(string.Format("<table border=1>"));
-                foreach (Tuple<string, bool> e in removeResults)
+                sb.AppendLine(string.Format("<thead><td>Page ID</td><td>Section Title</td></thead>"));
+                foreach (Tuple<string, string, bool> e in resultRemoval)
                 {
-                    if (e.Item2 == true)
+                    if (e.Item3 == true)
                     {
-                        sb.AppendLine(string.Format("<tr><td>{0}</td></tr>", e.Item1));
+                        sb.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", e.Item1, e.Item2));
                     }
                 }
                 sb.AppendLine(string.Format("</table>"));
                 ////////////////////////////////////////////////////////////////////
-                sb.AppendLine(string.Format("<h3>Pages that can't be removed (count:{0})</h3>", failureCount));
+                sb.AppendLine(string.Format("<h3>Pages that could not be removed (Count:{0})</h3>", countFailure));
                 sb.AppendLine(string.Format("<table border=1>"));
-                foreach (Tuple<string, bool> e in removeResults)
+                sb.AppendLine(string.Format("<thead><td>Page ID</td><td>Section Title</td></thead>"));
+                foreach (Tuple<string, string, bool> e in resultRemoval)
                 {
-                    if (e.Item2 == false)
+                    if (e.Item3 == false)
                     {
-                        sb.AppendLine(string.Format("<tr><td>{0}</td></tr>", e.Item1));
+                        sb.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", e.Item1, e.Item2));
                     }
                 }
                 sb.AppendLine(string.Format("</table>"));
@@ -388,11 +410,11 @@ namespace OneNoteDuplicatesRemover
             return filename;
         }
 
-        private void RemoveSelectedOneNotePages(int removingCount, out int successCount, out int failureCount, out List<Tuple<string, bool>> removeResults)
+        private void RemoveSelectedPages(int countPagesBeingRemoved, out int countSucess, out int countFailed, out List<Tuple<string, string, bool>> resultRemoval)
         {
-            successCount = 0;
-            failureCount = 0;
-            removeResults = new List<Tuple<string, bool>>();
+            countSucess = 0;
+            countFailed = 0;
+            resultRemoval = new List<Tuple<string, string, bool>>();
 
             int currentCount = 0;
 
@@ -406,36 +428,36 @@ namespace OneNoteDuplicatesRemover
                         bool result = accessor.RemovePage(childNode.Name);
                         if (result)
                         {
-                            successCount++;
-                            removeResults.Add(new Tuple<string, bool>(childNode.Text, true));
+                            countSucess++;
+                            resultRemoval.Add(new Tuple<string, string, bool>(childNode.Name, childNode.Text, true));
                         }
                         else
                         {
-                            failureCount++;
-                            removeResults.Add(new Tuple<string, bool>(childNode.Text, false));
+                            countFailed++;
+                            resultRemoval.Add(new Tuple<string, string, bool>(childNode.Name, childNode.Text, false));
                         }
 
-                        string additionalInformation = string.Format("{0} of {1}; {2}", currentCount, removingCount, childNode.Name);
-                        UpdateCurrentStatus(CurrentStatus.Removing, additionalInformation, currentCount, removingCount);
+                        string additionalInformation = string.Format("{0}/{1} -- {2}", currentCount, countPagesBeingRemoved, childNode.Name);
+                        UpdateCurrentStatus(CurrentStatus.Removing, additionalInformation, currentCount, countPagesBeingRemoved);
                     }
                 }
             }
         }
 
-        private int GetCountOfPageBeingRemoved()
+        private int GetCountPagesBeingRemoved()
         {
-            int removingCount = 0;
+            int countPagesBeingRemoved = 0;
             foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
             {
                 foreach (TreeNode childNode in treeNode.Nodes)
                 {
                     if (childNode.Checked == true)
                     {
-                        removingCount++;
+                        countPagesBeingRemoved++;
                     }
                 }
             }
-            return removingCount;
+            return countPagesBeingRemoved;
         }
 
         private bool CheckIfEveryPageIsSelected(out TreeNode selectedTreeNode)
@@ -469,7 +491,7 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        private static List<string> MakePreferredPathListTidy(List<string> sectionPathList)
+        private static List<string> SortSectionPathList(List<string> sectionPathList)
         {
             sectionPathList.Sort((string left, string right) =>
             {
@@ -506,27 +528,45 @@ namespace OneNoteDuplicatesRemover
             return sectionPathList;
         }
 
-        private void UpdateDuplicatedGroupsToUI(Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* Page Id List */ > duplicatedGroups, List<string> sectionPathList)
+        private List<string> GetSectionPathList(Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* Page Id List */ > duplicatesGroups)
         {
-            int duplicatedGroupIndex = 0;
-            foreach (KeyValuePair<string, List<Tuple<string, string>>> groupInfo in duplicatedGroups)
+            List<string> section_path_list = new List<string>();
+            foreach (KeyValuePair<string, List<Tuple<string, string>>> group_info in duplicatesGroups)
+            {
+                if (group_info.Value.Count > 1)
+                {
+                    for (int i = 0; i < group_info.Value.Count; ++i)
+                    {
+                        string page_id = group_info.Value[i].Item1;
+                        string section_path = "";
+                        if (accessor.TryGetSectionPath(page_id, out section_path))
+                        {
+                            section_path_list.Add(System.IO.Path.GetDirectoryName(section_path));
+                        }
+                    }
+                }
+            }
+            return section_path_list;
+        }
+
+        private void UpdateUIFromDuplicatesGroups(Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* Page Id List */ > duplicatesGroups)
+        {
+            int duplicatesGroupIndex = 0;
+            foreach (KeyValuePair<string, List<Tuple<string, string>>> groupInfo in duplicatesGroups)
             {
                 if (groupInfo.Value.Count > 1)
                 {
-                    duplicatedGroupIndex++;
-                    TreeNode groupNode = this.treeViewHierarchy.Nodes.Add(groupInfo.Key, string.Format("Duplicated Page Group {0} - {1}", duplicatedGroupIndex, groupInfo.Key == "D41D8CD98F00B204E9800998ECF8427E" ? "Empty Page" : groupInfo.Key));
-                    TreeViewHelper.HideCheckBox(treeViewHierarchy, groupNode);
+                    duplicatesGroupIndex++;
+                    TreeNode groupTreeNode = treeViewHierarchy.Nodes.Add(groupInfo.Key, string.Format("Duplicated Page Group {0} - {1}", duplicatesGroupIndex, groupInfo.Key == "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855" ? "Empty Page" : groupInfo.Key));
+                    TreeViewHelper.HideCheckBox(treeViewHierarchy, groupTreeNode);
                     for (int i = 0; i < groupInfo.Value.Count; ++i)
                     {
                         string pageId = groupInfo.Value[i].Item1;
-                        string sectionPath = null;
-                        //bool success = _accessor.TryGetSectionPath(pageId, out sectionPath);
-                        //if (success)
-                        //{
-                        //    // public virtual TreeNode Add(string key, string text);
-                        //    groupNode.Nodes.Add(pageId, sectionPath + " - " + groupInfo.Value[i].Item2).Tag = sectionPath;
-                        //    sectionPathList.Add(System.IO.Path.GetDirectoryName(sectionPath));
-                        //}
+                        string section_path = "";
+                        if (accessor.TryGetSectionPath(pageId, out section_path))
+                        {
+                            groupTreeNode.Nodes.Add(pageId, section_path + " - " + groupInfo.Value[i].Item2).Tag = section_path;
+                        }
                     }
                 }
             }

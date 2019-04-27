@@ -8,11 +8,13 @@ namespace OneNoteDuplicatesRemover
     public class OneNoteAccessor
     {
         private OneNoteApplicationWrapper onenote_application = null;
-        private OneNotePageInfoManager page_info_manager; 
+        private OneNotePageInfoManager page_info_manager;
         private string last_selected_page_id = "";
 
         public delegate void ProgressEventHandler(int count_read_pages_success, int count_read_pages_failed, int count_hashed_pages_success, int count_hashed_pages_failed, int total_pages, string page_title);
-        public event ProgressEventHandler UpdateProgress = null;
+        public event ProgressEventHandler EventProgressEvent = null;
+        public delegate void ScanCompleteEventHandler();
+        public event ScanCompleteEventHandler EventScanCompleted = null;
 
         public void InitializeOneNoteWrapper()
         {
@@ -20,7 +22,7 @@ namespace OneNoteDuplicatesRemover
             onenote_application.InitializeOneNoteTypeLibrary();
             page_info_manager = new OneNotePageInfoManager(this);
         }
-        
+
         public bool InvokeScanPages()
         {
             string raw_xml_string = "";
@@ -28,18 +30,16 @@ namespace OneNoteDuplicatesRemover
             {
                 if (page_info_manager.TryLoadFromXmlString(raw_xml_string))
                 {
-                    page_info_manager.ComputeHashValueAsynchronously();
+                    page_info_manager.AsyncComputeHashValues();
                     return true;
                 }
                 else
                 {
-                    etc.LoggerHelper.LogError("Failed to parse raw_xml_string.");
                     return false;
                 }
             }
             else
             {
-                etc.LoggerHelper.LogError("Failed to retrieve page hierarchy.");
                 return false;
             }
         }
@@ -49,9 +49,19 @@ namespace OneNoteDuplicatesRemover
             return onenote_application;
         }
 
+        internal Dictionary<string, List<Tuple<string, string>>> GetDuplicatesGroups()
+        {
+            return page_info_manager.GetDuplicatedGroups();
+        }
+
         internal void FireEventUpdateProgress(int count_read_pages_success, int count_read_pages_failed, int count_hashed_pages_success, int count_hashed_pages_failed, int total_pages, string page_title)
         {
-            UpdateProgress?.Invoke(count_read_pages_success, count_read_pages_failed, count_hashed_pages_success, count_hashed_pages_failed, total_pages, page_title);
+            EventProgressEvent?.Invoke(count_read_pages_success, count_read_pages_failed, count_hashed_pages_success, count_hashed_pages_failed, total_pages, page_title);
+        }
+
+        internal void FireEventScanComplete()
+        {
+            EventScanCompleted?.Invoke();
         }
 
         public void Navigate(string pageId)
@@ -129,6 +139,16 @@ namespace OneNoteDuplicatesRemover
                 etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
+        }
+
+        internal bool TryGetSectionPath(string pageId, out string sectionPath)
+        {
+            return page_info_manager.TryGetSectionPath(pageId, out sectionPath);
+        }
+
+        internal bool CheckIfPageExists(string page_id)
+        {
+            return page_info_manager.CheckIfPageExists(page_id);
         }
     }
 }
