@@ -1,4 +1,4 @@
-﻿namespace OneNoteDuplicatesRemover
+namespace OneNoteDuplicatesRemover
 {
     partial class FormMain
     {
@@ -53,6 +53,8 @@
             this.dumpJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cleanUpUsingJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -319,7 +321,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.advancedToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(978, 24);
@@ -354,6 +357,22 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // advancedToolStripMenuItem
+            // 
+            this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cleanUpUsingJSONToolStripMenuItem});
+            this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
+            this.advancedToolStripMenuItem.Text = "&Advanced";
+            this.advancedToolStripMenuItem.Visible = false;
+            // 
+            // cleanUpUsingJSONToolStripMenuItem
+            // 
+            this.cleanUpUsingJSONToolStripMenuItem.Name = "cleanUpUsingJSONToolStripMenuItem";
+            this.cleanUpUsingJSONToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.cleanUpUsingJSONToolStripMenuItem.Text = "&Clean up using JSON...";
+            this.cleanUpUsingJSONToolStripMenuItem.Click += new System.EventHandler(this.cleanUpUsingJSONToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -423,5 +442,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem dumpJsonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cleanUpUsingJSONToolStripMenuItem;
     }
 }

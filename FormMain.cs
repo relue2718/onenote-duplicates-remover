@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -655,6 +655,65 @@ namespace OneNoteDuplicatesRemover
             else
             {
                 MessageBox.Show("Scanning is not completed.");
+            }
+        }
+
+        private void cleanUpUsingJSONToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string warningMessage = "** DANGEROUS FEATURE **" + "\r\n\r\n" +
+                "It removes pages that are found in the JSON file." + "\r\n" +
+                "Please make sure the original notebook is closed to prevent data loss." + "\r\n\r\n" +
+                "Do you want to continue?";
+            if (MessageBox.Show(warningMessage, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "JSON files (*.json)|*.json";
+                ofd.Title = "Save JSON";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    SetUIControlEnabled(false);
+
+                    string json = "";
+                    using (System.IO.StreamReader sr = new System.IO.StreamReader(ofd.FileName, Encoding.UTF8, true))
+                    {
+                        json = sr.ReadToEnd();
+                    }
+                    Dictionary<string, List<Tuple<string, string>>> existingPagesGroups = new Dictionary<string, List<Tuple<string, string>>>();
+                    existingPagesGroups = Newtonsoft.Json.JsonConvert.DeserializeObject(json, existingPagesGroups.GetType()) as Dictionary<string, List<Tuple<string, string>>>;
+                    HashSet<string> cachedKnownHashes = new HashSet<string>(existingPagesGroups.Keys);
+                    Dictionary<string, List<Tuple<string, string>>> duplicatesGroups = accessor.GetDuplicatesGroups();
+
+                    if(duplicatesGroups == null)
+                    {
+                        MessageBox.Show("Scanning is not completed.");
+                    }
+                    else
+                    {
+                        int currentCount = 0;
+                        foreach (KeyValuePair<string, List<Tuple<string, string>>> groupInfo in duplicatesGroups)
+                        {
+                            currentCount += 1;
+                            string sha256sum = groupInfo.Key;
+
+                            if (cachedKnownHashes.Contains(sha256sum))
+                            {
+                                etc.LoggerHelper.LogInfo("Attempt to delete... {0}", sha256sum);
+                                foreach (Tuple<String,String> pageInfo in groupInfo.Value)
+                                {
+                                    accessor.RemovePage(pageInfo.Item1);
+                                    string additionalInformation = string.Format("{0} -- {1}", currentCount, sha256sum);
+                                    UpdateCurrentStatus(CurrentStatus.Removing, additionalInformation, currentCount, duplicatesGroups.Count);
+                                }
+                            }
+                        }
+
+                        ResetUIControl();
+                        UpdateCurrentStatus(CurrentStatus.RemoveCompleted);
+                    }
+                    
+                    SetUIControlEnabled(true);
+                    
+                }
             }
         }
     }

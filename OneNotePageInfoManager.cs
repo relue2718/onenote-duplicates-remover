@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -16,7 +16,6 @@ namespace OneNoteDuplicatesRemover
             public int countHashedPages_Failed = 0;
             public int countTotalPages = 0;
             public string lastPageTitle = "";
-            public bool workerThreadFinished = false;
         }
 
         private class ComputeHashValueTaskDetails
@@ -93,6 +92,7 @@ namespace OneNoteDuplicatesRemover
                 workerThread = new System.Threading.Thread((object state) =>
                 {
                     Dictionary<string, OneNotePageInfo> currentPageInfos = state as Dictionary<string, OneNotePageInfo>;
+                    ConcurrentQueue<System.Threading.ManualResetEvent> doneEvents = new ConcurrentQueue<System.Threading.ManualResetEvent>();
                     ComputeHashValuesStatistics stat = new ComputeHashValuesStatistics();
                     stat.countTotalPages = currentPageInfos.Count;
                     foreach (KeyValuePair<string, OneNotePageInfo> pageInfo in currentPageInfos)
@@ -112,6 +112,8 @@ namespace OneNoteDuplicatesRemover
 
                             System.Threading.ThreadPool.QueueUserWorkItem((object state2) =>
                             {
+                                System.Threading.ManualResetEvent doneEvent = new System.Threading.ManualResetEvent(false);
+                                doneEvents.Enqueue(doneEvent);
                                 ComputeHashValueTaskDetails currentComputeHashValueTask = (ComputeHashValueTaskDetails)state2;
                                 OneNotePageInfo targetPageInfo = currentComputeHashValueTask.TargetPageInfo;
                                 try
@@ -151,14 +153,11 @@ namespace OneNoteDuplicatesRemover
                                         }
                                         stat.lastPageTitle = targetPageInfo.PageTitle;
                                         accessor.FireEventUpdateProgress(stat.countReadPages_Success, stat.countReadPages_Failed, stat.countHashedPages_Success, stat.countHashedPages_Failed, stat.countTotalPages, stat.lastPageTitle);
-                                        if (stat.workerThreadFinished && stat.countHashedPages_Failed + stat.countHashedPages_Success == stat.countReadPages_Success)
-                                        {
-                                            this.isScanCompleted = true;
-                                            accessor.FireEventScanComplete();
-                                        }
+
+                                        doneEvent.Set();
                                     }
                                 }
-                            }, (object)computeHashValueTask);
+                            }, computeHashValueTask);
                         }
                         else
                         {
@@ -170,9 +169,19 @@ namespace OneNoteDuplicatesRemover
                         }
                     }
 
-                    lock (stat)
+                    while (!doneEvents.IsEmpty)
                     {
-                        stat.workerThreadFinished = true;
+                        System.Threading.ManualResetEvent doneEvent;
+                        if (doneEvents.TryDequeue(out doneEvent))
+                        {
+                            doneEvent.WaitOne();
+                        }
+                    }
+                    
+                    if (this.isScanCompleted == false)
+                    {
+                        this.isScanCompleted = true;
+                        accessor.FireEventScanComplete();
                     }
                 });
                 workerThread.Start(pageInfos);
@@ -241,7 +250,7 @@ namespace OneNoteDuplicatesRemover
             }
             return duplicatesGroups;
         }
-        
+
         private static bool CheckIfDeletedPage(System.Xml.XmlNode pageNode)
         {
             // The 'isDeletedPages' attribute is optional. If the attribute doesn't exist, we assume that the page isn't deleted.
