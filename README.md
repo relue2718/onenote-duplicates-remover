@@ -27,6 +27,6 @@ Known Issues
 ------------
 ![screenshot](https://raw.githubusercontent.com/relue2718/onenote-duplicates-remover/master/screenshot/2.png)
 
-* You should not run this program in the multiple computers. Let's say you have two computers, A and B. If you run this program in the computer A and delete the duplicated page A', and sync notes with the computer B. The sync process will delete the page A' in the computer B as well. However, if you run this program in the computer B and somehow delete the page A, both pages A and A' can be deleted.
+* You should not run this program in the multiple computers. Let's say you have two computers, A and B. If you run this program in the computer A and delete the duplicated page A', and sync notes with the computer B. The sync process will delete the page A' in the computer B as well. However, if you run this program in the computer B and somehow delete the page A, both pages A and A' will be deleted (data loss).
 * Please run this tool in only one computer and make sure the sync process is finished.
 
