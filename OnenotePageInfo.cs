@@ -10,9 +10,10 @@ namespace OneNoteDuplicatesRemover
         public string ParentSectionId;
         public string ParentSectionName;
         public string ParentSectionFilePath;
-        public string PageName; // The 'title' of the page
-        public string HashOfInnerText; // A hash value of 'innerText' in a page
+        public string PageTitle;
+        public string HashValueForInnerText;
 
-        public bool IsContentRetrieved = false; // The operation must be done over the pages where their data are available.
+        // This flag must be true to make sure the content is retrieved.
+        public bool IsContentRetrieved = false;
     }
 }

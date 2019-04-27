@@ -420,7 +420,7 @@ namespace OneNoteDuplicatesRemover
 
         private void ScanDuplicatedPages()
         {
-            bool success = _accessor.UpdateHierarchy();
+            bool success = _accessor.TryUpdatePageHierarchy();
             UpdateCurrentStatus(CurrentStatus.Completed_Scanning);
             if (success)
             {
@@ -468,8 +468,8 @@ namespace OneNoteDuplicatesRemover
                 else
                 {
                     // NOTE: Might be unsafe if the section name contains "OneNote_RecycleBin" (very unlikely)
-                    bool isLeftRecycleBin = left.Contains("OneNote_RecycleBin");
-                    bool isRightRecycleBin = right.Contains("OneNote_RecycleBin");
+                    bool isLeftRecycleBin = left.Contains("\\OneNote_RecycleBin");
+                    bool isRightRecycleBin = right.Contains("\\OneNote_RecycleBin");
                     if (isLeftRecycleBin && !isRightRecycleBin)
                     {
                         return 1;
@@ -533,7 +533,5 @@ namespace OneNoteDuplicatesRemover
                 etc.LoggerHelper.LogException(exception);
             }
         }
-
-
     }
 }

@@ -20,13 +20,29 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        public bool TryGetHierarchyAsXML(out string fullHierarchyXmlStr)
+        public bool TryGetPageHierarchyAsXML(out string fullHierarchyXmlStr)
         {
             fullHierarchyXmlStr = "";
 
             try
             {
                 application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsPages, out fullHierarchyXmlStr);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                etc.LoggerHelper.LogException(exception);
+                return false;
+            }
+        }
+
+        public bool TryGetSectionHierarchyAsXML(out string fullHierarchyXmlStr)
+        {
+            fullHierarchyXmlStr = "";
+
+            try
+            {
+                application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsSections, out fullHierarchyXmlStr);
                 return true;
             }
             catch (Exception exception)
@@ -71,6 +87,20 @@ namespace OneNoteDuplicatesRemover
             try
             {
                 application.DeleteHierarchy(pageId);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                etc.LoggerHelper.LogException(exception);
+                return false;
+            }
+        }
+
+        public bool TryMergeSection(string sourceId, string destinationId)
+        {
+            try
+            {
+                application.MergeSections(sourceId, destinationId);
                 return true;
             }
             catch (Exception exception)

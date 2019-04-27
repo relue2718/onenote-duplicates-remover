@@ -7,7 +7,7 @@ namespace OneNoteDuplicatesRemover
 {
   public static class Utils
   {
-    public static string MakeHashString(byte[] computedHash)
+    public static string ConvertToHexString(byte[] computedHash)
     {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < computedHash.Length; i++)

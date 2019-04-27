@@ -37,6 +37,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeViewHierarchy = new System.Windows.Forms.TreeView();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.buttonButtom = new System.Windows.Forms.Button();
+            this.buttonTop = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonUp = new System.Windows.Forms.Button();
             this.buttonDown = new System.Windows.Forms.Button();
@@ -45,8 +47,6 @@
             this.toolStripProgressBarScan = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelScan = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.buttonTop = new System.Windows.Forms.Button();
-            this.buttonButtom = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -200,6 +200,28 @@
             this.splitContainer3.SplitterDistance = 118;
             this.splitContainer3.TabIndex = 12;
             // 
+            // buttonButtom
+            // 
+            this.buttonButtom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonButtom.Location = new System.Drawing.Point(8, 119);
+            this.buttonButtom.Name = "buttonButtom";
+            this.buttonButtom.Size = new System.Drawing.Size(105, 24);
+            this.buttonButtom.TabIndex = 12;
+            this.buttonButtom.Text = "Bottom";
+            this.buttonButtom.UseVisualStyleBackColor = true;
+            this.buttonButtom.Click += new System.EventHandler(this.buttonButtom_Click);
+            // 
+            // buttonTop
+            // 
+            this.buttonTop.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonTop.Location = new System.Drawing.Point(8, 29);
+            this.buttonTop.Name = "buttonTop";
+            this.buttonTop.Size = new System.Drawing.Size(105, 24);
+            this.buttonTop.TabIndex = 11;
+            this.buttonTop.Text = "Top";
+            this.buttonTop.UseVisualStyleBackColor = true;
+            this.buttonTop.Click += new System.EventHandler(this.buttonTop_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -281,28 +303,6 @@
             this.toolStripContainer1.Size = new System.Drawing.Size(978, 635);
             this.toolStripContainer1.TabIndex = 20;
             this.toolStripContainer1.Text = "toolStripContainer1";
-            // 
-            // buttonTop
-            // 
-            this.buttonTop.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonTop.Location = new System.Drawing.Point(8, 29);
-            this.buttonTop.Name = "buttonTop";
-            this.buttonTop.Size = new System.Drawing.Size(105, 24);
-            this.buttonTop.TabIndex = 11;
-            this.buttonTop.Text = "Top";
-            this.buttonTop.UseVisualStyleBackColor = true;
-            this.buttonTop.Click += new System.EventHandler(this.buttonTop_Click);
-            // 
-            // buttonButtom
-            // 
-            this.buttonButtom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonButtom.Location = new System.Drawing.Point(8, 119);
-            this.buttonButtom.Name = "buttonButtom";
-            this.buttonButtom.Size = new System.Drawing.Size(105, 24);
-            this.buttonButtom.TabIndex = 12;
-            this.buttonButtom.Text = "Bottom";
-            this.buttonButtom.UseVisualStyleBackColor = true;
-            this.buttonButtom.Click += new System.EventHandler(this.buttonButtom_Click);
             // 
             // FormMain
             // 
