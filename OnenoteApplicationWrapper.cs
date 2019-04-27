@@ -15,7 +15,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
         }
@@ -31,7 +31,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
         }
@@ -47,7 +47,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
         }
@@ -63,7 +63,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
         }
@@ -77,7 +77,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
         }
@@ -91,7 +91,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
         }
@@ -105,7 +105,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
                 return false;
             }
         }

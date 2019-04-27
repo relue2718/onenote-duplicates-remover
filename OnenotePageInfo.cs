@@ -7,11 +7,11 @@ namespace OneNoteDuplicatesRemover
 {
     public class OneNotePageInfo
     {
-        public string ParentSectionId;
-        public string ParentSectionName;
-        public string ParentSectionFilePath;
-        public string PageTitle;
-        public string HashValueForInnerText;
+        public string ParentSectionId = null;
+        public string ParentSectionName = null;
+        public string ParentSectionFilePath = null;
+        public string PageTitle = null;
+        public string HashValueForInnerText = null;
 
         // This flag must be true to make sure the content is retrieved.
         public bool IsContentRetrieved = false;

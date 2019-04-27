@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -97,7 +95,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -121,7 +119,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -139,7 +137,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -157,7 +155,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -175,7 +173,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -189,16 +187,16 @@ namespace OneNoteDuplicatesRemover
                     if (lastSelectedPageId != e.Node.Name)
                     {
                         _accessor.SetLastSelectedPageId(e.Node.Name);
-                        if (_accessor.HasPageId(e.Node.Name))
-                        {
-                            _accessor.Navigate(e.Node.Name);
-                        }
+                        //if (_accessor.HasPageId(e.Node.Name))
+                        //{
+                        //    _accessor.Navigate(e.Node.Name);
+                        //}
                     }
                 }
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -238,7 +236,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -256,7 +254,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
 
@@ -421,25 +419,25 @@ namespace OneNoteDuplicatesRemover
         private void ScanDuplicatedPages()
         {
             bool success = _accessor.TryUpdatePageHierarchy();
-            UpdateCurrentStatus(CurrentStatus.Completed_Scanning);
-            if (success)
-            {
-                ResetTreeViewControl();
+            //UpdateCurrentStatus(CurrentStatus.Completed_Scanning);
+            //if (success)
+            //{
+            //    ResetTreeViewControl();
 
-                Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* < Page Id, Page Name > List */ > duplicatedGroups = null;
-                duplicatedGroups = _accessor.GetDuplicatedGroups();
+            //    Dictionary<string /* innerTextHash */, List<Tuple<string, string>> /* < Page Id, Page Name > List */ > duplicatedGroups = null;
+            //    duplicatedGroups = _accessor.GetDuplicatedGroups();
 
-                List<string> preferredPathList = new List<string>();
-                UpdateDuplicatedGroupsToUI(duplicatedGroups, preferredPathList);
-                preferredPathList = MakePreferredPathListTidy(preferredPathList);
-                UpdatePathPreferenceUI(preferredPathList);
+            //    List<string> preferredPathList = new List<string>();
+            //    UpdateDuplicatedGroupsToUI(duplicatedGroups, preferredPathList);
+            //    preferredPathList = MakePreferredPathListTidy(preferredPathList);
+            //    UpdatePathPreferenceUI(preferredPathList);
 
-                UpdateCurrentStatus(CurrentStatus.Completed_Scanning);
-            }
-            else
-            {
-                etc.LoggerHelper.LogWarn("Unable to get a hierarchy.");
-            }
+            //    UpdateCurrentStatus(CurrentStatus.Completed_Scanning);
+            //}
+            //else
+            //{
+            //    etc.LoggerHelper.LogWarn("Unable to get a hierarchy.");
+            //}
         }
 
         private void UpdatePathPreferenceUI(List<string> sectionPathList)
@@ -502,13 +500,13 @@ namespace OneNoteDuplicatesRemover
                     {
                         string pageId = groupInfo.Value[i].Item1;
                         string sectionPath = null;
-                        bool success = _accessor.TryGetSectionPath(pageId, out sectionPath);
-                        if (success)
-                        {
-                            // public virtual TreeNode Add(string key, string text);
-                            groupNode.Nodes.Add(pageId, sectionPath + " - " + groupInfo.Value[i].Item2).Tag = sectionPath;
-                            sectionPathList.Add(System.IO.Path.GetDirectoryName(sectionPath));
-                        }
+                        //bool success = _accessor.TryGetSectionPath(pageId, out sectionPath);
+                        //if (success)
+                        //{
+                        //    // public virtual TreeNode Add(string key, string text);
+                        //    groupNode.Nodes.Add(pageId, sectionPath + " - " + groupInfo.Value[i].Item2).Tag = sectionPath;
+                        //    sectionPathList.Add(System.IO.Path.GetDirectoryName(sectionPath));
+                        //}
                     }
                 }
             }
@@ -530,7 +528,7 @@ namespace OneNoteDuplicatesRemover
             }
             catch (System.Exception exception)
             {
-                etc.LoggerHelper.LogException(exception);
+                etc.LoggerHelper.LogUnexpectedException(exception);
             }
         }
     }

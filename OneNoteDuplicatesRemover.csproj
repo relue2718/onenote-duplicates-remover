@@ -108,6 +108,7 @@
     <Compile Include="OnenoteApplicationWrapper.cs" />
     <Compile Include="OnenoteAccessor.cs" />
     <Compile Include="OnenotePageInfo.cs" />
+    <Compile Include="OneNotePageInfoManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

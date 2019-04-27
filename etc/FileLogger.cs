@@ -5,55 +5,59 @@ using System.Text;
 
 namespace OneNoteDuplicatesRemover.etc
 {
-  public sealed class FileLogger
-  {
-    private static volatile FileLogger instance;
-    private static object syncRoot = new Object();
-
-    private FileLogger() { }
-
-    public static FileLogger Instance
+    public sealed class FileLogger
     {
-      get
-      {
-        if (instance == null)
+        private static volatile FileLogger instance;
+        private static object syncRoot = new Object();
+
+        private FileLogger() { }
+
+        public static FileLogger Instance
         {
-          lock (syncRoot)
-          {
-            if (instance == null)
+            get
             {
-              instance = new FileLogger();
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new FileLogger();
+                        }
+                    }
+                }
+
+                return instance;
             }
-          }
         }
 
-        return instance;
-      }
-    }
+        private string path = "";
+        private readonly object print_lock = new object();
 
-    private string path = "";
-
-    public void Init(string path)
-    {
-      this.path = path;
-    }
-
-    public void Print(string category, string format, params object[] args)
-    {
-      try
-      {
-        if (path != "")
+        public void Init(string path)
         {
-          using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, true, Encoding.UTF8))
-          {
-            sw.WriteLine(category + " * " + DateTime.Now.ToUniversalTime().ToString() + " * " + format, args);
-          }
+            this.path = path;
         }
-      }
-      catch (Exception e)
-      {
-        System.Diagnostics.Debug.Print(e.ToString());
-      }
+
+        public void Print(string message)
+        {
+            lock (print_lock)
+            {
+                try
+                {
+                    if (path != "")
+                    {
+                        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, true, Encoding.UTF8))
+                        {
+                            sw.WriteLine(message);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.Print(e.ToString());
+                }
+            }
+        }
     }
-  }
 }
