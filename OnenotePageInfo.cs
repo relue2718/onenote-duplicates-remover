@@ -13,7 +13,11 @@ namespace OneNoteDuplicatesRemover
         public string PageTitle = null;
         public string HashValueForInnerText = null;
 
+        public string PageContent = null;
+        public System.Xml.XmlDocument PageContentXml = null;
+
         // This flag must be true to make sure the content is retrieved.
         public bool IsContentRetrieved = false;
+        
     }
 }

@@ -11,91 +11,47 @@ namespace OneNoteDuplicatesRemover
         private OneNotePageInfoManager page_info_manager; 
         private string last_selected_page_id = "";
 
-        public delegate void ProgressEventHandler(int current, int max, string page_name);
-        public event ProgressEventHandler OnUpdatedScanProgress = null;
+        public delegate void ProgressEventHandler(int count_read_pages_success, int count_read_pages_failed, int count_hashed_pages_success, int count_hashed_pages_failed, int total_pages, string page_title);
+        public event ProgressEventHandler UpdateProgress = null;
 
         public void InitializeOneNoteWrapper()
         {
             onenote_application = new OneNoteApplicationWrapper();
             onenote_application.InitializeOneNoteTypeLibrary();
-            page_info_manager = new OneNotePageInfoManager();
+            page_info_manager = new OneNotePageInfoManager(this);
         }
-
-        public bool TryUpdatePageHierarchy()
+        
+        public bool InvokeScanPages()
         {
             string raw_xml_string = "";
             if (onenote_application.TryGetPageHierarchyAsXML(out raw_xml_string))
             {
-                return page_info_manager.TryLoadFromXmlString(raw_xml_string);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private void FireEventUpdatedScanProgress(int current, int max, string page_name)
-        {
-            OnUpdatedScanProgress?.Invoke(current, max, page_name);
-        }
-
-        private bool TryGetHashOfOneNotePage(string pageId, out string hash_value)
-        {
-            hash_value = "";
-
-            // The OneNote page consists of XML-like markups. 
-            // Though the innerText is identical, it is common to have different 'objectID' and  'lastModifiedTime' attributes. 
-            // These differences would cause a complete different hash value even if the contents are the same.
-            // Therefore, I will ignore those attributes by extracting 'innerText' and calculate a hash value without those attributes.
-
-            string page_content = "";
-            bool success = onenote_application.TryGetPageContent(pageId, out page_content);
-
-            if (success)
-            {
-                System.Xml.XmlDocument page_content_xml = new System.Xml.XmlDocument();
-                try
+                if (page_info_manager.TryLoadFromXmlString(raw_xml_string))
                 {
-                    page_content_xml.LoadXml(page_content);
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                    return false;
-                }
-
-                if (TryCalculateHashValue(page_content_xml.InnerText, out hash_value))
-                {
+                    page_info_manager.ComputeHashValueAsynchronously();
                     return true;
                 }
                 else
                 {
-                    etc.LoggerHelper.LogWarn("Unable to calculate a hash, pageId:{0}", pageId);
+                    etc.LoggerHelper.LogError("Failed to parse raw_xml_string.");
                     return false;
                 }
             }
             else
             {
-                etc.LoggerHelper.LogWarn("Unable to get a page content, pageId:{0}", pageId);
+                etc.LoggerHelper.LogError("Failed to retrieve page hierarchy.");
                 return false;
             }
         }
 
-        private static bool TryCalculateHashValue(string plain_text, out string hash_value)
+        internal OneNoteApplicationWrapper GetOneNoteApplication()
         {
-            hash_value = "";
-            try
-            {
-                byte[] raw_inner_text = Encoding.UTF8.GetBytes(plain_text);
-                byte[] computed_hash_value = System.Security.Cryptography.SHA256.Create().ComputeHash(raw_inner_text);
-                hash_value = Utils.ConvertToHexString(computed_hash_value);
-                return true;
-            }
-            catch (System.Exception exception)
-            {
-                etc.LoggerHelper.LogUnexpectedException(exception);
-                return false;
-            }
+            return onenote_application;
+        }
+
+        internal void FireEventUpdateProgress(int count_read_pages_success, int count_read_pages_failed, int count_hashed_pages_success, int count_hashed_pages_failed, int total_pages, string page_title)
+        {
+            UpdateProgress?.Invoke(count_read_pages_success, count_read_pages_failed, count_hashed_pages_success, count_hashed_pages_failed, total_pages, page_title);
         }
 
         public void Navigate(string pageId)

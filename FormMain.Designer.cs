@@ -37,7 +37,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeViewHierarchy = new System.Windows.Forms.TreeView();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.buttonButtom = new System.Windows.Forms.Button();
+            this.buttonBottom = new System.Windows.Forms.Button();
             this.buttonTop = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonUp = new System.Windows.Forms.Button();
@@ -187,7 +187,7 @@
             // 
             // splitContainer3.Panel1
             // 
-            this.splitContainer3.Panel1.Controls.Add(this.buttonButtom);
+            this.splitContainer3.Panel1.Controls.Add(this.buttonBottom);
             this.splitContainer3.Panel1.Controls.Add(this.buttonTop);
             this.splitContainer3.Panel1.Controls.Add(this.label2);
             this.splitContainer3.Panel1.Controls.Add(this.buttonUp);
@@ -200,16 +200,16 @@
             this.splitContainer3.SplitterDistance = 118;
             this.splitContainer3.TabIndex = 12;
             // 
-            // buttonButtom
+            // buttonBottom
             // 
-            this.buttonButtom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonButtom.Location = new System.Drawing.Point(8, 119);
-            this.buttonButtom.Name = "buttonButtom";
-            this.buttonButtom.Size = new System.Drawing.Size(105, 24);
-            this.buttonButtom.TabIndex = 12;
-            this.buttonButtom.Text = "Bottom";
-            this.buttonButtom.UseVisualStyleBackColor = true;
-            this.buttonButtom.Click += new System.EventHandler(this.buttonButtom_Click);
+            this.buttonBottom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonBottom.Location = new System.Drawing.Point(8, 119);
+            this.buttonBottom.Name = "buttonBottom";
+            this.buttonBottom.Size = new System.Drawing.Size(105, 24);
+            this.buttonBottom.TabIndex = 12;
+            this.buttonBottom.Text = "Bottom";
+            this.buttonBottom.UseVisualStyleBackColor = true;
+            this.buttonBottom.Click += new System.EventHandler(this.buttonBottom_Click);
             // 
             // buttonTop
             // 
@@ -359,7 +359,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listBoxPreferences;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private System.Windows.Forms.Button buttonButtom;
+        private System.Windows.Forms.Button buttonBottom;
         private System.Windows.Forms.Button buttonTop;
     }
 }
