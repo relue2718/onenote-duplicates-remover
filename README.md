@@ -5,7 +5,7 @@ A simple tool that removes duplicated pages for Microsoft OneNote
 Requirements
 ------------
 * Microsoft Office OneNote
-* .NET framework 4 
+* .NET framework 4.5
 
 Why do I need this tool?
 -----------
