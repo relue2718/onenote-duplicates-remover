@@ -11,13 +11,6 @@ namespace OneNoteDuplicatesRemover
         public string ParentSectionName = null;
         public string ParentSectionFilePath = null;
         public string PageTitle = null;
-        public string HashValueForInnerText = null;
-
-        public string PageContent = null;
-        public System.Xml.XmlDocument PageContentXml = null;
-
-        // This flag must be true to make sure the content is retrieved.
-        public bool IsContentRetrieved = false;
-        
+        public string HashValueForInnerText = null; // The hash value must not be a null value.
     }
 }

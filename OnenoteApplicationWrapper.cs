@@ -2,7 +2,7 @@ using System;
 
 namespace OneNoteDuplicatesRemover
 {
-    class OneNoteApplicationWrapper
+    public class OneNoteApplicationWrapper
     {
         private Microsoft.Office.Interop.OneNote.Application application = null;
 
@@ -20,13 +20,12 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        public bool TryGetPageHierarchyAsXML(out string fullHierarchyXmlStr)
+        public bool TryGetPageHierarchyAsXML(out string rawXmlString)
         {
-            fullHierarchyXmlStr = "";
-
+            rawXmlString = "";
             try
             {
-                application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsPages, out fullHierarchyXmlStr);
+                application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsPages, out rawXmlString);
                 return true;
             }
             catch (Exception exception)
@@ -36,13 +35,12 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        public bool TryGetSectionHierarchyAsXML(out string fullHierarchyXmlStr)
+        public bool TryGetSectionHierarchyAsXML(out string rawXmlString)
         {
-            fullHierarchyXmlStr = "";
-
+            rawXmlString = "";
             try
             {
-                application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsSections, out fullHierarchyXmlStr);
+                application.GetHierarchy(null, Microsoft.Office.Interop.OneNote.HierarchyScope.hsSections, out rawXmlString);
                 return true;
             }
             catch (Exception exception)
@@ -55,7 +53,6 @@ namespace OneNoteDuplicatesRemover
         public bool TryGetPageContent(string pageId, out string pageContent)
         {
             pageContent = "";
-
             try
             {
                 application.GetPageContent(pageId, out pageContent, Microsoft.Office.Interop.OneNote.PageInfo.piAll);
@@ -68,11 +65,11 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        public bool TryNavigateTo(string lastSelectedPageId)
+        public bool TryNavigateTo(string pageId)
         {
             try
             {
-                application.NavigateTo(lastSelectedPageId /* bstrHierarchyObjectID */, "", false);
+                application.NavigateTo(pageId /* bstrHierarchyObjectID */, "", false);
                 return true;
             }
             catch (Exception exception)

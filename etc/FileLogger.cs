@@ -29,13 +29,13 @@ namespace OneNoteDuplicatesRemover.etc
             }
         }
 
-        private string path = "";
+        private string logFilePath = "";
 
         public void Init(string path)
         {
             lock (this)
             {
-                this.path = path;
+                this.logFilePath = path;
             }
         }
 
@@ -45,9 +45,9 @@ namespace OneNoteDuplicatesRemover.etc
             {
                 try
                 {
-                    if (path != "")
+                    if (logFilePath != "")
                     {
-                        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, true, Encoding.UTF8))
+                        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(logFilePath, true /* APPEND */, Encoding.UTF8))
                         {
                             sw.WriteLine(message);
                         }
