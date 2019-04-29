@@ -92,7 +92,7 @@ namespace OneNoteDuplicatesRemover
                 string timestampNow = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-FFF");
                 etc.FileLogger.Instance.Init("log-" + timestampNow + ".log");
                 etc.LoggerHelper.EventCategoryCountChanged += LoggerHelper_EventCategoryCountChanged;
-                // advancedToolStripMenuItem.Visible = false; // Hide advanced features by default
+                advancedToolStripMenuItem.Visible = false; // Hide advanced features by default
                 accessor = new OneNoteAccessor();
                 accessor.OnCancelled += Accessor_OnCancelled;
                 var retInit = accessor.InitializeOneNoteWrapper();
