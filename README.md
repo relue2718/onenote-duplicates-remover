@@ -22,7 +22,7 @@ Screenshot
 Disclaimer
 ----------
 * It is strongly recommended to back up the files before you proceed any removal operation.
-* There is a very rare chance to get the same hash value for different contents. The hash collision may cause unexpected data loss.
+* There is a very rare chance to get the same hash value (SHA256) for different contents. The hash collision may cause unexpected data loss.
 
 Potential Issues
 ----------------
