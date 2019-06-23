@@ -1,6 +1,6 @@
 OneNote Duplicates Remover
 ==========================
-A simple tool that removes duplicated pages for Microsoft OneNote
+To remove OneNote page duplicates
 
 Requirements
 ------------
@@ -8,9 +8,12 @@ Requirements
 * .NET framework 4.5
 
 Why do I need this tool?
------------
-* Some duplicated OneNote pages cannot be detected by file-level duplicate removers because internal attributes such as 'objectId' and 'lastModifiedTime' are different.
-* This tool calculates a hash value for each OneNote page by ignoring those attributes.
+------------------------
+* Some OneNote page duplicates cannot be detected by file-level duplicate removers.
+
+How does this tool work?
+------------------------
+* It calculates a hash value of the page content except for some irrelevant attributes such as 'objectId' (UUID) and 'lastModifiedTime'.
 
 Screenshot
 ----------
@@ -18,15 +21,13 @@ Screenshot
 
 Disclaimer
 ----------
-* **PLEASE BACKUP YOUR ONENOTE FILES BEFORE YOU PROCEED ANY REMOVAL OPERATION**
-* I cannot guarantee that this tool does not have a bug for every corner case.
-* I strongly recommend to backup notebook files before you proceed any removal operation.
-* This tool does not use an exact match due to the attribute issue and uses a hash function (SHA256) for grouping duplicates. There is a very rare chance to have the same hash value for different contents. The hash collision can cause unexpected data loss.
+* It is strongly recommended to back up the files before you proceed any removal operation.
+* There is a very rare chance to get the same hash value for different contents. The hash collision may cause unexpected data loss.
 
-Known Issues
-------------
+Potential Issues
+----------------
 ![screenshot](https://raw.githubusercontent.com/relue2718/onenote-duplicates-remover/master/screenshot/2.png)
 
-* You should not run this program in the multiple computers. Let's say you have two computers, A and B. If you run this program in the computer A and delete the duplicated page A', and sync notes with the computer B. The sync process will delete the page A' in the computer B as well. However, if you run this program in the computer B and somehow delete the page A, both pages A and A' will be deleted (data loss).
-* Please run this tool in only one computer and make sure the sync process is finished.
+* You should not run this program on multiple computers. Let's say you have two computers A and B running this tool. You have deleted the page A' on the computer A and have deleted the page A on the computer B. The sync process will end up deleting all pages (data loss).
+
 
