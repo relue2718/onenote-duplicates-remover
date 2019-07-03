@@ -1,6 +1,6 @@
 OneNote Duplicates Remover
 ==========================
-To remove OneNote page duplicates
+Remove OneNote page duplicates
 
 Requirements
 ------------
@@ -30,4 +30,7 @@ Potential Issues
 
 * You should not run this program on multiple computers. Let's say you have two computers A and B running this tool. You have deleted the page A' on the computer A and have deleted the page A on the computer B. The sync process will end up deleting all pages (data loss).
 
-
+Downloads
+---------
+* [Setup - OneNoteDuplicatesRemover_1_0_1_5.zip](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.5/OneNoteDuplicatesRemover_1_0_1_5.zip)
+* [Signature (self-signed) - OneNoteDuplicatesRemover_1_0_1_5.zip.sig](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.5/OneNoteDuplicatesRemover_1_0_1_5.zip.sig)
