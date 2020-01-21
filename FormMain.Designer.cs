@@ -57,6 +57,8 @@ namespace OneNoteDuplicatesRemover
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanUpUsingJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flattenSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -336,7 +338,8 @@ namespace OneNoteDuplicatesRemover
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.advancedToolStripMenuItem});
+            this.advancedToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(978, 24);
@@ -356,19 +359,19 @@ namespace OneNoteDuplicatesRemover
             // dumpJsonToolStripMenuItem
             // 
             this.dumpJsonToolStripMenuItem.Name = "dumpJsonToolStripMenuItem";
-            this.dumpJsonToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.dumpJsonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.dumpJsonToolStripMenuItem.Text = "&Dump JSON...";
             this.dumpJsonToolStripMenuItem.Click += new System.EventHandler(this.dumpJsonToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(144, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -394,6 +397,21 @@ namespace OneNoteDuplicatesRemover
             this.flattenSectionsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.flattenSectionsToolStripMenuItem.Text = "&Flatten Sections";
             this.flattenSectionsToolStripMenuItem.Click += new System.EventHandler(this.flattenSectionsToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Text = "&About...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -468,5 +486,7 @@ namespace OneNoteDuplicatesRemover
         private System.Windows.Forms.ToolStripMenuItem cleanUpUsingJSONToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem flattenSectionsToolStripMenuItem;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }

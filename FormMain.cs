@@ -557,5 +557,11 @@ namespace OneNoteDuplicatesRemover
         {
             TossCancellationToken();
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAbout formAbout = new FormAbout(accessor);
+            formAbout.ShowDialog(); // DialogResult is not used in this context.
+        }
     }
 }

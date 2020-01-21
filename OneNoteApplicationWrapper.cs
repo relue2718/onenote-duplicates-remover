@@ -20,6 +20,11 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
+        public Type GetApplicationType()
+        {
+            return application.GetType();
+        }
+
         public bool TryGetPageHierarchyAsXML(out string rawXmlString)
         {
             rawXmlString = "";

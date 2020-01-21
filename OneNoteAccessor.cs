@@ -30,6 +30,11 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
+        public Type GetApplicationType()
+        {
+            return onenoteApplication.GetApplicationType();
+        }
+
         private Tuple<bool, string> UpdatePageInfos()
         {
             pageInfos = new Dictionary<string, OneNotePageInfo>();
