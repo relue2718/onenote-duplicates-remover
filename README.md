@@ -32,5 +32,5 @@ Potential Issues
 
 Downloads
 ---------
-* [Setup - OneNoteDuplicatesRemover_1_0_1_5.zip](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.5/OneNoteDuplicatesRemover_1_0_1_5.zip)
-* [Signature (self-signed) - OneNoteDuplicatesRemover_1_0_1_5.zip.sig](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.5/OneNoteDuplicatesRemover_1_0_1_5.zip.sig)
+* [Setup - OneNoteDuplicatesRemover_1_0_1_7.zip](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.7/OneNoteDuplicatesRemover_1_0_1_7.zip)
+* [Signature (self-signed) - OneNoteDuplicatesRemover_1_0_1_7.zip.sig](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.7/OneNoteDuplicatesRemover_1_0_1_7.zip.sig)
