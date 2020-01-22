@@ -32,4 +32,4 @@ Potential Issues
 
 Downloads
 ---------
-* [setup.exe](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.10/setup.exe)
+* [setup.exe](https://github.com/relue2718/onenote-duplicates-remover/releases/download/v1.0.1.11/setup.exe)
