@@ -5,8 +5,8 @@
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
@@ -15,11 +15,11 @@
     <InstallUrl>https://relue2718.com/static/publish/onenote_duplicates_remover/</InstallUrl>
     <UpdateUrl>http://relue2718.com/static/publish/onenote_duplicates_remover/</UpdateUrl>
     <ProductName>OneNoteDuplicatesRemover</ProductName>
-    <PublisherName>Seunghyun Yoo</PublisherName>
+    <PublisherName>OneNoteDuplicatesRemover</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
-    <ApplicationVersion>1.0.1.10</ApplicationVersion>
+    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationVersion>1.0.1.11</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
