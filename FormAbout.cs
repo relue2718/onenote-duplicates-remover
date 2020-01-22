@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Net.Sockets;
+
 namespace OneNoteDuplicatesRemover
 {
     public partial class FormAbout : Form
@@ -128,6 +130,7 @@ namespace OneNoteDuplicatesRemover
             {
                 sb.AppendLine(string.Format("Unable to retrieve type information."));
             }
+
             textBoxInformation.Text = sb.ToString();
         }
 
@@ -139,6 +142,34 @@ namespace OneNoteDuplicatesRemover
                 UseShellExecute = true,
                 Verb = "open"
             });
+        }
+
+        private void textBoxInformation_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonTestRpcConnection_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            // Check whether the RPC server is available or not
+            using (TcpClient tcpClient = new TcpClient())
+            {
+                try
+                {
+                    tcpClient.Connect("localhost", 135);
+                }
+                catch (System.Exception e2)
+                {
+                    sb.AppendLine(string.Format("Unable to connect localhost:135, reason = {0}", e2.ToString()));
+                }
+                sb.AppendLine(string.Format("RPC connection test: {0}", tcpClient.Connected));
+            }
+            textBoxInformation.Text += sb.ToString();
+        }
+
+        private void textBoxInformation_Enter(object sender, EventArgs e)
+        {
         }
     }
 }
