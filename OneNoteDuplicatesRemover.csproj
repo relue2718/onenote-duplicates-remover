@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ManifestCertificateThumbprint>070474EF65200986B7C040B6EA5ABE9E4DD85936</ManifestCertificateThumbprint>
     <PublishUrl>publish\</PublishUrl>
@@ -85,7 +85,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OneNoteDuplicatesRemover</RootNamespace>
     <AssemblyName>OneNoteDuplicatesRemover</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
