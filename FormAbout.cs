@@ -32,109 +32,7 @@ namespace OneNoteDuplicatesRemover
                 Verb = "open"
             });
         }
-
-        private void buttonCopyText_Click(object sender, EventArgs e)
-        {
-            if (textBoxInformation.Text.Length > 0)
-            {
-                Clipboard.SetText(textBoxInformation.Text);
-            }
-
-        }
-
-        private void FormAbout_Load(object sender, EventArgs e)
-        {
-            Type comObjectType = accessor.GetApplicationType();
-            StringBuilder sb = new StringBuilder();
-            try
-            {
-                sb.AppendLine(string.Format("Program Version = {0}", System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString()));
-            }
-            catch (System.Exception exception)
-            {
-                etc.LoggerHelper.LogUnexpectedException(exception);
-            }
-
-            if (comObjectType != null)
-            {
-                try
-                {
-                    sb.AppendLine(string.Format("Assembly.CodeBase = {0}", comObjectType.Assembly.CodeBase));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-
-                try
-                {
-                    sb.AppendLine(string.Format("Assembly.FullName = {0}", comObjectType.Assembly.FullName));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-
-                try
-                {
-                    sb.AppendLine(string.Format("Assembly.ImageRuntimeVersion = {0}", comObjectType.Assembly.ImageRuntimeVersion));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-
-                try
-                {
-                    sb.AppendLine(string.Format("Assembly.IsFullyTrusted = {0}", comObjectType.Assembly.IsFullyTrusted));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-
-                try
-                {
-                    sb.AppendLine(string.Format("Assembly.Location = {0}", comObjectType.Assembly.Location));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-                try
-                {
-                    sb.AppendLine(string.Format("FullName = {0}", comObjectType.FullName));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-                try
-                {
-                    sb.AppendLine(string.Format("IsCOMObject = {0}", comObjectType.IsCOMObject));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-                try
-                {
-                    sb.AppendLine(string.Format("Module.Name = {0}", comObjectType.Module.Name));
-                }
-                catch (System.Exception exception)
-                {
-                    etc.LoggerHelper.LogUnexpectedException(exception);
-                }
-            }
-            else
-            {
-                sb.AppendLine(string.Format("Unable to retrieve type information."));
-            }
-
-            textBoxInformation.Text = sb.ToString();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonOpenWebsite_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
             {
@@ -144,32 +42,50 @@ namespace OneNoteDuplicatesRemover
             });
         }
 
-        private void textBoxInformation_TextChanged(object sender, EventArgs e)
+        private void buttonCopyText_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void buttonTestRpcConnection_Click(object sender, EventArgs e)
-        {
-            StringBuilder sb = new StringBuilder();
-            // Check whether the RPC server is available or not
-            using (TcpClient tcpClient = new TcpClient())
+            if (textBoxInformation.Text.Length > 0)
             {
-                try
-                {
-                    tcpClient.Connect("localhost", 135);
-                }
-                catch (System.Exception e2)
-                {
-                    sb.AppendLine(string.Format("Unable to connect localhost:135, reason = {0}", e2.ToString()));
-                }
-                sb.AppendLine(string.Format("RPC connection test: {0}", tcpClient.Connected));
+                Clipboard.SetText(textBoxInformation.Text);
             }
-            textBoxInformation.Text += sb.ToString();
         }
 
-        private void textBoxInformation_Enter(object sender, EventArgs e)
+        private void appendInfo(StringBuilder sb, string name, Func<string> valueProvider)
         {
+            try
+            {
+                sb.AppendLine(string.Format("{0} = {1}", name, valueProvider()));
+            }
+            catch (System.Exception exception)
+            {
+                etc.LoggerHelper.LogUnexpectedException(exception);
+            }
+        }
+
+        private void FormAbout_Load(object sender, EventArgs e)
+        {
+            Type comObjectType = accessor.GetApplicationType();
+            StringBuilder sb = new StringBuilder();
+
+            appendInfo(sb, "Program Version", () => System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString());
+
+            if (comObjectType != null)
+            {
+                appendInfo(sb, "Assembly.CodeBase", () => comObjectType.Assembly.CodeBase);
+                appendInfo(sb, "Assembly.FullName", () => comObjectType.Assembly.FullName);
+                appendInfo(sb, "Assembly.ImageRuntimeVersion", () => comObjectType.Assembly.ImageRuntimeVersion);
+                appendInfo(sb, "Assembly.IsFullyTrusted", () => comObjectType.Assembly.IsFullyTrusted.ToString());
+                appendInfo(sb, "Assembly.Location", () => comObjectType.Assembly.Location.ToString());
+                appendInfo(sb, "FullName", () => comObjectType.FullName);
+                appendInfo(sb, "IsCOMObject", () => comObjectType.IsCOMObject.ToString());
+                appendInfo(sb, "Module.Name", () => comObjectType.Module.Name);
+            }
+            else
+            {
+                sb.AppendLine(string.Format("Unable to retrieve type information."));
+            }
+
+            textBoxInformation.Text = sb.ToString();
         }
     }
 }
