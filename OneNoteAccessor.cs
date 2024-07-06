@@ -319,6 +319,7 @@ namespace OneNoteDuplicatesRemover
                             if ((sectionNode.Attributes["isInRecycleBin"] == null) || (sectionNode.Attributes["isInRecycleBin"].Value != "true") &&
                                (sectionNode.Attributes["isDeletedPages"] == null) || (sectionNode.Attributes["isDeletedPages"].Value != "true"))
                             {
+                                // TODO: Can a section node have the attribute 'isDeletedPages'?
                                 if (onenoteApplication.TryMergeSection(sourceSectionId, destinationSectionId))
                                 {
                                     countFlattenedSections += 1;
@@ -341,6 +342,50 @@ namespace OneNoteDuplicatesRemover
             catch (System.Exception exception)
             {
                 etc.LoggerHelper.LogUnexpectedException(exception);
+                return false;
+            }
+        }
+
+        private bool isRecycled(System.Xml.XmlNode xmlNode)
+        {
+            if (xmlNode.Attributes["isInRecycleBin"] == null)
+            {
+                return false;
+            }
+            else
+            {
+                return bool.Parse(xmlNode.Attributes["isInRecycleBin"].Value);
+            }
+        }
+
+        public bool TryExportSectionHierarchyAsXML(string path)
+        {
+            bool result = onenoteApplication.TryGetSectionHierarchyAsXML(out string rawXmlString);
+            if (result)
+            {
+                System.Xml.XmlDocument xml = new System.Xml.XmlDocument();
+                xml.LoadXml(rawXmlString);
+                xml.Save(path);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool TryExportPageHierarchyAsXML(string path)
+        {
+            bool result = onenoteApplication.TryGetPageHierarchyAsXML(out string rawXmlString);
+            if (result)
+            {
+                System.Xml.XmlDocument xml = new System.Xml.XmlDocument();
+                xml.LoadXml(rawXmlString);
+                xml.Save(path);
+                return true;
+            }
+            else
+            {
                 return false;
             }
         }

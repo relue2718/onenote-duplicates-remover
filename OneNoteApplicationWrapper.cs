@@ -40,6 +40,21 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
+        public bool TryGetPageHierarchyAsXMLWithinID(string sectionId, out string rawXmlString)
+        {
+            rawXmlString = "";
+            try
+            {
+                application.GetHierarchy(sectionId, Microsoft.Office.Interop.OneNote.HierarchyScope.hsPages, out rawXmlString);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                etc.LoggerHelper.LogUnexpectedException(exception);
+                return false;
+            }
+        }
+
         public bool TryGetSectionHierarchyAsXML(out string rawXmlString)
         {
             rawXmlString = "";

@@ -563,5 +563,47 @@ namespace OneNoteDuplicatesRemover
             FormAbout formAbout = new FormAbout(accessor);
             formAbout.ShowDialog(); // DialogResult is not used in this context.
         }
+
+        private void exportSectionDataToXml_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                FileName = "dump-sections-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".xml",
+                Filter = "XML files (*.xml)|*.xml",
+                Title = "Save XML"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                if (accessor.TryExportSectionHierarchyAsXML(sfd.FileName))
+                {
+                    MessageBox.Show("Exported successfully!", "Export Sections Hierarchy", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Failed to export!", "Export Sections Hierarchy", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void exportPagesDataToXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                FileName = "dump-pages-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".xml",
+                Filter = "XML files (*.xml)|*.xml",
+                Title = "Save XML"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                if (accessor.TryExportPageHierarchyAsXML(sfd.FileName))
+                {
+                    MessageBox.Show("Exported successfully!", "Export Pages Hierarchy", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Failed to export!", "Export Pages Hierarchy", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 }

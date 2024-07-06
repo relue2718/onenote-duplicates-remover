@@ -57,6 +57,8 @@ namespace OneNoteDuplicatesRemover
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanUpUsingJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flattenSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportSectionDataToXml = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportpagesDataToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -84,6 +86,7 @@ namespace OneNoteDuplicatesRemover
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -100,16 +103,17 @@ namespace OneNoteDuplicatesRemover
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer2.Size = new System.Drawing.Size(978, 564);
+            this.splitContainer2.Size = new System.Drawing.Size(1141, 515);
             this.splitContainer2.SplitterDistance = 66;
             this.splitContainer2.TabIndex = 18;
             // 
             // buttonCancel
             // 
             this.buttonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.buttonCancel.Location = new System.Drawing.Point(873, 12);
+            this.buttonCancel.Location = new System.Drawing.Point(1018, 11);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(91, 26);
+            this.buttonCancel.Size = new System.Drawing.Size(106, 24);
             this.buttonCancel.TabIndex = 7;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = false;
@@ -118,18 +122,20 @@ namespace OneNoteDuplicatesRemover
             // labelMessageCounts
             // 
             this.labelMessageCounts.AutoSize = true;
-            this.labelMessageCounts.Location = new System.Drawing.Point(483, 44);
+            this.labelMessageCounts.Location = new System.Drawing.Point(564, 41);
+            this.labelMessageCounts.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelMessageCounts.Name = "labelMessageCounts";
-            this.labelMessageCounts.Size = new System.Drawing.Size(0, 13);
+            this.labelMessageCounts.Size = new System.Drawing.Size(0, 12);
             this.labelMessageCounts.TabIndex = 6;
             // 
             // buttonScanDuplicatedPages
             // 
             this.buttonScanDuplicatedPages.BackColor = System.Drawing.Color.LightSkyBlue;
             this.buttonScanDuplicatedPages.Cursor = System.Windows.Forms.Cursors.Default;
-            this.buttonScanDuplicatedPages.Location = new System.Drawing.Point(12, 12);
+            this.buttonScanDuplicatedPages.Location = new System.Drawing.Point(14, 11);
+            this.buttonScanDuplicatedPages.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonScanDuplicatedPages.Name = "buttonScanDuplicatedPages";
-            this.buttonScanDuplicatedPages.Size = new System.Drawing.Size(148, 26);
+            this.buttonScanDuplicatedPages.Size = new System.Drawing.Size(173, 24);
             this.buttonScanDuplicatedPages.TabIndex = 0;
             this.buttonScanDuplicatedPages.Text = "Scan duplicates";
             this.buttonScanDuplicatedPages.UseVisualStyleBackColor = false;
@@ -140,18 +146,20 @@ namespace OneNoteDuplicatesRemover
             this.checkBoxNavigateAutomatically.AutoSize = true;
             this.checkBoxNavigateAutomatically.Checked = true;
             this.checkBoxNavigateAutomatically.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxNavigateAutomatically.Location = new System.Drawing.Point(12, 44);
+            this.checkBoxNavigateAutomatically.Location = new System.Drawing.Point(14, 41);
+            this.checkBoxNavigateAutomatically.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.checkBoxNavigateAutomatically.Name = "checkBoxNavigateAutomatically";
-            this.checkBoxNavigateAutomatically.Size = new System.Drawing.Size(180, 17);
+            this.checkBoxNavigateAutomatically.Size = new System.Drawing.Size(205, 16);
             this.checkBoxNavigateAutomatically.TabIndex = 5;
             this.checkBoxNavigateAutomatically.Text = "Navigate to the highlighted page";
             this.checkBoxNavigateAutomatically.UseVisualStyleBackColor = true;
             // 
             // buttonSelectAllExceptOne
             // 
-            this.buttonSelectAllExceptOne.Location = new System.Drawing.Point(173, 12);
+            this.buttonSelectAllExceptOne.Location = new System.Drawing.Point(202, 11);
+            this.buttonSelectAllExceptOne.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonSelectAllExceptOne.Name = "buttonSelectAllExceptOne";
-            this.buttonSelectAllExceptOne.Size = new System.Drawing.Size(148, 26);
+            this.buttonSelectAllExceptOne.Size = new System.Drawing.Size(173, 24);
             this.buttonSelectAllExceptOne.TabIndex = 1;
             this.buttonSelectAllExceptOne.Text = "Select all except one";
             this.buttonSelectAllExceptOne.UseVisualStyleBackColor = true;
@@ -159,9 +167,10 @@ namespace OneNoteDuplicatesRemover
             // 
             // buttonDeselectAll
             // 
-            this.buttonDeselectAll.Location = new System.Drawing.Point(325, 12);
+            this.buttonDeselectAll.Location = new System.Drawing.Point(379, 11);
+            this.buttonDeselectAll.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonDeselectAll.Name = "buttonDeselectAll";
-            this.buttonDeselectAll.Size = new System.Drawing.Size(148, 26);
+            this.buttonDeselectAll.Size = new System.Drawing.Size(173, 24);
             this.buttonDeselectAll.TabIndex = 3;
             this.buttonDeselectAll.Text = "Deselect all";
             this.buttonDeselectAll.UseVisualStyleBackColor = true;
@@ -170,9 +179,10 @@ namespace OneNoteDuplicatesRemover
             // buttonRemoveSelectedPages
             // 
             this.buttonRemoveSelectedPages.BackColor = System.Drawing.Color.LightSalmon;
-            this.buttonRemoveSelectedPages.Location = new System.Drawing.Point(486, 12);
+            this.buttonRemoveSelectedPages.Location = new System.Drawing.Point(567, 11);
+            this.buttonRemoveSelectedPages.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonRemoveSelectedPages.Name = "buttonRemoveSelectedPages";
-            this.buttonRemoveSelectedPages.Size = new System.Drawing.Size(244, 26);
+            this.buttonRemoveSelectedPages.Size = new System.Drawing.Size(285, 24);
             this.buttonRemoveSelectedPages.TabIndex = 4;
             this.buttonRemoveSelectedPages.Text = "Remove the selected pages";
             this.buttonRemoveSelectedPages.UseVisualStyleBackColor = false;
@@ -183,6 +193,7 @@ namespace OneNoteDuplicatesRemover
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -193,8 +204,8 @@ namespace OneNoteDuplicatesRemover
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer1.Size = new System.Drawing.Size(978, 494);
-            this.splitContainer1.SplitterDistance = 329;
+            this.splitContainer1.Size = new System.Drawing.Size(1141, 445);
+            this.splitContainer1.SplitterDistance = 295;
             this.splitContainer1.TabIndex = 18;
             // 
             // treeViewHierarchy
@@ -203,8 +214,9 @@ namespace OneNoteDuplicatesRemover
             this.treeViewHierarchy.CheckBoxes = true;
             this.treeViewHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewHierarchy.Location = new System.Drawing.Point(0, 0);
+            this.treeViewHierarchy.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.treeViewHierarchy.Name = "treeViewHierarchy";
-            this.treeViewHierarchy.Size = new System.Drawing.Size(974, 325);
+            this.treeViewHierarchy.Size = new System.Drawing.Size(1137, 291);
             this.treeViewHierarchy.TabIndex = 6;
             this.treeViewHierarchy.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewHierarchy_BeforeSelect);
             // 
@@ -213,6 +225,7 @@ namespace OneNoteDuplicatesRemover
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer3.Name = "splitContainer3";
             // 
             // splitContainer3.Panel1
@@ -226,16 +239,18 @@ namespace OneNoteDuplicatesRemover
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.listBoxPathPreference);
-            this.splitContainer3.Size = new System.Drawing.Size(974, 157);
+            this.splitContainer3.Size = new System.Drawing.Size(1137, 142);
             this.splitContainer3.SplitterDistance = 118;
+            this.splitContainer3.SplitterWidth = 5;
             this.splitContainer3.TabIndex = 12;
             // 
             // buttonBottom
             // 
             this.buttonBottom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonBottom.Location = new System.Drawing.Point(8, 119);
+            this.buttonBottom.Location = new System.Drawing.Point(9, 110);
+            this.buttonBottom.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonBottom.Name = "buttonBottom";
-            this.buttonBottom.Size = new System.Drawing.Size(105, 24);
+            this.buttonBottom.Size = new System.Drawing.Size(122, 22);
             this.buttonBottom.TabIndex = 10;
             this.buttonBottom.Text = "Bottom";
             this.buttonBottom.UseVisualStyleBackColor = true;
@@ -244,9 +259,10 @@ namespace OneNoteDuplicatesRemover
             // buttonTop
             // 
             this.buttonTop.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonTop.Location = new System.Drawing.Point(8, 29);
+            this.buttonTop.Location = new System.Drawing.Point(9, 27);
+            this.buttonTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonTop.Name = "buttonTop";
-            this.buttonTop.Size = new System.Drawing.Size(105, 24);
+            this.buttonTop.Size = new System.Drawing.Size(122, 22);
             this.buttonTop.TabIndex = 7;
             this.buttonTop.Text = "Top";
             this.buttonTop.UseVisualStyleBackColor = true;
@@ -255,18 +271,20 @@ namespace OneNoteDuplicatesRemover
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 7);
+            this.label2.Location = new System.Drawing.Point(10, 6);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 13);
+            this.label2.Size = new System.Drawing.Size(112, 12);
             this.label2.TabIndex = 10;
             this.label2.Text = "Section Preference";
             // 
             // buttonUp
             // 
             this.buttonUp.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonUp.Location = new System.Drawing.Point(8, 59);
+            this.buttonUp.Location = new System.Drawing.Point(9, 54);
+            this.buttonUp.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonUp.Name = "buttonUp";
-            this.buttonUp.Size = new System.Drawing.Size(105, 24);
+            this.buttonUp.Size = new System.Drawing.Size(122, 22);
             this.buttonUp.TabIndex = 8;
             this.buttonUp.Text = "Up";
             this.buttonUp.UseVisualStyleBackColor = true;
@@ -275,9 +293,10 @@ namespace OneNoteDuplicatesRemover
             // buttonDown
             // 
             this.buttonDown.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonDown.Location = new System.Drawing.Point(8, 89);
+            this.buttonDown.Location = new System.Drawing.Point(9, 82);
+            this.buttonDown.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.buttonDown.Name = "buttonDown";
-            this.buttonDown.Size = new System.Drawing.Size(105, 24);
+            this.buttonDown.Size = new System.Drawing.Size(122, 22);
             this.buttonDown.TabIndex = 9;
             this.buttonDown.Text = "Down";
             this.buttonDown.UseVisualStyleBackColor = true;
@@ -288,9 +307,11 @@ namespace OneNoteDuplicatesRemover
             this.listBoxPathPreference.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listBoxPathPreference.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxPathPreference.FormattingEnabled = true;
+            this.listBoxPathPreference.ItemHeight = 12;
             this.listBoxPathPreference.Location = new System.Drawing.Point(0, 0);
+            this.listBoxPathPreference.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.listBoxPathPreference.Name = "listBoxPathPreference";
-            this.listBoxPathPreference.Size = new System.Drawing.Size(852, 157);
+            this.listBoxPathPreference.Size = new System.Drawing.Size(1014, 142);
             this.listBoxPathPreference.TabIndex = 11;
             // 
             // statusStrip1
@@ -301,7 +322,7 @@ namespace OneNoteDuplicatesRemover
             this.toolStripStatusLabelScan});
             this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(978, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1141, 22);
             this.statusStrip1.TabIndex = 19;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -326,11 +347,13 @@ namespace OneNoteDuplicatesRemover
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer2);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(978, 564);
+            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1141, 515);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
+            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(978, 611);
+            this.toolStripContainer1.Size = new System.Drawing.Size(1141, 562);
             this.toolStripContainer1.TabIndex = 20;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -342,7 +365,8 @@ namespace OneNoteDuplicatesRemover
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(978, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(1141, 24);
             this.menuStrip1.TabIndex = 21;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -359,19 +383,19 @@ namespace OneNoteDuplicatesRemover
             // dumpJsonToolStripMenuItem
             // 
             this.dumpJsonToolStripMenuItem.Name = "dumpJsonToolStripMenuItem";
-            this.dumpJsonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dumpJsonToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.dumpJsonToolStripMenuItem.Text = "&Dump JSON...";
             this.dumpJsonToolStripMenuItem.Click += new System.EventHandler(this.dumpJsonToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(144, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -379,7 +403,9 @@ namespace OneNoteDuplicatesRemover
             // 
             this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cleanUpUsingJSONToolStripMenuItem,
-            this.flattenSectionsToolStripMenuItem});
+            this.flattenSectionsToolStripMenuItem,
+            this.exportSectionDataToXml,
+            this.exportpagesDataToXMLToolStripMenuItem});
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
             this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.advancedToolStripMenuItem.Text = "&Advanced";
@@ -387,16 +413,30 @@ namespace OneNoteDuplicatesRemover
             // cleanUpUsingJSONToolStripMenuItem
             // 
             this.cleanUpUsingJSONToolStripMenuItem.Name = "cleanUpUsingJSONToolStripMenuItem";
-            this.cleanUpUsingJSONToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.cleanUpUsingJSONToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.cleanUpUsingJSONToolStripMenuItem.Text = "&Clean up using JSON...";
             this.cleanUpUsingJSONToolStripMenuItem.Click += new System.EventHandler(this.cleanUpUsingJSONToolStripMenuItem_Click);
             // 
             // flattenSectionsToolStripMenuItem
             // 
             this.flattenSectionsToolStripMenuItem.Name = "flattenSectionsToolStripMenuItem";
-            this.flattenSectionsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.flattenSectionsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.flattenSectionsToolStripMenuItem.Text = "&Flatten Sections";
             this.flattenSectionsToolStripMenuItem.Click += new System.EventHandler(this.flattenSectionsToolStripMenuItem_Click);
+            // 
+            // exportSectionDataToXml
+            // 
+            this.exportSectionDataToXml.Name = "exportSectionDataToXml";
+            this.exportSectionDataToXml.Size = new System.Drawing.Size(225, 22);
+            this.exportSectionDataToXml.Text = "Export &section data to XML...";
+            this.exportSectionDataToXml.Click += new System.EventHandler(this.exportSectionDataToXml_Click);
+            // 
+            // exportpagesDataToXMLToolStripMenuItem
+            // 
+            this.exportpagesDataToXMLToolStripMenuItem.Name = "exportpagesDataToXMLToolStripMenuItem";
+            this.exportpagesDataToXMLToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.exportpagesDataToXMLToolStripMenuItem.Text = "Export &pages data to XML...";
+            this.exportpagesDataToXMLToolStripMenuItem.Click += new System.EventHandler(this.exportPagesDataToXMLToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -409,22 +449,23 @@ namespace OneNoteDuplicatesRemover
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 635);
+            this.ClientSize = new System.Drawing.Size(1141, 586);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.menuStrip1);
             this.ForeColor = System.Drawing.Color.Black;
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "OneNoteDuplicatesRemover";
+            this.Text = "OneNote Duplicates Remover";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -488,5 +529,7 @@ namespace OneNoteDuplicatesRemover
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportSectionDataToXml;
+        private System.Windows.Forms.ToolStripMenuItem exportpagesDataToXMLToolStripMenuItem;
     }
 }
