@@ -3,3 +3,6 @@
 /.vs
 *.back
 OneNoteDuplicatesRemover.csproj.user
+
+.claude/
+.omc/
