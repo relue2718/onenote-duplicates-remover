@@ -386,7 +386,11 @@ namespace OneNoteDuplicatesRemover
                         HtmlReportGenerator report = new HtmlReportGenerator();
                         string generatedHtmlFile;
                         report.GenerateReportForRemovalOperation(resultRemovePages, out generatedHtmlFile);
-                        System.Diagnostics.Process.Start(generatedHtmlFile);
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                        {
+                            FileName = generatedHtmlFile,
+                            UseShellExecute = true
+                        });
 
                         ResetUIResultScanPages();
                         toolStripStatusLabelScan.Text = "Remove Completed";
@@ -452,7 +456,7 @@ namespace OneNoteDuplicatesRemover
         private void dumpJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Dictionary<string, List<Tuple<string, string>>> duplicatesGroups = accessor.GetDuplicatesGroups();
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(duplicatesGroups);
+            string json = System.Text.Json.JsonSerializer.Serialize(duplicatesGroups);
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.FileName = "dump-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json";
             sfd.Filter = "JSON files (*.json)|*.json";
@@ -488,8 +492,7 @@ namespace OneNoteDuplicatesRemover
                         {
                             jsonText = sr.ReadToEnd();
                         }
-                        Dictionary<string, List<Tuple<string, string>>> archivedPages = new Dictionary<string, List<Tuple<string, string>>>();
-                        archivedPages = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonText, archivedPages.GetType()) as Dictionary<string, List<Tuple<string, string>>>;
+                        Dictionary<string, List<Tuple<string, string>>> archivedPages = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, List<Tuple<string, string>>>>(jsonText);
                         HashSet<string> knownHashes = new HashSet<string>(archivedPages.Keys);
 
                         List<Tuple<string, string>> pagesBeingRemoved = new List<Tuple<string, string>>();
@@ -516,7 +519,11 @@ namespace OneNoteDuplicatesRemover
                         HtmlReportGenerator report = new HtmlReportGenerator();
                         string generatedHtmlFile;
                         report.GenerateReportForRemovalOperation(resultRemovePages, out generatedHtmlFile);
-                        System.Diagnostics.Process.Start(generatedHtmlFile);
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                        {
+                            FileName = generatedHtmlFile,
+                            UseShellExecute = true
+                        });
 
                         ResetUIResultScanPages();
                         toolStripStatusLabelScan.Text = "Remove Completed";
