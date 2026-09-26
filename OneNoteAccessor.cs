@@ -234,60 +234,36 @@ namespace OneNoteDuplicatesRemover
         public bool TryFlattenSections(string targetSectionName, IProgress<Tuple<int, int, int, string>> progress, System.Threading.CancellationToken cancellationToken)
         {
             onenoteApplication.TryGetSectionHierarchyAsXML(out string rawXmlString);
-            System.Xml.XmlDocument sectionHierarchyXml = new System.Xml.XmlDocument();
             try
             {
-                sectionHierarchyXml.LoadXml(rawXmlString);
-                string destinationSectionId = null;
-                System.Xml.XmlNodeList sectionNodeList = sectionHierarchyXml.GetElementsByTagName("one:Section");
-                int countTotalSections = sectionNodeList.Count;
-                int countFlattenedSections = 0;
-                int countNotFlattenedSections = 0;
-                foreach (System.Xml.XmlNode sectionNode in sectionNodeList)
-                {
-                    if (sectionNode.Attributes["name"].Value == targetSectionName)
-                    {
-                        destinationSectionId = sectionNode.Attributes["ID"].Value;
-                        break;
-                    }
-                }
-                if (destinationSectionId != null)
-                {
-                    foreach (System.Xml.XmlNode sectionNode in sectionNodeList)
-                    {
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            OnCancelled.Invoke();
-                            break;
-                        }
-                        string sourceSectionName = sectionNode.Attributes["name"].Value;
-                        if (sourceSectionName != targetSectionName)
-                        {
-                            string sourceSectionId = sectionNode.Attributes["ID"].Value;
-
-                            bool isInRecycleBin = sectionNode.Attributes["isInRecycleBin"]?.Value == "true";
-                            bool isDeletedPages = sectionNode.Attributes["isDeletedPages"]?.Value == "true";
-                            if (!isInRecycleBin && !isDeletedPages)
-                            {
-                                // TODO: Can a section node have the attribute 'isDeletedPages'?
-                                if (onenoteApplication.TryMergeSection(sourceSectionId, destinationSectionId))
-                                {
-                                    countFlattenedSections += 1;
-                                }
-                                else
-                                {
-                                    countNotFlattenedSections += 1;
-                                }
-                            }
-                        }
-                        progress.Report(Tuple.Create(countFlattenedSections, countNotFlattenedSections, countTotalSections, sourceSectionName));
-                    }
-                    return true;
-                }
-                else
+                SectionMergePlan plan = SectionFlattening.Plan(rawXmlString, targetSectionName);
+                if (plan == null)
                 {
                     return false;
                 }
+                int countFlattenedSections = 0;
+                int countNotFlattenedSections = 0;
+                foreach (SectionMergeStep step in plan.Steps)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        OnCancelled.Invoke();
+                        break;
+                    }
+                    if (step.ShouldMerge)
+                    {
+                        if (onenoteApplication.TryMergeSection(step.SectionId, plan.DestinationSectionId))
+                        {
+                            countFlattenedSections += 1;
+                        }
+                        else
+                        {
+                            countNotFlattenedSections += 1;
+                        }
+                    }
+                    progress.Report(Tuple.Create(countFlattenedSections, countNotFlattenedSections, plan.TotalSections, step.SectionName));
+                }
+                return true;
             }
             catch (System.Exception exception)
             {
