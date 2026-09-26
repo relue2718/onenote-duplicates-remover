@@ -322,8 +322,9 @@ namespace OneNoteDuplicatesRemover
                         {
                             string sourceSectionId = sectionNode.Attributes["ID"].Value;
 
-                            if ((sectionNode.Attributes["isInRecycleBin"] == null) || (sectionNode.Attributes["isInRecycleBin"].Value != "true") &&
-                               (sectionNode.Attributes["isDeletedPages"] == null) || (sectionNode.Attributes["isDeletedPages"].Value != "true"))
+                            bool isInRecycleBin = sectionNode.Attributes["isInRecycleBin"]?.Value == "true";
+                            bool isDeletedPages = sectionNode.Attributes["isDeletedPages"]?.Value == "true";
+                            if (!isInRecycleBin && !isDeletedPages)
                             {
                                 // TODO: Can a section node have the attribute 'isDeletedPages'?
                                 if (onenoteApplication.TryMergeSection(sourceSectionId, destinationSectionId))
