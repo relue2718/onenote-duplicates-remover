@@ -1,0 +1,8 @@
+# Store text files with LF and check them out with LF on every platform.
+* text=auto eol=lf
+
+# Visual Studio writes solution files with CRLF.
+*.sln text eol=crlf
+
+# Published ClickOnce output embeds hashes of its files; never convert it.
+publish/** -text
