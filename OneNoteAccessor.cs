@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OneNoteDuplicatesRemover
 {
-    public class OneNoteAccessor
+    public class OneNoteAccessor : IDisposable
     {
         // Member Variables
         private OneNoteApplicationWrapper onenoteApplication = null;
@@ -32,7 +32,13 @@ namespace OneNoteDuplicatesRemover
 
         public Type GetApplicationType()
         {
-            return onenoteApplication.GetApplicationType();
+            return onenoteApplication?.GetApplicationType();
+        }
+
+        public void Dispose()
+        {
+            // Keep the field set: a worker thread may still be running and will get 'false' from the disposed wrapper.
+            onenoteApplication?.Dispose();
         }
 
         private Tuple<bool, string> UpdatePageInfos()

@@ -71,7 +71,6 @@ namespace OneNoteDuplicatesRemover
 
             if (comObjectType != null)
             {
-                appendInfo(sb, "Assembly.CodeBase", () => comObjectType.Assembly.CodeBase);
                 appendInfo(sb, "Assembly.FullName", () => comObjectType.Assembly.FullName);
                 appendInfo(sb, "Assembly.ImageRuntimeVersion", () => comObjectType.Assembly.ImageRuntimeVersion);
                 appendInfo(sb, "Assembly.IsFullyTrusted", () => comObjectType.Assembly.IsFullyTrusted.ToString());

@@ -12,7 +12,7 @@ Traditional file-level duplicate removers cannot detect duplicate OneNote pages 
 
 - Windows
 - Microsoft Office OneNote (desktop version)
-- .NET Framework 4.8
+- [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 ## Download
 
@@ -36,16 +36,18 @@ After removal, an HTML report is generated showing which pages were successfully
 
 ## Building from Source
 
-Open `OneNoteDuplicatesRemover.sln` in Visual Studio and build. The project supports both x86 and x64 configurations.
+Open `OneNoteDuplicatesRemover.sln` in Visual Studio 2026 (with the .NET desktop development workload) and build. The project supports both x86 and x64 configurations.
 
 ```
-msbuild OneNoteDuplicatesRemover.sln /p:Configuration=Release /p:Platform=x64
+msbuild OneNoteDuplicatesRemover.sln /restore /p:Configuration=Release /p:Platform=x64
 ```
+
+`dotnet build` is not supported because the COM reference requires the .NET Framework version of MSBuild (MSB4803). Use the `msbuild` bundled with Visual Studio.
 
 ### Dependencies
 
-- [Microsoft.Office.Interop.OneNote](https://docs.microsoft.com/en-us/office/client-developer/onenote/onenote-developer-reference) (COM reference)
-- [Newtonsoft.Json 12.0.2](https://www.nuget.org/packages/Newtonsoft.Json/12.0.2) (NuGet)
+- [Microsoft.Office.Interop.OneNote](https://docs.microsoft.com/en-us/office/client-developer/onenote/onenote-developer-reference) (COM reference, interop types embedded)
+- JSON import/export uses the built-in `System.Text.Json`
 
 ## Advanced Features
 
