@@ -178,30 +178,30 @@ namespace OneNoteDuplicatesRemover
             return Tuple.Create(true, "");
         }
 
-        public List<Tuple<string, string, bool>> RemovePages(List<Tuple<string, string>> pagesBeingRemoved, IProgress<Tuple<int, int, int, string>> progress, System.Threading.CancellationToken cancellationToken)
+        public List<RemovalResult> RemovePages(IReadOnlyList<PageRef> pagesBeingRemoved, IProgress<Tuple<int, int, int, string>> progress, System.Threading.CancellationToken cancellationToken)
         {
             int countRemoved = 0;
             int countFailedToRemove = 0;
             int countTotal = pagesBeingRemoved.Count;
-            List<Tuple<string, string, bool>> ret = new List<Tuple<string, string, bool>>();
-            foreach (Tuple<string, string> elem in pagesBeingRemoved)
+            List<RemovalResult> ret = new List<RemovalResult>();
+            foreach (PageRef page in pagesBeingRemoved)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     OnCancelled.Invoke();
                     break;
                 }
-                if (onenoteApplication.TryDeleteHierarchy(elem.Item1))
+                if (onenoteApplication.TryDeleteHierarchy(page.PageId))
                 {
                     countRemoved += 1;
-                    ret.Add(Tuple.Create(elem.Item1, elem.Item2, true));
+                    ret.Add(new RemovalResult(page, true));
                 }
                 else
                 {
                     countFailedToRemove += 1;
-                    ret.Add(Tuple.Create(elem.Item1, elem.Item2, false));
+                    ret.Add(new RemovalResult(page, false));
                 }
-                progress.Report(Tuple.Create(countRemoved, countFailedToRemove, countTotal, elem.Item2));
+                progress.Report(Tuple.Create(countRemoved, countFailedToRemove, countTotal, page.Title));
             }
             return ret;
         }

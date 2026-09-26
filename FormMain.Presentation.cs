@@ -51,6 +51,20 @@ namespace OneNoteDuplicatesRemover
             return pageIds;
         }
 
+        // Checked pages in tree order.
+        private List<PageRef> GetSelectedPages()
+        {
+            List<PageRef> pages = new List<PageRef>();
+            foreach (TreeNode group in treeViewHierarchy.Nodes)
+            {
+                foreach (TreeNode page in group.Nodes)
+                {
+                    if (page.Checked && page.Tag is PageRef pageRef) pages.Add(pageRef);
+                }
+            }
+            return pages;
+        }
+
         private void ApplySelection(ISet<string> pageIds)
         {
             foreach (TreeNode group in treeViewHierarchy.Nodes)

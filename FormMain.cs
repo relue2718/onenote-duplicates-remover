@@ -350,7 +350,7 @@ namespace OneNoteDuplicatesRemover
             }
             else
             {
-                List<Tuple<string, string>> pagesBeingRemoved = PrepareRemovalOperation();
+                List<PageRef> pagesBeingRemoved = GetSelectedPages();
                 if (pagesBeingRemoved.Count > 0)
                 {
                     if (MessageBox.Show("Are you sure to remove the selected pages?\r\n" + string.Format("The number of the selected pages: {0}", pagesBeingRemoved.Count) + "\r\n\r\nPlease **BACKUP** OneNote notebooks!", "Confirm", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
@@ -372,29 +372,13 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        private List<Tuple<string, string>> PrepareRemovalOperation()
-        {
-            List<Tuple<string, string>> ret = new List<Tuple<string, string>>();
-            foreach (TreeNode treeNode in treeViewHierarchy.Nodes)
-            {
-                foreach (TreeNode childNode in treeNode.Nodes)
-                {
-                    if (childNode.Checked)
-                    {
-                        ret.Add(Tuple.Create(childNode.Name, childNode.Text));
-                    }
-                }
-            }
-            return ret;
-        }
-
         // Removes the pages on a worker thread, then opens the HTML report and clears the results.
-        private async Task RemovePagesAndOpenReportAsync(List<Tuple<string, string>> pagesBeingRemoved)
+        private async Task RemovePagesAndOpenReportAsync(List<PageRef> pagesBeingRemoved)
         {
             isRemovingPages = true;
             SetUIControlEnabled(false);
             cancellationTokenSource = new CancellationTokenSource();
-            List<Tuple<string, string, bool>> resultRemovePages = await Task.Run(() =>
+            List<RemovalResult> resultRemovePages = await Task.Run(() =>
             {
                 return accessor.RemovePages(pagesBeingRemoved, new Progress<Tuple<int, int, int, string>>(progress => UpdateProgressRemovePages(progress)), cancellationTokenSource.Token);
             }, cancellationTokenSource.Token);
@@ -457,9 +441,7 @@ namespace OneNoteDuplicatesRemover
                         {
                             jsonText = sr.ReadToEnd();
                         }
-                        List<Tuple<string, string>> pagesBeingRemoved = PageGroupDump.SelectPagesWithDumpedContent(pageGroups, jsonText)
-                            .Select(page => Tuple.Create(page.PageId, page.Title))
-                            .ToList();
+                        List<PageRef> pagesBeingRemoved = PageGroupDump.SelectPagesWithDumpedContent(pageGroups, jsonText);
                         await RemovePagesAndOpenReportAsync(pagesBeingRemoved);
                         toolStripStatusLabelScan.Text = "Remove Completed";
                     }
