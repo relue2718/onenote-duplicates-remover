@@ -4,6 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using OneNoteDuplicatesRemover.Core;
 
 namespace OneNoteDuplicatesRemover
 {
@@ -205,64 +206,6 @@ namespace OneNoteDuplicatesRemover
             return ret;
         }
 
-        private static List<string> SortSectionPathList(List<string> sectionPathList)
-        {
-            sectionPathList.Sort((string left, string right) =>
-            {
-                bool isLeftCloud = (left.IndexOf("https:") == 0);
-                bool isRightCloud = (right.IndexOf("https:") == 0);
-                if (isLeftCloud && !isRightCloud)
-                {
-                    return -1;
-                }
-                else if (!isLeftCloud && isRightCloud)
-                {
-                    return 1;
-                }
-                else
-                {
-                    // NOTE: Might be unsafe if the section name contains "OneNote_RecycleBin" (very unlikely)
-                    bool isLeftRecycleBin = left.Contains("\\OneNote_RecycleBin");
-                    bool isRightRecycleBin = right.Contains("\\OneNote_RecycleBin");
-                    if (isLeftRecycleBin && !isRightRecycleBin)
-                    {
-                        return 1;
-                    }
-                    else if (!isLeftRecycleBin && isRightRecycleBin)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return left.CompareTo(right);
-                    }
-                }
-            });
-            sectionPathList = sectionPathList.Distinct().ToList();
-            return sectionPathList;
-        }
-
-        public List<string> GetSectionPathList(Dictionary<string, List<Tuple<string, string>>> duplicatesGroups)
-        {
-            List<string> sectionPathList = new List<string>();
-            foreach (KeyValuePair<string, List<Tuple<string, string>>> groupInfo in duplicatesGroups)
-            {
-                if (groupInfo.Value.Count > 1)
-                {
-                    for (int i = 0; i < groupInfo.Value.Count; ++i)
-                    {
-                        string pageId = groupInfo.Value[i].Item1;
-                        string sectionPath = "";
-                        if (TryGetSectionPath(pageId, out sectionPath))
-                        {
-                            sectionPathList.Add(System.IO.Path.GetDirectoryName(sectionPath));
-                        }
-                    }
-                }
-            }
-            return SortSectionPathList(sectionPathList);
-        }
-
         public bool TryNavigate(string pageId)
         {
             /*
@@ -410,53 +353,27 @@ namespace OneNoteDuplicatesRemover
             }
         }
 
-        public bool TryGetSectionPath(string pageId, out string sectionPath)
-        {
-            sectionPath = "";
-
-            if (pageInfos != null)
-            {
-                if (pageInfos.ContainsKey(pageId))
-                {
-                    sectionPath = pageInfos[pageId].ParentSectionFilePath;
-                    return true;
-                }
-                else
-                {
-                    etc.LoggerHelper.LogError("Page ({0}) not found!", pageId);
-                    return false;
-                }
-            }
-            else
-            {
-                etc.LoggerHelper.LogError("Pages are not loaded");
-                return false;
-            }
-        }
-
-        public Dictionary<string, List<Tuple<string /* pageId */, string /* pageName */ >>> GetDuplicatesGroups()
+        // Pages grouped by content hash, in scan order. Includes groups with a single page. Null before the first scan.
+        public List<PageGroup> GetPageGroups()
         {
             if (pageInfos == null) { return null; }
-            else
+            Dictionary<string, List<PageRef>> pagesByHash = new Dictionary<string, List<PageRef>>();
+            List<PageGroup> groups = new List<PageGroup>();
+            foreach (KeyValuePair<string, OneNotePageInfo> elem in pageInfos)
             {
-                Dictionary<string, List<Tuple<string, string>>> duplicatesGroups = new Dictionary<string, List<Tuple<string, string>>>();
-                foreach (KeyValuePair<string, OneNotePageInfo> elem in pageInfos)
+                string hashValueForInnerText = elem.Value.HashValueForInnerText;
+                if (hashValueForInnerText != null)
                 {
-                    string pageId = elem.Key;
-                    OneNotePageInfo pageInfo = elem.Value;
-
-                    string hashValueForInnerText = pageInfo.HashValueForInnerText;
-                    if (hashValueForInnerText != null)
+                    if (pagesByHash.TryGetValue(hashValueForInnerText, out List<PageRef> pages) == false)
                     {
-                        if (duplicatesGroups.ContainsKey(hashValueForInnerText) == false)
-                        {
-                            duplicatesGroups.Add(hashValueForInnerText, new List<Tuple<string, string>>());
-                        }
-                        duplicatesGroups[hashValueForInnerText].Add(Tuple.Create(pageId, pageInfo.PageTitle));
+                        pages = new List<PageRef>();
+                        pagesByHash.Add(hashValueForInnerText, pages);
+                        groups.Add(new PageGroup(hashValueForInnerText, pages));
                     }
+                    pages.Add(new PageRef(elem.Key, elem.Value.PageTitle, elem.Value.ParentSectionFilePath));
                 }
-                return duplicatesGroups;
             }
+            return groups;
         }
 
         private static bool IsPageDeleted(System.Xml.XmlNode pageNode)

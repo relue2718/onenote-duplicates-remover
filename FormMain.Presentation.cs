@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using OneNoteDuplicatesRemover.Core;
 
 namespace OneNoteDuplicatesRemover
 {
@@ -35,20 +37,48 @@ namespace OneNoteDuplicatesRemover
             if (!updatingSelection) UpdateSelectionSummary();
         }
 
-        private void UpdateSelectionSummary()
+        // The tree's check boxes hold the selection. Page nodes are named by page ID.
+        private HashSet<string> GetSelectedPageIds()
         {
-            int pageCount = 0;
-            int selectedCount = 0;
-            bool hasEntireGroupSelected = false;
+            HashSet<string> pageIds = new HashSet<string>();
             foreach (TreeNode group in treeViewHierarchy.Nodes)
             {
-                int checkedCount = group.Nodes.Cast<TreeNode>().Count(node => node.Checked);
-                pageCount += group.Nodes.Count;
-                selectedCount += checkedCount;
-                hasEntireGroupSelected |= group.Nodes.Count > 0 && checkedCount == group.Nodes.Count;
+                foreach (TreeNode page in group.Nodes)
+                {
+                    if (page.Checked) pageIds.Add(page.Name);
+                }
             }
+            return pageIds;
+        }
 
-            labelGroupCount.Text = treeViewHierarchy.Nodes.Count.ToString("N0");
+        private void ApplySelection(ISet<string> pageIds)
+        {
+            foreach (TreeNode group in treeViewHierarchy.Nodes)
+            {
+                foreach (TreeNode page in group.Nodes)
+                {
+                    page.Checked = pageIds.Contains(page.Name);
+                }
+            }
+        }
+
+        private void ShowLocationPreference(int selectedIndex)
+        {
+            listBoxPathPreference.BeginUpdate();
+            listBoxPathPreference.Items.Clear();
+            listBoxPathPreference.Items.AddRange(locationPreference.Locations.ToArray());
+            listBoxPathPreference.SelectedIndex = selectedIndex;
+            listBoxPathPreference.EndUpdate();
+        }
+
+        private void UpdateSelectionSummary()
+        {
+            HashSet<string> selectedPageIds = GetSelectedPageIds();
+            int pageCount = duplicateGroups.Sum(group => group.Pages.Count);
+            int selectedCount = selectedPageIds.Count;
+            bool hasEntireGroupSelected = KeepPolicy.FindGroupWithoutKeptCopy(duplicateGroups, selectedPageIds) != null;
+
+            labelGroupCount.Text = duplicateGroups.Count.ToString("N0");
             labelPageCount.Text = pageCount.ToString("N0");
             labelSelectedCount.Text = selectedCount.ToString("N0");
             buttonSelectAllExceptOne.Enabled = uiEnabled && pageCount > 0;
