@@ -1,537 +1,286 @@
+using System.Drawing;
+using System.Windows.Forms;
+
 namespace OneNoteDuplicatesRemover
 {
     partial class FormMain
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if ( disposing )
+            if (disposing)
             {
                 etc.LoggerHelper.EventCategoryCountChanged -= LoggerHelper_EventCategoryCountChanged;
                 accessor?.Dispose();
                 components?.Dispose();
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.labelMessageCounts = new System.Windows.Forms.Label();
-            this.buttonScanDuplicatedPages = new System.Windows.Forms.Button();
-            this.checkBoxNavigateAutomatically = new System.Windows.Forms.CheckBox();
-            this.buttonSelectAllExceptOne = new System.Windows.Forms.Button();
-            this.buttonDeselectAll = new System.Windows.Forms.Button();
-            this.buttonRemoveSelectedPages = new System.Windows.Forms.Button();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.treeViewHierarchy = new System.Windows.Forms.TreeView();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.buttonBottom = new System.Windows.Forms.Button();
-            this.buttonTop = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.buttonUp = new System.Windows.Forms.Button();
-            this.buttonDown = new System.Windows.Forms.Button();
-            this.listBoxPathPreference = new System.Windows.Forms.ListBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBarScan = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabelScan = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dumpJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cleanUpUsingJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flattenSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportSectionDataToXml = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportpagesDataToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
-            this.toolStripContainer1.ContentPanel.SuspendLayout();
-            this.toolStripContainer1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.buttonCancel);
-            this.splitContainer2.Panel1.Controls.Add(this.labelMessageCounts);
-            this.splitContainer2.Panel1.Controls.Add(this.buttonScanDuplicatedPages);
-            this.splitContainer2.Panel1.Controls.Add(this.checkBoxNavigateAutomatically);
-            this.splitContainer2.Panel1.Controls.Add(this.buttonSelectAllExceptOne);
-            this.splitContainer2.Panel1.Controls.Add(this.buttonDeselectAll);
-            this.splitContainer2.Panel1.Controls.Add(this.buttonRemoveSelectedPages);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer2.Size = new System.Drawing.Size(1141, 515);
-            this.splitContainer2.SplitterDistance = 66;
-            this.splitContainer2.TabIndex = 18;
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.buttonCancel.Location = new System.Drawing.Point(1018, 11);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(106, 24);
-            this.buttonCancel.TabIndex = 7;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = false;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
-            // labelMessageCounts
-            // 
-            this.labelMessageCounts.AutoSize = true;
-            this.labelMessageCounts.Location = new System.Drawing.Point(564, 41);
-            this.labelMessageCounts.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelMessageCounts.Name = "labelMessageCounts";
-            this.labelMessageCounts.Size = new System.Drawing.Size(0, 12);
-            this.labelMessageCounts.TabIndex = 6;
-            // 
-            // buttonScanDuplicatedPages
-            // 
-            this.buttonScanDuplicatedPages.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.buttonScanDuplicatedPages.Cursor = System.Windows.Forms.Cursors.Default;
-            this.buttonScanDuplicatedPages.Location = new System.Drawing.Point(14, 11);
-            this.buttonScanDuplicatedPages.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonScanDuplicatedPages.Name = "buttonScanDuplicatedPages";
-            this.buttonScanDuplicatedPages.Size = new System.Drawing.Size(173, 24);
-            this.buttonScanDuplicatedPages.TabIndex = 0;
-            this.buttonScanDuplicatedPages.Text = "Scan duplicates";
-            this.buttonScanDuplicatedPages.UseVisualStyleBackColor = false;
-            this.buttonScanDuplicatedPages.Click += new System.EventHandler(this.buttonScanDuplicatedPages_Click);
-            // 
-            // checkBoxNavigateAutomatically
-            // 
-            this.checkBoxNavigateAutomatically.AutoSize = true;
-            this.checkBoxNavigateAutomatically.Checked = true;
-            this.checkBoxNavigateAutomatically.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxNavigateAutomatically.Location = new System.Drawing.Point(14, 41);
-            this.checkBoxNavigateAutomatically.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.checkBoxNavigateAutomatically.Name = "checkBoxNavigateAutomatically";
-            this.checkBoxNavigateAutomatically.Size = new System.Drawing.Size(205, 16);
-            this.checkBoxNavigateAutomatically.TabIndex = 5;
-            this.checkBoxNavigateAutomatically.Text = "Navigate to the highlighted page";
-            this.checkBoxNavigateAutomatically.UseVisualStyleBackColor = true;
-            // 
-            // buttonSelectAllExceptOne
-            // 
-            this.buttonSelectAllExceptOne.Location = new System.Drawing.Point(202, 11);
-            this.buttonSelectAllExceptOne.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonSelectAllExceptOne.Name = "buttonSelectAllExceptOne";
-            this.buttonSelectAllExceptOne.Size = new System.Drawing.Size(173, 24);
-            this.buttonSelectAllExceptOne.TabIndex = 1;
-            this.buttonSelectAllExceptOne.Text = "Select all except one";
-            this.buttonSelectAllExceptOne.UseVisualStyleBackColor = true;
-            this.buttonSelectAllExceptOne.Click += new System.EventHandler(this.buttonSelectAllExceptOne_Click);
-            // 
-            // buttonDeselectAll
-            // 
-            this.buttonDeselectAll.Location = new System.Drawing.Point(379, 11);
-            this.buttonDeselectAll.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonDeselectAll.Name = "buttonDeselectAll";
-            this.buttonDeselectAll.Size = new System.Drawing.Size(173, 24);
-            this.buttonDeselectAll.TabIndex = 3;
-            this.buttonDeselectAll.Text = "Deselect all";
-            this.buttonDeselectAll.UseVisualStyleBackColor = true;
-            this.buttonDeselectAll.Click += new System.EventHandler(this.buttonDeselectAll_Click);
-            // 
-            // buttonRemoveSelectedPages
-            // 
-            this.buttonRemoveSelectedPages.BackColor = System.Drawing.Color.LightSalmon;
-            this.buttonRemoveSelectedPages.Location = new System.Drawing.Point(567, 11);
-            this.buttonRemoveSelectedPages.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonRemoveSelectedPages.Name = "buttonRemoveSelectedPages";
-            this.buttonRemoveSelectedPages.Size = new System.Drawing.Size(285, 24);
-            this.buttonRemoveSelectedPages.TabIndex = 4;
-            this.buttonRemoveSelectedPages.Text = "Remove the selected pages";
-            this.buttonRemoveSelectedPages.UseVisualStyleBackColor = false;
-            this.buttonRemoveSelectedPages.Click += new System.EventHandler(this.buttonRemoveSelectedPages_Click);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeViewHierarchy);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer1.Size = new System.Drawing.Size(1141, 445);
-            this.splitContainer1.SplitterDistance = 295;
-            this.splitContainer1.TabIndex = 18;
-            // 
-            // treeViewHierarchy
-            // 
-            this.treeViewHierarchy.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeViewHierarchy.CheckBoxes = true;
-            this.treeViewHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewHierarchy.Location = new System.Drawing.Point(0, 0);
-            this.treeViewHierarchy.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.treeViewHierarchy.Name = "treeViewHierarchy";
-            this.treeViewHierarchy.Size = new System.Drawing.Size(1137, 291);
-            this.treeViewHierarchy.TabIndex = 6;
-            this.treeViewHierarchy.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewHierarchy_BeforeSelect);
-            // 
-            // splitContainer3
-            // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.splitContainer3.Name = "splitContainer3";
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.buttonBottom);
-            this.splitContainer3.Panel1.Controls.Add(this.buttonTop);
-            this.splitContainer3.Panel1.Controls.Add(this.label2);
-            this.splitContainer3.Panel1.Controls.Add(this.buttonUp);
-            this.splitContainer3.Panel1.Controls.Add(this.buttonDown);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.listBoxPathPreference);
-            this.splitContainer3.Size = new System.Drawing.Size(1137, 142);
-            this.splitContainer3.SplitterDistance = 118;
-            this.splitContainer3.SplitterWidth = 5;
-            this.splitContainer3.TabIndex = 12;
-            // 
-            // buttonBottom
-            // 
-            this.buttonBottom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonBottom.Location = new System.Drawing.Point(9, 110);
-            this.buttonBottom.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonBottom.Name = "buttonBottom";
-            this.buttonBottom.Size = new System.Drawing.Size(122, 22);
-            this.buttonBottom.TabIndex = 10;
-            this.buttonBottom.Text = "Bottom";
-            this.buttonBottom.UseVisualStyleBackColor = true;
-            this.buttonBottom.Click += new System.EventHandler(this.buttonBottom_Click);
-            // 
-            // buttonTop
-            // 
-            this.buttonTop.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonTop.Location = new System.Drawing.Point(9, 27);
-            this.buttonTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonTop.Name = "buttonTop";
-            this.buttonTop.Size = new System.Drawing.Size(122, 22);
-            this.buttonTop.TabIndex = 7;
-            this.buttonTop.Text = "Top";
-            this.buttonTop.UseVisualStyleBackColor = true;
-            this.buttonTop.Click += new System.EventHandler(this.buttonTop_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 6);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 12);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Section Preference";
-            // 
-            // buttonUp
-            // 
-            this.buttonUp.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonUp.Location = new System.Drawing.Point(9, 54);
-            this.buttonUp.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonUp.Name = "buttonUp";
-            this.buttonUp.Size = new System.Drawing.Size(122, 22);
-            this.buttonUp.TabIndex = 8;
-            this.buttonUp.Text = "Up";
-            this.buttonUp.UseVisualStyleBackColor = true;
-            this.buttonUp.Click += new System.EventHandler(this.buttonUp_Click);
-            // 
-            // buttonDown
-            // 
-            this.buttonDown.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.buttonDown.Location = new System.Drawing.Point(9, 82);
-            this.buttonDown.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonDown.Name = "buttonDown";
-            this.buttonDown.Size = new System.Drawing.Size(122, 22);
-            this.buttonDown.TabIndex = 9;
-            this.buttonDown.Text = "Down";
-            this.buttonDown.UseVisualStyleBackColor = true;
-            this.buttonDown.Click += new System.EventHandler(this.buttonDown_Click);
-            // 
-            // listBoxPathPreference
-            // 
-            this.listBoxPathPreference.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxPathPreference.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxPathPreference.FormattingEnabled = true;
-            this.listBoxPathPreference.ItemHeight = 12;
-            this.listBoxPathPreference.Location = new System.Drawing.Point(0, 0);
-            this.listBoxPathPreference.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.listBoxPathPreference.Name = "listBoxPathPreference";
-            this.listBoxPathPreference.Size = new System.Drawing.Size(1014, 142);
-            this.listBoxPathPreference.TabIndex = 11;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBarScan,
-            this.toolStripStatusLabelScan});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 0);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1141, 22);
-            this.statusStrip1.TabIndex = 19;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripProgressBarScan
-            // 
-            this.toolStripProgressBarScan.Name = "toolStripProgressBarScan";
-            this.toolStripProgressBarScan.Size = new System.Drawing.Size(100, 16);
-            // 
-            // toolStripStatusLabelScan
-            // 
-            this.toolStripStatusLabelScan.Name = "toolStripStatusLabelScan";
-            this.toolStripStatusLabelScan.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabelScan.Text = "toolStripStatusLabel1";
-            // 
-            // toolStripContainer1
-            // 
-            // 
-            // toolStripContainer1.BottomToolStripPanel
-            // 
-            this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.statusStrip1);
-            // 
-            // toolStripContainer1.ContentPanel
-            // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer2);
-            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1141, 515);
-            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
-            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(1141, 562);
-            this.toolStripContainer1.TabIndex = 20;
-            this.toolStripContainer1.Text = "toolStripContainer1";
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.advancedToolStripMenuItem,
-            this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1141, 24);
-            this.menuStrip1.TabIndex = 21;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dumpJsonToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "&File";
-            // 
-            // dumpJsonToolStripMenuItem
-            // 
-            this.dumpJsonToolStripMenuItem.Name = "dumpJsonToolStripMenuItem";
-            this.dumpJsonToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.dumpJsonToolStripMenuItem.Text = "&Dump JSON...";
-            this.dumpJsonToolStripMenuItem.Click += new System.EventHandler(this.dumpJsonToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(144, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // advancedToolStripMenuItem
-            // 
-            this.advancedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cleanUpUsingJSONToolStripMenuItem,
-            this.flattenSectionsToolStripMenuItem,
-            this.exportSectionDataToXml,
-            this.exportpagesDataToXMLToolStripMenuItem});
-            this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
-            this.advancedToolStripMenuItem.Text = "&Advanced";
-            // 
-            // cleanUpUsingJSONToolStripMenuItem
-            // 
-            this.cleanUpUsingJSONToolStripMenuItem.Name = "cleanUpUsingJSONToolStripMenuItem";
-            this.cleanUpUsingJSONToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.cleanUpUsingJSONToolStripMenuItem.Text = "&Clean up using JSON...";
-            this.cleanUpUsingJSONToolStripMenuItem.Click += new System.EventHandler(this.cleanUpUsingJSONToolStripMenuItem_Click);
-            // 
-            // flattenSectionsToolStripMenuItem
-            // 
-            this.flattenSectionsToolStripMenuItem.Name = "flattenSectionsToolStripMenuItem";
-            this.flattenSectionsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.flattenSectionsToolStripMenuItem.Text = "&Flatten Sections";
-            this.flattenSectionsToolStripMenuItem.Click += new System.EventHandler(this.flattenSectionsToolStripMenuItem_Click);
-            // 
-            // exportSectionDataToXml
-            // 
-            this.exportSectionDataToXml.Name = "exportSectionDataToXml";
-            this.exportSectionDataToXml.Size = new System.Drawing.Size(225, 22);
-            this.exportSectionDataToXml.Text = "Export &section data to XML...";
-            this.exportSectionDataToXml.Click += new System.EventHandler(this.exportSectionDataToXml_Click);
-            // 
-            // exportpagesDataToXMLToolStripMenuItem
-            // 
-            this.exportpagesDataToXMLToolStripMenuItem.Name = "exportpagesDataToXMLToolStripMenuItem";
-            this.exportpagesDataToXMLToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.exportpagesDataToXMLToolStripMenuItem.Text = "Export &pages data to XML...";
-            this.exportpagesDataToXMLToolStripMenuItem.Click += new System.EventHandler(this.exportPagesDataToXMLToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "&Help";
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.aboutToolStripMenuItem.Text = "&About...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // FormMain
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1141, 586);
-            this.Controls.Add(this.toolStripContainer1);
-            this.Controls.Add(this.menuStrip1);
-            this.ForeColor = System.Drawing.Color.Black;
-            this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "FormMain";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "OneNote Duplicates Remover";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
-            this.Load += new System.EventHandler(this.FormMain_Load);
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel1.PerformLayout();
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel1.PerformLayout();
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
-            this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
-            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-            this.toolStripContainer1.ResumeLayout(false);
-            this.toolStripContainer1.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            SuspendLayout();
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            Font = AppTheme.BodyFont;
+            BackColor = AppTheme.Background;
+            ForeColor = AppTheme.Text;
+            ClientSize = new Size(1180, 800);
+            MinimumSize = new Size(980, 720);
+            StartPosition = FormStartPosition.CenterScreen;
+            Name = "FormMain";
+            Text = "OneNote Duplicates Remover";
 
+            InitializeMenus();
+
+            var page = AppTheme.Stack();
+            page.Padding = new Padding(28, 16, 28, 16);
+            page.RowCount = 4;
+            page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            page.RowStyles.Add(new RowStyle(SizeType.Absolute, 104));
+            page.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            page.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            var header = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 2, Margin = new Padding(0, 0, 0, 20) };
+            header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            header.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            var title = AppTheme.Stack();
+            title.AutoSize = true;
+            title.Controls.Add(AppTheme.Label("NOTEBOOK CLEANUP", color: AppTheme.Accent));
+            title.Controls.Add(AppTheme.Label("OneNote Duplicates Remover", AppTheme.HeadingFont));
+            title.Controls.Add(AppTheme.Label("Find matching pages. Keep the copies that matter.", color: AppTheme.Muted));
+            header.Controls.Add(title, 0, 0);
+            var scanActions = AppTheme.Actions();
+            scanActions.Anchor = AnchorStyles.Right;
+            scanActions.Dock = DockStyle.None;
+            scanActions.WrapContents = false;
+            buttonScanDuplicatedPages = AppTheme.Button("&Scan notebooks", primary: true);
+            buttonScanDuplicatedPages.Click += buttonScanDuplicatedPages_Click;
+            buttonCancel = AppTheme.Button("&Cancel");
+            buttonCancel.Visible = false;
+            buttonCancel.Click += buttonCancel_Click;
+            scanActions.Controls.AddRange(new Control[] { buttonScanDuplicatedPages, buttonCancel });
+            header.Controls.Add(scanActions, 1, 0);
+            page.Controls.Add(header, 0, 0);
+
+            var summary = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 3, Margin = new Padding(0, 0, 0, 20) };
+            for (int i = 0; i < 3; i++) summary.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / 3));
+            summary.Controls.Add(CreateSummaryCard("DUPLICATE GROUPS", out labelGroupCount), 0, 0);
+            summary.Controls.Add(CreateSummaryCard("PAGES IN GROUPS", out labelPageCount), 1, 0);
+            summary.Controls.Add(CreateSummaryCard("SELECTED FOR REMOVAL", out labelSelectedCount), 2, 0);
+            summary.Controls[0].Margin = new Padding(0, 0, 12, 0);
+            summary.Controls[1].Margin = new Padding(0, 0, 12, 0);
+            page.Controls.Add(summary, 0, 1);
+
+            var workspace = new SplitContainer
+            {
+                Dock = DockStyle.Fill,
+                Size = new Size(1124, 420),
+                SplitterDistance = 752,
+                SplitterWidth = 16,
+                FixedPanel = FixedPanel.Panel2,
+                BackColor = AppTheme.Background,
+                Margin = Padding.Empty,
+                TabStop = false
+            };
+            workspace.Panel1MinSize = 470;
+            workspace.Panel2MinSize = 280;
+            workspace.Panel1.Controls.Add(CreateResultsCard());
+            workspace.Panel2.Controls.Add(CreatePreferencesCard());
+            page.Controls.Add(workspace, 0, 2);
+
+            var footer = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 2, Margin = new Padding(0, 16, 0, 0) };
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            labelSelectionHint = AppTheme.Label("Select copies to remove after scanning.", color: AppTheme.Muted);
+            labelSelectionHint.Dock = DockStyle.Fill;
+            labelSelectionHint.TextAlign = ContentAlignment.MiddleLeft;
+            labelSelectionHint.Margin = new Padding(0, 0, 16, 0);
+            buttonRemoveSelectedPages = AppTheme.Button("&Remove selected", destructive: true);
+            buttonRemoveSelectedPages.Margin = Padding.Empty;
+            buttonRemoveSelectedPages.Click += buttonRemoveSelectedPages_Click;
+            footer.Controls.Add(labelSelectionHint, 0, 0);
+            footer.Controls.Add(buttonRemoveSelectedPages, 1, 0);
+            page.Controls.Add(footer, 0, 3);
+
+            statusStrip1 = new StatusStrip { BackColor = AppTheme.Surface, Padding = new Padding(28, 6, 20, 6), Font = AppTheme.BodyFont };
+            toolStripProgressBarScan = new ToolStripProgressBar { Size = new Size(140, 12), Margin = new Padding(0, 0, 16, 0) };
+            toolStripStatusLabelScan = new ToolStripStatusLabel("Connecting to OneNote…") { Spring = true, TextAlign = ContentAlignment.MiddleLeft };
+            labelMessageCounts = new ToolStripStatusLabel { ForeColor = AppTheme.Muted };
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripProgressBarScan, toolStripStatusLabelScan, labelMessageCounts });
+            Controls.Add(page);
+            Controls.Add(statusStrip1);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
+            FormClosing += FormMain_FormClosing;
+            Load += FormMain_Load;
+            SetUIControlEnabled(false);
+            ResumeLayout(true);
         }
 
-        #endregion
+        private Panel CreateSummaryCard(string caption, out Label value)
+        {
+            var card = AppTheme.Card();
+            card.Padding = new Padding(18, 10, 18, 8);
+            var stack = AppTheme.Stack();
+            var label = AppTheme.Label(caption, color: AppTheme.Muted);
+            label.Margin = Padding.Empty;
+            value = AppTheme.Label("0", AppTheme.NumberFont, AppTheme.Accent);
+            value.Margin = Padding.Empty;
+            stack.Controls.Add(label);
+            stack.Controls.Add(value);
+            card.Controls.Add(stack);
+            return card;
+        }
 
-        private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.TreeView treeViewHierarchy;
-        private System.Windows.Forms.Button buttonScanDuplicatedPages;
-        private System.Windows.Forms.CheckBox checkBoxNavigateAutomatically;
-        private System.Windows.Forms.Button buttonSelectAllExceptOne;
-        private System.Windows.Forms.Button buttonDeselectAll;
-        private System.Windows.Forms.Button buttonRemoveSelectedPages;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarScan;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelScan;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.Button buttonDown;
-        private System.Windows.Forms.Button buttonUp;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox listBoxPathPreference;
-        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private System.Windows.Forms.Button buttonBottom;
-        private System.Windows.Forms.Button buttonTop;
-        private System.Windows.Forms.Label labelMessageCounts;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem dumpJsonToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cleanUpUsingJSONToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem flattenSectionsToolStripMenuItem;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportSectionDataToXml;
-        private System.Windows.Forms.ToolStripMenuItem exportpagesDataToXMLToolStripMenuItem;
+        private Panel CreateResultsCard()
+        {
+            var card = AppTheme.Card();
+            var layout = AppTheme.Stack();
+            layout.RowCount = 5;
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.Controls.Add(AppTheme.Label("Duplicate pages", AppTheme.SectionFont), 0, 0);
+            layout.Controls.Add(AppTheme.Label("Review each group and keep at least one copy.", color: AppTheme.Muted), 0, 1);
+            var actions = AppTheme.Actions();
+            actions.Margin = new Padding(0, 4, 0, 12);
+            buttonSelectAllExceptOne = AppTheme.Button("Select &extra copies");
+            buttonSelectAllExceptOne.Click += buttonSelectAllExceptOne_Click;
+            buttonDeselectAll = AppTheme.Button("&Clear selection");
+            buttonDeselectAll.Click += buttonDeselectAll_Click;
+            actions.Controls.AddRange(new Control[] { buttonSelectAllExceptOne, buttonDeselectAll });
+            layout.Controls.Add(actions, 0, 2);
+
+            var results = new Panel { Dock = DockStyle.Fill, Margin = Padding.Empty };
+            treeViewHierarchy = new etc.MyTreeView
+            {
+                Name = "treeViewHierarchy",
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                BackColor = AppTheme.Surface,
+                ForeColor = AppTheme.Text,
+                CheckBoxes = true,
+                HideSelection = false,
+                ShowLines = false,
+                ShowNodeToolTips = true,
+                ItemHeight = 32,
+                Indent = 24,
+                AccessibleName = "Duplicate page groups"
+            };
+            treeViewHierarchy.BeforeSelect += treeViewHierarchy_BeforeSelect;
+            treeViewHierarchy.BeforeCheck += treeViewHierarchy_BeforeCheck;
+            treeViewHierarchy.AfterCheck += treeViewHierarchy_AfterCheck;
+            emptyState = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 4, BackColor = AppTheme.Surface };
+            emptyState.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            emptyState.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            emptyState.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            emptyState.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            emptyState.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            labelEmptyTitle = AppTheme.Label("A little less clutter", AppTheme.SectionFont);
+            labelEmptyTitle.Anchor = AnchorStyles.None;
+            labelEmptyDescription = AppTheme.Label("Scan your notebooks to find duplicate pages.\nYou choose what to remove.", color: AppTheme.Muted);
+            labelEmptyDescription.TextAlign = ContentAlignment.MiddleCenter;
+            labelEmptyDescription.Anchor = AnchorStyles.None;
+            emptyState.Controls.Add(labelEmptyTitle, 0, 1);
+            emptyState.Controls.Add(labelEmptyDescription, 0, 2);
+            results.Controls.Add(treeViewHierarchy);
+            results.Controls.Add(emptyState);
+            emptyState.BringToFront();
+            layout.Controls.Add(results, 0, 3);
+
+            checkBoxNavigateAutomatically = new CheckBox
+            {
+                Text = "Open highlighted page in OneNote",
+                AutoSize = true,
+                Checked = true,
+                Margin = new Padding(0, 14, 0, 0)
+            };
+            layout.Controls.Add(checkBoxNavigateAutomatically, 0, 4);
+            card.Controls.Add(layout);
+            return card;
+        }
+
+        private Panel CreatePreferencesCard()
+        {
+            var card = AppTheme.Card();
+            var layout = AppTheme.Stack();
+            layout.RowCount = 4;
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.Controls.Add(AppTheme.Label("Keep preferred copies", AppTheme.SectionFont), 0, 0);
+            var description = AppTheme.Label("Move preferred locations to the top.\n“Select extra copies” keeps a copy from\nthe highest ranked location.", color: AppTheme.Muted);
+            layout.Controls.Add(description, 0, 1);
+            listBoxPathPreference = new ListBox
+            {
+                Name = "listBoxPathPreference",
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                IntegralHeight = false,
+                HorizontalScrollbar = true,
+                BackColor = AppTheme.Surface,
+                ForeColor = AppTheme.Text,
+                Margin = new Padding(0, 12, 0, 12),
+                AccessibleName = "Locations in order of preference"
+            };
+            listBoxPathPreference.SelectedIndexChanged += (sender, e) => UpdatePreferenceButtons();
+            layout.Controls.Add(listBoxPathPreference, 0, 2);
+            var actions = AppTheme.Actions();
+            buttonTop = AppTheme.Button("Top");
+            buttonUp = AppTheme.Button("Up");
+            buttonDown = AppTheme.Button("Down");
+            buttonBottom = AppTheme.Button("Bottom");
+            buttonTop.AccessibleName = "Move location to top";
+            buttonUp.AccessibleName = "Move location up";
+            buttonDown.AccessibleName = "Move location down";
+            buttonBottom.AccessibleName = "Move location to bottom";
+            buttonTop.Click += buttonTop_Click;
+            buttonUp.Click += buttonUp_Click;
+            buttonDown.Click += buttonDown_Click;
+            buttonBottom.Click += buttonBottom_Click;
+            actions.Controls.AddRange(new Control[] { buttonTop, buttonUp, buttonDown, buttonBottom });
+            layout.Controls.Add(actions, 0, 3);
+            card.Controls.Add(layout);
+            return card;
+        }
+
+        private void InitializeMenus()
+        {
+            menuStrip1 = new MenuStrip { BackColor = AppTheme.Surface, ForeColor = AppTheme.Text, Font = AppTheme.BodyFont, Padding = new Padding(20, 6, 0, 6) };
+            fileToolStripMenuItem = new ToolStripMenuItem("&File");
+            dumpJsonToolStripMenuItem = new ToolStripMenuItem("&Export results to JSON…", null, dumpJsonToolStripMenuItem_Click);
+            exitToolStripMenuItem = new ToolStripMenuItem("E&xit", null, exitToolStripMenuItem_Click);
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { dumpJsonToolStripMenuItem, new ToolStripSeparator(), exitToolStripMenuItem });
+            advancedToolStripMenuItem = new ToolStripMenuItem("&Advanced") { Visible = false };
+            cleanUpUsingJSONToolStripMenuItem = new ToolStripMenuItem("&Clean up using JSON…", null, cleanUpUsingJSONToolStripMenuItem_Click);
+            flattenSectionsToolStripMenuItem = new ToolStripMenuItem("&Flatten sections", null, flattenSectionsToolStripMenuItem_Click);
+            exportSectionDataToXml = new ToolStripMenuItem("Export &sections to XML…", null, exportSectionDataToXml_Click);
+            exportpagesDataToXMLToolStripMenuItem = new ToolStripMenuItem("Export &pages to XML…", null, exportPagesDataToXMLToolStripMenuItem_Click);
+            advancedToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cleanUpUsingJSONToolStripMenuItem, flattenSectionsToolStripMenuItem, exportSectionDataToXml, exportpagesDataToXMLToolStripMenuItem });
+            helpToolStripMenuItem = new ToolStripMenuItem("&Help");
+            aboutToolStripMenuItem = new ToolStripMenuItem("&About…", null, aboutToolStripMenuItem_Click);
+            helpToolStripMenuItem.DropDownItems.Add(aboutToolStripMenuItem);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, advancedToolStripMenuItem, helpToolStripMenuItem });
+        }
+
+        private TreeView treeViewHierarchy;
+        private Button buttonScanDuplicatedPages, buttonCancel, buttonSelectAllExceptOne, buttonDeselectAll, buttonRemoveSelectedPages;
+        private Button buttonTop, buttonUp, buttonDown, buttonBottom;
+        private CheckBox checkBoxNavigateAutomatically;
+        private ListBox listBoxPathPreference;
+        private Label labelGroupCount, labelPageCount, labelSelectedCount, labelSelectionHint, labelEmptyTitle, labelEmptyDescription;
+        private TableLayoutPanel emptyState;
+        private StatusStrip statusStrip1;
+        private ToolStripProgressBar toolStripProgressBarScan;
+        private ToolStripStatusLabel toolStripStatusLabelScan, labelMessageCounts;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem, dumpJsonToolStripMenuItem, exitToolStripMenuItem;
+        private ToolStripMenuItem advancedToolStripMenuItem, cleanUpUsingJSONToolStripMenuItem, flattenSectionsToolStripMenuItem;
+        private ToolStripMenuItem exportSectionDataToXml, exportpagesDataToXMLToolStripMenuItem, helpToolStripMenuItem, aboutToolStripMenuItem;
     }
 }
