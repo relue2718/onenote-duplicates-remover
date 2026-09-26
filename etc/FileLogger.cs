@@ -31,11 +31,23 @@ namespace OneNoteDuplicatesRemover.etc
 
         private string logFilePath = "";
 
+        public string LogDirectory
+        {
+            get
+            {
+                lock (this)
+                {
+                    return string.IsNullOrEmpty(logFilePath) ? null : System.IO.Path.GetDirectoryName(logFilePath);
+                }
+            }
+        }
+
         public void Init(string path)
         {
             lock (this)
             {
-                this.logFilePath = path;
+                // Resolve once so the diagnostics link and subsequent writes use the same folder.
+                this.logFilePath = string.IsNullOrEmpty(path) ? "" : System.IO.Path.GetFullPath(path);
             }
         }
 

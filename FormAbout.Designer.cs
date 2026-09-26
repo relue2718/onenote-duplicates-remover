@@ -1,153 +1,142 @@
-﻿namespace OneNoteDuplicatesRemover
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace OneNoteDuplicatesRemover
 {
     partial class FormAbout
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer components;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
+            if (disposing) components?.Dispose();
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxInformation = new System.Windows.Forms.TextBox();
-            this.buttonOpenInstallationPath = new System.Windows.Forms.Button();
-            this.buttonCopyText = new System.Windows.Forms.Button();
-            this.buttonOkay = new System.Windows.Forms.Button();
-            this.buttonOpenWebsite = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(15, 21);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(439, 37);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "OneNote Duplicates Remover";
-            // 
-            // textBoxInformation
-            // 
-            this.textBoxInformation.Location = new System.Drawing.Point(23, 91);
-            this.textBoxInformation.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxInformation.Multiline = true;
-            this.textBoxInformation.Name = "textBoxInformation";
-            this.textBoxInformation.ReadOnly = true;
-            this.textBoxInformation.Size = new System.Drawing.Size(668, 382);
-            this.textBoxInformation.TabIndex = 1;
-            // 
-            // buttonOpenInstallationPath
-            // 
-            this.buttonOpenInstallationPath.Location = new System.Drawing.Point(708, 91);
-            this.buttonOpenInstallationPath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonOpenInstallationPath.Name = "buttonOpenInstallationPath";
-            this.buttonOpenInstallationPath.Size = new System.Drawing.Size(164, 28);
-            this.buttonOpenInstallationPath.TabIndex = 0;
-            this.buttonOpenInstallationPath.Text = "&Open Installation Path...";
-            this.buttonOpenInstallationPath.UseVisualStyleBackColor = true;
-            this.buttonOpenInstallationPath.Click += new System.EventHandler(this.buttonOpenInstallationPath_Click);
-            // 
-            // buttonCopyText
-            // 
-            this.buttonCopyText.Location = new System.Drawing.Point(708, 412);
-            this.buttonCopyText.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonCopyText.Name = "buttonCopyText";
-            this.buttonCopyText.Size = new System.Drawing.Size(164, 28);
-            this.buttonCopyText.TabIndex = 3;
-            this.buttonCopyText.Text = "&Copy Text";
-            this.buttonCopyText.UseVisualStyleBackColor = true;
-            this.buttonCopyText.Click += new System.EventHandler(this.buttonCopyText_Click);
-            // 
-            // buttonOkay
-            // 
-            this.buttonOkay.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOkay.Location = new System.Drawing.Point(708, 445);
-            this.buttonOkay.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonOkay.Name = "buttonOkay";
-            this.buttonOkay.Size = new System.Drawing.Size(164, 28);
-            this.buttonOkay.TabIndex = 4;
-            this.buttonOkay.Text = "&OK";
-            this.buttonOkay.UseVisualStyleBackColor = true;
-            // 
-            // buttonOpenWebsite
-            // 
-            this.buttonOpenWebsite.Location = new System.Drawing.Point(708, 125);
-            this.buttonOpenWebsite.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonOpenWebsite.Name = "buttonOpenWebsite";
-            this.buttonOpenWebsite.Size = new System.Drawing.Size(164, 28);
-            this.buttonOpenWebsite.TabIndex = 1;
-            this.buttonOpenWebsite.Text = "&Website...";
-            this.buttonOpenWebsite.UseVisualStyleBackColor = true;
-            this.buttonOpenWebsite.Click += new System.EventHandler(this.buttonOpenWebsite_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 77);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(111, 12);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Debug Information:";
-            // 
-            // FormAbout
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(895, 493);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.buttonOpenWebsite);
-            this.Controls.Add(this.buttonOkay);
-            this.Controls.Add(this.buttonCopyText);
-            this.Controls.Add(this.buttonOpenInstallationPath);
-            this.Controls.Add(this.textBoxInformation);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FormAbout";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "About";
-            this.Load += new System.EventHandler(this.FormAbout_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            components = new System.ComponentModel.Container();
+            SuspendLayout();
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            Font = AppTheme.BodyFont;
+            BackColor = AppTheme.Background;
+            ForeColor = AppTheme.Text;
+            ClientSize = new Size(660, 380);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            StartPosition = FormStartPosition.CenterParent;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            Name = "FormAbout";
+            Text = "About OneNote Duplicates Remover";
 
+            layout = AppTheme.Stack();
+            layout.Dock = DockStyle.Top;
+            layout.AutoSize = true;
+            layout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            layout.Padding = new Padding(28, 24, 28, 24);
+            layout.RowCount = 9;
+            for (int i = 0; i < layout.RowCount; i++)
+                layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            layout.Controls.Add(AppTheme.Label("OneNote Duplicates Remover", AppTheme.HeadingFont), 0, 0);
+            layout.Controls.Add(AppTheme.Label("Find and remove duplicate pages in your OneNote notebooks.", color: AppTheme.Muted), 0, 1);
+            labelVersion = AppTheme.Label("", AppTheme.SectionFont, AppTheme.Accent);
+            labelVersion.Margin = new Padding(0, 8, 0, 12);
+            layout.Controls.Add(labelVersion, 0, 2);
+
+            var credits = AppTheme.Actions();
+            credits.Controls.Add(AppTheme.Label("Developed by Yoo Seunghyun", color: AppTheme.Muted));
+            var license = CreateProjectLink("MIT license", ProjectUrl + "/blob/master/LICENSE");
+            license.Margin = new Padding(18, 0, 0, 0);
+            credits.Controls.Add(license);
+            layout.Controls.Add(credits, 0, 3);
+
+            var links = AppTheme.Actions();
+            links.Margin = new Padding(0, 8, 0, 18);
+            links.Controls.Add(CreateProjectLink("GitHub", ProjectUrl));
+            links.Controls.Add(CreateProjectLink("Report an issue", ProjectUrl + "/issues/new"));
+            links.Controls.Add(CreateProjectLink("Release history", ProjectUrl + "/releases"));
+            layout.Controls.Add(links, 0, 4);
+
+            buttonToggleDiagnostics = AppTheme.Button("Show &diagnostics");
+            buttonToggleDiagnostics.Margin = Padding.Empty;
+            buttonToggleDiagnostics.Click += buttonToggleDiagnostics_Click;
+            layout.Controls.Add(buttonToggleDiagnostics, 0, 5);
+
+            diagnosticsPanel = AppTheme.Stack();
+            diagnosticsPanel.Height = 224;
+            diagnosticsPanel.MinimumSize = new Size(0, 224);
+            diagnosticsPanel.Visible = false;
+            diagnosticsPanel.Margin = new Padding(0, 12, 0, 0);
+            diagnosticsPanel.RowCount = 2;
+            diagnosticsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            diagnosticsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            var infoCard = AppTheme.Card();
+            infoCard.Padding = new Padding(12);
+            infoCard.Margin = new Padding(0, 0, 0, 12);
+            textBoxInformation = new TextBox
+            {
+                Dock = DockStyle.Fill, Multiline = true, ReadOnly = true,
+                BorderStyle = BorderStyle.None, BackColor = AppTheme.Surface,
+                ForeColor = AppTheme.Text, ScrollBars = ScrollBars.Vertical, WordWrap = true,
+                AccessibleName = "Application and OneNote diagnostic information"
+            };
+            infoCard.Controls.Add(textBoxInformation);
+            diagnosticsPanel.Controls.Add(infoCard, 0, 0);
+            var folderActions = AppTheme.Actions();
+            buttonOpenInstallationPath = AppTheme.Button("Installation &folder");
+            buttonOpenInstallationPath.Click += buttonOpenInstallationPath_Click;
+            buttonOpenLogFolder = AppTheme.Button("Open &log folder");
+            buttonOpenLogFolder.Click += buttonOpenLogFolder_Click;
+            folderActions.Controls.AddRange(new Control[] { buttonOpenInstallationPath, buttonOpenLogFolder });
+            diagnosticsPanel.Controls.Add(folderActions, 0, 1);
+            layout.Controls.Add(diagnosticsPanel, 0, 6);
+
+            labelActionStatus = AppTheme.Label(" ", color: AppTheme.Muted);
+            labelActionStatus.Margin = new Padding(0, 12, 0, 12);
+            labelActionStatus.AccessibleName = "Action status";
+            layout.Controls.Add(labelActionStatus, 0, 7);
+
+            var footer = new TableLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, ColumnCount = 2, Margin = Padding.Empty };
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            buttonCopyText = AppTheme.Button("&Copy diagnostics");
+            buttonCopyText.Click += buttonCopyText_Click;
+            buttonOkay = AppTheme.Button("&Close", primary: true);
+            buttonOkay.Margin = Padding.Empty;
+            buttonOkay.DialogResult = DialogResult.OK;
+            footer.Controls.Add(buttonCopyText, 0, 0);
+            footer.Controls.Add(buttonOkay, 1, 0);
+            layout.Controls.Add(footer, 0, 8);
+            Controls.Add(layout);
+            AcceptButton = buttonOkay;
+            CancelButton = buttonOkay;
+            copyFeedbackTimer = new Timer(components) { Interval = 2000 };
+            copyFeedbackTimer.Tick += copyFeedbackTimer_Tick;
+            Load += FormAbout_Load;
+            ResumeLayout(true);
         }
 
-        #endregion
+        private LinkLabel CreateProjectLink(string text, string url)
+        {
+            var link = new LinkLabel
+            {
+                Text = text, Tag = url, AutoSize = true, UseMnemonic = false,
+                LinkColor = AppTheme.Accent, ActiveLinkColor = AppTheme.Accent,
+                VisitedLinkColor = AppTheme.Accent, LinkBehavior = LinkBehavior.HoverUnderline,
+                Margin = new Padding(0, 0, 22, 0)
+            };
+            link.LinkClicked += projectLink_LinkClicked;
+            return link;
+        }
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxInformation;
-        private System.Windows.Forms.Button buttonOpenInstallationPath;
-        private System.Windows.Forms.Button buttonCopyText;
-        private System.Windows.Forms.Button buttonOkay;
-        private System.Windows.Forms.Button buttonOpenWebsite;
-        private System.Windows.Forms.Label label2;
+        private TableLayoutPanel layout, diagnosticsPanel;
+        private Label labelVersion, labelActionStatus;
+        private TextBox textBoxInformation;
+        private Button buttonToggleDiagnostics, buttonOpenInstallationPath, buttonOpenLogFolder, buttonCopyText, buttonOkay;
+        private Timer copyFeedbackTimer;
     }
 }

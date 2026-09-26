@@ -6,7 +6,9 @@ Traditional file-level duplicate removers cannot detect duplicate OneNote pages 
 
 ## Screenshot
 
-![screenshot](https://raw.githubusercontent.com/relue2718/onenote-duplicates-remover/master/screenshot/1.png)
+![Duplicate review with sample notebook data](screenshot/modern-ui.png)
+
+The current interface, shown with sample data. Windows display scaling and high-contrast colors are supported.
 
 ## Requirements
 
@@ -30,9 +32,22 @@ Traditional file-level duplicate removers cannot detect duplicate OneNote pages 
 
 When selecting duplicates for removal, the tool uses a section preference system that prioritizes keeping pages in cloud-synced notebooks over local ones, and avoids selecting pages from the Recycle Bin. You can also manually select/deselect individual pages.
 
+1. Choose **Scan notebooks** to find matching pages.
+2. In **Keep preferred copies**, move the locations you want to keep to the top.
+3. Choose **Select extra copies**, then review the checked pages and selection counts.
+4. Choose **Remove selected** and confirm. Removal is disabled if every copy in any group is checked.
+
+Group headings show the page title and number of copies. Hover over a heading to inspect its content hash, or over a page to see its full location.
+
 ### Removal & Reporting
 
 After removal, an HTML report is generated showing which pages were successfully removed and which could not be removed.
+
+### Help & Diagnostics
+
+**Help → About** shows the app version, process bitness, developer, and license, with links to GitHub, issue reporting, and release history. Choose **Show diagnostics** for Windows, .NET, and OneNote integration details, plus shortcuts to the installation and current log folders. **Copy diagnostics** is available even when OneNote could not initialize; it excludes notebook content and local paths.
+
+[Preview the About dialog](screenshot/about.png).
 
 ## Building from Source
 

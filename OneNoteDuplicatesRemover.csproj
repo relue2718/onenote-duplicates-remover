@@ -11,8 +11,12 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <DefaultItemExcludes>$(DefaultItemExcludes);publish\**;packages\**;screenshot\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);publish\**;packages\**;screenshot\**;OneNoteDuplicatesRemover.Core\**;OneNoteDuplicatesRemover.Core.Tests\**</DefaultItemExcludes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="OneNoteDuplicatesRemover.Core\OneNoteDuplicatesRemover.Core.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.OneNote">
